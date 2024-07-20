@@ -1,0 +1,81 @@
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import ErrorPage from './Pages/ErrorPage';
+import Home from './Pages/Home';
+import Author from './Pages/Author';
+import Blogs from './Pages/Blogs';
+import Blog from './Pages/Blog';
+import Tutorials from './Pages/Tutorials';
+import Tutorial from './Pages/Tutorial';
+import Admin from './Pages/Admin';
+import Signup from './Pages/Signup';
+import Login from './Pages/Login';
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
+        element: <Home />
+      },
+      {
+        path: "/author",
+        element: <Author />
+      },
+      {
+        path: "/blogs",
+        element: <Blogs />
+      },
+      {
+        path: "/blogs/:blog_id",
+        element: <Blog />
+      },
+      {
+        path: "/tutorials",
+        element: <Tutorials />
+      },
+      {
+        path: "/tutorials/:tutorial_id",
+        element: <Tutorial />
+      },
+    ]
+  },
+  {
+    path: "/auth",
+    element: <Admin />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "login",
+        element: <Login />
+      },
+      {
+        path: "signup",
+        element: <Signup />
+      },
+    ]
+  },
+  {
+    path: "/admin",
+    element: <Admin />,
+    errorElement: <ErrorPage />,
+    children: [{}]
+  },
+])
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
