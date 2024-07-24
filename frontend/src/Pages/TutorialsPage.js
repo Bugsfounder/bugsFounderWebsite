@@ -1,5 +1,5 @@
 import React from 'react'
-import Tutorials from '../Components/utils/Tutorials'
+import Tutorials from '../Components/Tutorials'
 
 const TutorialsPage = () => {
     return (
