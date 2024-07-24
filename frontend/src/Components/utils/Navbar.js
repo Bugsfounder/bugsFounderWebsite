@@ -43,20 +43,20 @@ const Navbar = () => {
         const itemsNav = hamburger.nextSibling
         const itemNavClassList = itemsNav.classList
         const navbar = document.getElementById("navbar")
-        const authorLogo = document.getElementById("authorLogo")
+        const aboutLogo = document.getElementById("aboutLogo")
 
         if (itemNavClassList.contains("hidden")) {
             itemNavClassList.remove("hidden")
             navbar.classList.remove("flex", "justify-between", "item-center")
-            authorLogo.classList.add("hidden")
+            aboutLogo.classList.add("hidden")
             hamburger.classList.add("mt-3")
         } else {
             itemNavClassList.add("hidden")
             navbar.classList.add("flex", "justify-between", "item-center")
-            authorLogo.classList.remove("hidden")
+            aboutLogo.classList.remove("hidden")
             hamburger.classList.remove("mt-3")
         }
-        console.log(hamburger, itemsNav, navbar, authorLogo);
+        console.log(hamburger, itemsNav, navbar, aboutLogo);
     }
 
     return (
@@ -76,15 +76,15 @@ const Navbar = () => {
                                 <li><Link className="hover:underline dark:hover:text-slate-400 md:text-lg" to="/">Home </Link></li>
                                 <li><Link className="hover:underline dark:hover:text-slate-400 md:text-lg" to="/blogs">Blogs</Link></li>
                                 <li><Link className="hover:underline dark:hover:text-slate-400 md:text-lg" to="/tutorials">Tutorials</Link></li>
-                                <li><Link className="hover:underline dark:hover:text-slate-400 md:text-lg" to="/author">Author </Link></li>
+                                <li><Link className="hover:underline dark:hover:text-slate-400 md:text-lg" to="/about_me">About </Link></li>
                                 <li></li>
                             </ul>
                         </div>
                     </div>
 
                     <div className="logo md:order-1">
-                        {/* <Link to="/"><img src={NavLogo} id="authorLogo" alt="Loading..." className='rounded-full w-14 h-14' /></Link> */}
-                        <Link to="/"><span className='font-extrabold text-xl' id="authorLogo"> <span className='dark:text-white text-gray-400'>Bugs</span><span className='text-sky-600'>Founder</span></span></Link>
+                        {/* <Link to="/"><img src={NavLogo} id="aboutLogo" alt="Loading..." className='rounded-full w-14 h-14' /></Link> */}
+                        <Link to="/"><span className='font-extrabold text-xl' id="aboutLogo"> <span className='dark:text-white text-gray-400'>Bugs</span><span className='text-sky-600'>Founder</span></span></Link>
                     </div>
 
                     <form className="search flex md:shadow-sm justify-center items-center md:order-3 " onSubmit={OnPressEnter}>
