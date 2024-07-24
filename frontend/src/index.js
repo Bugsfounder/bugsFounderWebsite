@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ErrorPage from './Pages/ErrorPage';
-import Home from './Pages/Home';
+import Home from './Pages/HomePage';
 import Author from './Pages/Author';
 import Blogs from './Pages/Blogs';
 import Blog from './Pages/Blog';
@@ -13,6 +13,7 @@ import Tutorial from './Pages/Tutorial';
 import Admin from './Pages/Admin';
 import Signup from './Pages/Signup';
 import Login from './Pages/Login';
+import SearchPage from './Pages/SearchPage';
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       {
         path: "/tutorials/:tutorial_id",
         element: <Tutorial />
+      },
+      {
+        path: "/search/:query",
+        element: <SearchPage />
       },
     ]
   },
