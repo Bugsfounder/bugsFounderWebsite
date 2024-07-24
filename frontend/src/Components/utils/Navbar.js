@@ -61,13 +61,13 @@ const Navbar = () => {
 
     return (
         <>
-            <div className="navSection">
-                <nav className='dark:bg-slate-900  dark:text-slate-300  text-bold flex justify-between items-center p-3 md:p-6' id='navbar'>
+            <div className="navSection fixed w-full top-0 left-0">
+                <nav className='dark:bg-slate-900  dark:text-slate-300 bg-gray-100 text-black text-bold flex justify-between items-center p-3 md:p-6' id='navbar'>
                     <div className='md:order-2'>
                         <div className="hamburger cursor-pointer md:hidden" onClick={hamburgerClicked}>
-                            <div className="first dark:bg-sky-600 bg-white h-0.5 w-5 mb-1"></div>
-                            <div className="second dark:bg-sky-600 bg-white h-0.5 w-5 mb-1"></div>
-                            <div className="third dark:bg-sky-600 bg-white h-0.5 w-5 "></div>
+                            <div className="first dark:bg-slate-600 bg-black  h-0.5 w-5 mb-1"></div>
+                            <div className="second dark:bg-slate-600 bg-black h-0.5 w-5 mb-1"></div>
+                            <div className="third dark:bg-slate-600 bg-black  h-0.5 w-5 "></div>
                         </div>
 
                         <div className="navItems mt-4 hidden md:block md:mt-0 ">
@@ -87,7 +87,7 @@ const Navbar = () => {
                         <Link to="/"><span className='font-extrabold text-xl' id="authorLogo"> <span className='dark:text-white text-gray-400'>Bugs</span><span className='text-sky-600'>Founder</span></span></Link>
                     </div>
 
-                    <form className="search flex md:shadow-xl justify-center items-center md:order-3 " onSubmit={OnPressEnter}>
+                    <form className="search flex md:shadow-sm justify-center items-center md:order-3 " onSubmit={OnPressEnter}>
                         <input type="input" name="search" id="search" placeholder='Search' className='px-2  dark:bg-slate-700 shadow-sm   bg-gray-100 outline-none py-1 rounded hidden focus:outline-2 md:block' />
                         <button></button>
                         <span onClick={searchIconClicked} className=''><MagnifyingGlassIcon className='size-5 font-bold text-slate-500 cursor-pointer mx-2' /></span>
@@ -95,7 +95,7 @@ const Navbar = () => {
                 </nav>
                 <hr className="dark:border-gray-500" />
 
-                <div className="navSm shadow-md shadow-slate-600/60 dark:bg-slate-900  px-7 py-2 flex justify-between items-center" >
+                <div className="navSm shadow-md shadow-slate-600/60 dark:bg-slate-900 bg-gray-100 px-7 py-2 flex justify-between items-center" >
                     <div className="left">
                         <Link to='/'><HomeIcon className='size-8 text-slate-500' /></Link>
                     </div>
@@ -109,7 +109,8 @@ const Navbar = () => {
                     </div>
                 </div>
             </div>
-
+            <div className="mt-[132.5px]">
+            </div>
         </>
     )
 }
