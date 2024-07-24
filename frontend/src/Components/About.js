@@ -56,7 +56,7 @@ const About = () => {
                     <SocialIcon className='' bgColor="#334155" fgColor="white" url="https://www.instagram.com/bugsfounder" target="_blank" />
                     <SocialIcon bgColor="#334155" fgColor="white" url="https://www.linkedin.com/bugsfounder" target="_blank" />
                     <SocialIcon bgColor="#334155" fgColor="white" url="https://www.github.com/bugsfounder" target="_blank" />
-                    <SocialIcon bgColor="#334155" fgColor="white" url="https://www.youtube.com/@jocefyneroott" target="_blank" />
+                    <SocialIcon bgColor="#334155" fgColor="white" url="https://www.youtube.com/@bugsfounder" target="_blank" />
                 </div>
             </div>
         </div>

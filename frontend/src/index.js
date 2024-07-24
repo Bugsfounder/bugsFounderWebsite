@@ -7,9 +7,9 @@ import ErrorPage from './Pages/ErrorPage';
 import Home from './Pages/HomePage';
 import AboutPage from './Pages/AboutPage';
 import BlogsPage from './Pages/BlogsPage';
-import Blog from './Pages/Blog';
+import BlogPage from './Pages/BlogPage';
 import TutorialsPage from './Pages/TutorialsPage';
-import Tutorial from './Pages/Tutorial';
+import TutorialPage from './Pages/TutorialPage';
 import Admin from './Pages/Admin';
 import Signup from './Pages/Signup';
 import Login from './Pages/Login';
@@ -36,7 +36,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/blogs/:blog_id",
-        element: <Blog />
+        element: <BlogPage />
       },
       {
         path: "/tutorials",
@@ -44,7 +44,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/tutorials/:tutorial_id",
-        element: <Tutorial />
+        element: <TutorialPage />
       },
       {
         path: "/search/:query",
