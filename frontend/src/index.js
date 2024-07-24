@@ -14,6 +14,7 @@ import Admin from './Pages/Admin';
 import Signup from './Pages/Signup';
 import Login from './Pages/Login';
 import SearchPage from './Pages/SearchPage';
+import Auth from './Pages/Auth';
 
 const router = createBrowserRouter([
   {
@@ -53,7 +54,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/auth",
-    element: <Admin />,
+    element: <Auth />,
     errorElement: <ErrorPage />,
     children: [
       {

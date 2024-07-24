@@ -1,11 +1,24 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import NavLogo from '../../images/logo.jpeg'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
-
+import { HomeIcon, UserCircleIcon, SunIcon, MoonIcon } from '@heroicons/react/24/solid'
 
 const PhoneNav = () => {
     const navigate = useNavigate(0)
+    const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark")
+
+    useEffect(() => {
+        document.documentElement.classList.add(theme)
+        return () => {
+            document.documentElement.classList.remove(theme)
+        }
+    }, [theme])
+
+    const toggleTheme = () => {
+        const newTheme = theme === "dark" ? "light" : "dark"
+        setTheme(newTheme)
+        localStorage.setItem("theme", newTheme)
+    }
 
     const searchIconClicked = (event) => {
         const spanElement = event.currentTarget
@@ -45,42 +58,59 @@ const PhoneNav = () => {
         }
         console.log(hamburger, itemsNav, navbar, authorLogo);
     }
+
     return (
         <>
-            <nav className='bg-slate-100 dark:bg-slate-900 dark:text-white flex justify-between items-center p-3' id='navbar'>
-                <div>
-                    <div className="hamburger cursor-pointer" onClick={hamburgerClicked}>
-                        <div className="first bg-black dark:bg-white h-0.5 w-5 mb-1"></div>
-                        <div className="second bg-black dark:bg-white h-0.5 w-5 mb-1"></div>
-                        <div className="third bg-black dark:bg-white h-0.5 w-5 "></div>
-                    </div>
+            <div className="navSection">
+                <nav className='dark:bg-slate-900  dark:text-slate-300  text-bold flex justify-between items-center p-3 md:p-6' id='navbar'>
+                    <div className='md:order-2'>
+                        <div className="hamburger cursor-pointer md:hidden" onClick={hamburgerClicked}>
+                            <div className="first dark:bg-sky-600 bg-white h-0.5 w-5 mb-1"></div>
+                            <div className="second dark:bg-sky-600 bg-white h-0.5 w-5 mb-1"></div>
+                            <div className="third dark:bg-sky-600 bg-white h-0.5 w-5 "></div>
+                        </div>
 
-                    <div className="navItems mt-4 hidden ">
-                        <ul className='space-y-2'>
-                            <li><Link className="" to="/">Home </Link></li>
-                            <li><Link className="" to="/blogs">Blogs</Link></li>
-                            <li><Link className="" to="/tutorials">Tutorials</Link></li>
-                            <li><Link className="" to="/author">Author </Link></li>
-                        </ul>
+                        <div className="navItems mt-4 hidden md:block md:mt-0 ">
+                            <ul className='space-y-2 md:flex md:space-y-0 md:space-x-8 text-bold'>
+                                <li></li>
+                                <li><Link className="hover:underline dark:hover:text-slate-100 md:text-lg" to="/">Home </Link></li>
+                                <li><Link className="hover:underline dark:hover:text-slate-100 md:text-lg" to="/blogs">Blogs</Link></li>
+                                <li><Link className="hover:underline dark:hover:text-slate-100 md:text-lg" to="/tutorials">Tutorials</Link></li>
+                                <li><Link className="hover:underline dark:hover:text-slate-100 md:text-lg" to="/author">Author </Link></li>
+                                <li></li>
+                            </ul>
 
-                        <div className="auth my-5 space-x-3">
-                            <button className="login  bg-blue-700 text-white px-4 py-2 rounded-lg active:bg-blue-500">login</button>
-                            <button className="Signup  bg-blue-700 text-white px-4 py-2 rounded-lg active:bg-blue-500">Signup</button>
-                            <button className="logout  bg-red-700 text-white px-4 py-2 rounded-lg active:bg-red-500">Logout</button>
                         </div>
                     </div>
-                </div>
 
-                <div className="logo">
-                    <Link to="/"><img src={NavLogo} id="authorLogo" alt="Loading..." className='rounded-full w-10 h-10' /></Link>
-                </div>
+                    <div className="logo md:order-1">
+                        {/* <Link to="/"><img src={NavLogo} id="authorLogo" alt="Loading..." className='rounded-full w-14 h-14' /></Link> */}
+                        <Link to="/"><span className='font-extrabold text-xl' id="authorLogo"> <span className='dark:text-white text-gray-400'>Bugs</span><span className='text-sky-600'>Founder</span></span></Link>
+                    </div>
 
-                <form className="search flex justify-center items-center" onSubmit={OnPressEnter}>
-                    <input type="input" name="search" id="search" placeholder='Search' className='px-2 py-1 rounded hidden focus:outline-2 w-36' />
-                    <button ></button>
-                    <span onClick={searchIconClicked} className=''><MagnifyingGlassIcon className='size-5 font-bold text-blue-500 cursor-pointer mx-2' /></span>
-                </form>
-            </nav >
+                    <form className="search flex md:shadow-xl justify-center items-center md:order-3 " onSubmit={OnPressEnter}>
+                        <input type="input" name="search" id="search" placeholder='Search' className='px-2  dark:bg-slate-700 shadow-sm   bg-gray-100 outline-none py-1 rounded hidden focus:outline-2 md:block' />
+                        <button></button>
+                        <span onClick={searchIconClicked} className=''><MagnifyingGlassIcon className='size-5 font-bold text-blue-500 cursor-pointer mx-2' /></span>
+                    </form>
+                </nav>
+                <hr className="dark:border-gray-500" />
+
+                <div className="navSm shadow-md shadow-slate-600/60 dark:bg-slate-900  px-7 py-2 flex justify-between items-center" >
+                    <div className="left">
+                        <HomeIcon className='size-8 text-sky-500' />
+                    </div>
+                    <div className="right flex space-x-2">
+                        {theme === "dark" ?
+                            <SunIcon className='size-8 text-sky-500 cursor-pointer' onClick={toggleTheme} />
+                            :
+                            <MoonIcon className='size-8 text-sky-500 cursor-pointer' onClick={toggleTheme} />
+                        }
+                        <Link to='/auth'> <UserCircleIcon className='size-9 text-sky-500 cursor-pointer' /></Link>
+                    </div>
+                </div>
+            </div>
+
         </>
     )
 }
