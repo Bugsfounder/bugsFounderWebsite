@@ -6,9 +6,9 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ErrorPage from './Pages/ErrorPage';
 import Home from './Pages/HomePage';
 import Author from './Pages/Author';
-import Blogs from './Pages/Blogs';
+import BlogsPage from './Pages/BlogsPage';
 import Blog from './Pages/Blog';
-import Tutorials from './Pages/Tutorials';
+import TutorialsPage from './Pages/TutorialsPage';
 import Tutorial from './Pages/Tutorial';
 import Admin from './Pages/Admin';
 import Signup from './Pages/Signup';
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/blogs",
-        element: <Blogs />
+        element: <BlogsPage />
       },
       {
         path: "/blogs/:blog_id",
@@ -40,7 +40,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/tutorials",
-        element: <Tutorials />
+        element: <TutorialsPage />
       },
       {
         path: "/tutorials/:tutorial_id",
