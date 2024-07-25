@@ -105,7 +105,7 @@ const Navbar = () => {
                             :
                             <MoonIcon className='size-8 text-slate-500 cursor-pointer' onClick={toggleTheme} />
                         }
-                        <Link to='/auth'> <UserCircleIcon className='size-9 text-slate-500 cursor-pointer' /></Link>
+                        <Link to='/auth/login'> <UserCircleIcon className='size-9 text-slate-500 cursor-pointer' /></Link>
                     </div>
                 </div>
             </div>

@@ -11,10 +11,9 @@ import BlogPage from './Pages/BlogPage';
 import TutorialsPage from './Pages/TutorialsPage';
 import TutorialPage from './Pages/TutorialPage';
 import Admin from './Pages/Admin';
-import Signup from './Pages/Signup';
-import Login from './Pages/Login';
+import SignupPage from './Pages/SignupPage';
+import LoginPage from './Pages/LoginPage';
 import SearchPage from './Pages/SearchPage';
-import Auth from './Pages/Auth';
 
 const router = createBrowserRouter([
   {
@@ -50,20 +49,21 @@ const router = createBrowserRouter([
         path: "/search/:query",
         element: <SearchPage />
       },
+
     ]
   },
   {
     path: "/auth",
-    element: <Auth />,
+    element: <App />,
     errorElement: <ErrorPage />,
     children: [
       {
         path: "login",
-        element: <Login />
+        element: <LoginPage />
       },
       {
         path: "signup",
-        element: <Signup />
+        element: <SignupPage />
       },
     ]
   },
