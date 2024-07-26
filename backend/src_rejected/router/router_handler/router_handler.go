@@ -150,7 +150,7 @@ func GetBlogById(c *gin.Context) {
 
 func UpdateBlog(c *gin.Context) {
 	id := c.Param("id")
-	var updateJSON []byte
+	var updateJSON models.Blog
 	if err := c.BindJSON(&updateJSON); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
 		return
@@ -228,12 +228,12 @@ func GetTutorialById(c *gin.Context) {
 
 func UpdateTutorial(c *gin.Context) {
 	id := c.Param("id")
-	var updateJSON []byte
-	if err := c.BindJSON(&updateJSON); err != nil {
+	var update models.Tutorial
+	if err := c.BindJSON(&update); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
 		return
 	}
-	response, err := handlers.UpdateTutorial(id, updateJSON)
+	response, err := handlers.UpdateTutorial(id, update)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

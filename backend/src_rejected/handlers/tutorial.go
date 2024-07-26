@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"time"
 
 	"github.com/bugsfounder/bugsfounderweb/db/db_handler"
 	"github.com/bugsfounder/bugsfounderweb/db/models"
@@ -10,6 +11,9 @@ import (
 
 // create
 func CreateTutorial(tutorial models.Tutorial) error {
+	tutorial.CreatedAt = time.Now()
+	tutorial.UpdatedAt = time.Now()
+
 	tutorialData, err := json.Marshal(tutorial)
 	if err != nil {
 		return err
@@ -42,14 +46,20 @@ func GetTutorialById(id string) ([]byte, error) {
 }
 
 // update
+func UpdateTutorial(id string, update models.Tutorial) ([]byte, error) {
+	update.UpdatedAt = time.Now()
 
-func UpdateTutorial(id string, updateJSON []byte) ([]byte, error) {
-	var update bson.M
-	if err := json.Unmarshal(updateJSON, &update); err != nil {
+	updateData, err := json.Marshal(update)
+	if err != nil {
 		return nil, err
 	}
 
-	if err := db_handler.UpdateTutorial(id, update); err != nil {
+	var updateBson bson.M
+	if err := json.Unmarshal(updateData, &updateBson); err != nil {
+		return nil, err
+	}
+
+	if err := db_handler.UpdateTutorial(id, updateBson); err != nil {
 		return nil, err
 	}
 
@@ -65,6 +75,7 @@ func DeleteTutorial(id string) ([]byte, error) {
 	return json.Marshal(map[string]string{"message": "Tutorial deleted successfully"})
 }
 
+// hide
 func HideTutorial(id string) ([]byte, error) {
 	if err := db_handler.HideTutorial(id); err != nil {
 		return nil, err
@@ -73,6 +84,7 @@ func HideTutorial(id string) ([]byte, error) {
 	return json.Marshal(map[string]string{"message": "Tutorial hidden successfully"})
 }
 
+// unhide
 func UnHideTutorial(id string) ([]byte, error) {
 	if err := db_handler.UnHideTutorial(id); err != nil {
 		return nil, err

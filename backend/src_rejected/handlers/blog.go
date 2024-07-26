@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"time"
 
 	"github.com/bugsfounder/bugsfounderweb/db/db_handler"
 	"github.com/bugsfounder/bugsfounderweb/db/models"
@@ -44,16 +45,15 @@ func GetBlogById(id string) ([]byte, error) {
 }
 
 // update
-func UpdateBlog(id string, updateJSON []byte) ([]byte, error) {
-	var update bson.M
-	if err := json.Unmarshal(updateJSON, &update); err != nil {
+func UpdateBlog(id string, update models.Blog) ([]byte, error) {
+	update.UpdatedAt = time.Now()
+	updateBson, err := bson.Marshal(update)
+	if err != nil {
 		return nil, err
 	}
-
-	if err := db_handler.UpdateBlog(id, update); err != nil {
+	if err := db_handler.UpdateBlog(id, updateBson); err != nil {
 		return nil, err
 	}
-
 	return json.Marshal(map[string]string{"message": "Blog updated successfully"})
 }
 

@@ -43,8 +43,7 @@ func ConnectToDB(db_credentials *DB_Credentials) (*mongo.Client, error) {
 		return nil, err
 	}
 	LOG.Info("Connected to MongoDB!")
-
-	return client, err
+	return client, nil
 }
 
 func DisconnectToDB(client *mongo.Client) {
