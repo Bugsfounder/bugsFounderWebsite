@@ -5,20 +5,23 @@ import (
 	"errors"
 
 	"github.com/bugsfounder/bugsfounderweb/db/db_handler"
+	"github.com/bugsfounder/bugsfounderweb/db/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"golang.org/x/crypto/bcrypt"
 )
 
 // create
-func CreateUser(userJSON []byte) ([]byte, error) {
-	var user bson.M
-	if err := json.Unmarshal(userJSON, &user); err != nil {
-		return nil, err
+func CreateUser(user models.User) error {
+	userData, err := json.Marshal(user)
+	if err != nil {
+		return err
 	}
-	if err := db_handler.CreateUser(user); err != nil {
-		return nil, err
+
+	var userBson bson.M
+	if err := json.Unmarshal(userData, &userBson); err != nil {
+		return err
 	}
-	return json.Marshal(map[string]string{"message": "user created successfully"})
+	return db_handler.CreateUser(userBson)
 }
 
 // read

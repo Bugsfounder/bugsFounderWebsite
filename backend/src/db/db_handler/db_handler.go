@@ -7,7 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-var database = "bugsFounderDB"
+var database = "bugsfounderDB"
 var username = "bugsfounder"
 var password = "kubari"
 var dbCre *db.DB_Credentials = db.NewDB_Credentials(username, password)

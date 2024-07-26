@@ -4,21 +4,22 @@ import (
 	"encoding/json"
 
 	"github.com/bugsfounder/bugsfounderweb/db/db_handler"
+	"github.com/bugsfounder/bugsfounderweb/db/models"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
 // create
-func CreateTutorial(tutorialJSON []byte) ([]byte, error) {
-	var tutorial bson.M
-	if err := json.Unmarshal(tutorialJSON, &tutorial); err != nil {
-		return nil, err
+func CreateTutorial(tutorial models.Tutorial) error {
+	tutorialData, err := json.Marshal(tutorial)
+	if err != nil {
+		return err
 	}
 
-	if err := db_handler.CreateTutorial(tutorial); err != nil {
-		return nil, err
+	var tutorialBson bson.M
+	if err := json.Unmarshal(tutorialData, &tutorialBson); err != nil {
+		return err
 	}
-
-	return json.Marshal(map[string]string{"message": "Tutorial created successfully"})
+	return db_handler.CreateUser(tutorialBson)
 }
 
 // read

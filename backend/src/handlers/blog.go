@@ -4,21 +4,24 @@ import (
 	"encoding/json"
 
 	"github.com/bugsfounder/bugsfounderweb/db/db_handler"
+	"github.com/bugsfounder/bugsfounderweb/db/models"
 	"github.com/bugsfounder/bugsfounderweb/logger"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
 // create
-func CreateBlog(blogJSON []byte) ([]byte, error) {
-	var blog bson.M
-	if err := json.Unmarshal(blogJSON, &blog); err != nil {
-		return nil, err
+func CreateBlog(blog models.Blog) error {
+	blogData, err := json.Marshal(blog)
+	if err != nil {
+		return err
 	}
 
-	if err := db_handler.CreateBlog(blog); err != nil {
-		return nil, err
+	var blogBson bson.M
+	if err := json.Unmarshal(blogData, &blogBson); err != nil {
+		return err
 	}
-	return json.Marshal(map[string]string{"message": "blog created successfully"})
+
+	return db_handler.CreateBlog(blogBson)
 }
 
 // read

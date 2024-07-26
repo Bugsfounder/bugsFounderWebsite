@@ -3,6 +3,7 @@ package router_handler
 import (
 	"net/http"
 
+	"github.com/bugsfounder/bugsfounderweb/db/models"
 	"github.com/bugsfounder/bugsfounderweb/handlers"
 	"github.com/bugsfounder/bugsfounderweb/logger"
 	"github.com/gin-gonic/gin"
@@ -55,17 +56,18 @@ func Logout(c *gin.Context) {
 // Existing functions ...
 
 func CreateUser(c *gin.Context) {
-	var userJSON []byte
-	if err := c.BindJSON(&userJSON); err != nil {
+	var user models.User
+	if err := c.BindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
 		return
 	}
-	response, err := handlers.CreateUser(userJSON)
+	err := handlers.CreateUser(user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.Data(http.StatusOK, "application/json", response)
+	c.JSON(http.StatusOK, gin.H{"message": "blog created successfully"})
+
 }
 
 func GetUserByUsername(c *gin.Context) {
@@ -114,17 +116,17 @@ func DeleteUser(c *gin.Context) {
 }
 
 func CreateBlog(c *gin.Context) {
-	var blogJSON []byte
-	if err := c.BindJSON(&blogJSON); err != nil {
+	var blog models.Blog
+	if err := c.BindJSON(&blog); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
 		return
 	}
-	response, err := handlers.CreateBlog(blogJSON)
+	err := handlers.CreateBlog(blog)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.Data(http.StatusOK, "application/json", response)
+	c.JSON(http.StatusOK, gin.H{"message": "blog created successfully"})
 }
 
 func GetAllBlogs(c *gin.Context) {
@@ -192,17 +194,17 @@ func UnHideBlog(c *gin.Context) {
 }
 
 func CreateTutorial(c *gin.Context) {
-	var tutorialJSON []byte
-	if err := c.BindJSON(&tutorialJSON); err != nil {
+	var tutorial models.Tutorial
+	if err := c.BindJSON(&tutorial); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
 		return
 	}
-	response, err := handlers.CreateTutorial(tutorialJSON)
+	err := handlers.CreateTutorial(tutorial)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.Data(http.StatusOK, "application/json", response)
+	c.JSON(http.StatusOK, gin.H{"message": "Tutorial Created Successfully"})
 }
 
 func GetAllTutorials(c *gin.Context) {
