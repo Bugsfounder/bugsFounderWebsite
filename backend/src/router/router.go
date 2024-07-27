@@ -14,8 +14,30 @@ func ApiRoutes(server *gin.Engine, dbHandler *handler.DB_Handler) {
 	// public roup
 	public_router := server.Group("/api/public")
 	{
+		// blog api's
 		public_router.GET("/", handlePublic(dbHandler))
-		public_router.GET("/info", handlePublicInfo)
+		public_router.POST("/blog", HandleCreateOneBlog(dbHandler))
+		public_router.GET("/blogs", HandleGetAllBlogs(dbHandler))
+		public_router.GET("/blogs/:blog_id", handleGetOneBlogByID(dbHandler))
+		public_router.POST("/blogs/:blog_id", HandleUpdateOneBlogById(dbHandler))
+		public_router.DELETE("/blogs/:blog_id", HandleDeleteOneBlogById(dbHandler))
+
+		// tutorial api's
+		public_router.GET("/", handlePublic(dbHandler))
+		public_router.POST("/tutorial", HandleCreateOneTutorail(dbHandler))
+		public_router.GET("/tutorials", HandleGetAllTutorial(dbHandler))
+		public_router.GET("/tutorials/:tutorial_id", handleGetOneTutorialByID(dbHandler))
+		public_router.POST("/tutorials/:tutorial_id", HandleUpdateOneTutorialById(dbHandler))
+		public_router.DELETE("/tutorials/:tutorial_id", HandleDeleteOneTutorialById(dbHandler))
+
+		// user api's
+		public_router.GET("/users", HandlerGetAllUsers(dbHandler))
+		public_router.GET("/users/:username", HandlerGetOneUserByUsername(dbHandler))
+		public_router.GET("/users/:email", HandlerGetOneUserByEmail(dbHandler))
+		public_router.POST("/user", HandlerCreateOneUser(dbHandler))
+		public_router.POST("/user/:username_or_email", HandlerUpdateOneUserByUsernameOrEmail(dbHandler))
+		public_router.DELETE("/user/:username_or_email", HandlerDeleteOneUserByUsernameOrEmail(dbHandler))
+
 	}
 
 	// private group
