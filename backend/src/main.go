@@ -11,29 +11,33 @@ import (
 var LOG = logger.Logging()
 
 func main() {
-	LOG.Debug("Main of server")
+	LOG.Debug("Starting server")
 	server := gin.Default() // gin server
 
 	// connecting to db
 	client, ctx, cancel, err := db.ConnectToDBAndGetClientCtxCancelErr()
-	LOG.Error("Error: %v", err)
 	if err != nil {
-		LOG.Error("Error: %v", err)
-		panic(err)
+		LOG.Error("Failed to connect to the database: %v", err)
+		LOG.Fatal(err)
 	}
 	// closing db
 	defer db.Close(client, ctx, cancel)
+
 	// ping
 	if err := db.Ping(client, ctx); err != nil {
-		LOG.Error("%v", err)
+		LOG.Error("Failed to ping the database: %v", err)
 		LOG.Fatal(err)
 	}
 
-	c := db.Client{Client_Obj: client, Ctx: ctx}
+	// creating handler which is present in handler to access db methods
+	dbHandler := handler.HandlerForDBHandlers{
+		Client: db.Client{
+			Client_Obj: client,
+			Ctx:        ctx,
+		},
+	}
 
-	// c.DemoFunc()
-	dbHandler := handler.DB_Handler{Client: c}
-
+	// passing handler to api routes
 	router.ApiRoutes(server, &dbHandler)
 	server.Run(":8080")
 }

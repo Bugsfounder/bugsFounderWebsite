@@ -7,89 +7,111 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func handlePublic(dbHandler *handler.DB_Handler) gin.HandlerFunc {
+func handlePublic(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		dbHandler.DemoFuncHandler()
 		ctx.String(http.StatusOK, "Welcome to the public endpoint")
 	}
 }
 
-func HandleCreateOneBlog(dbHandler *handler.DB_Handler) gin.HandlerFunc {
+func HandleCreateOneBlog(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+	// we can access handler functions here, ex: dbHandler.DemoFuncHandler()
 	return func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "endpoint: /HandleCreateOneBlog")
 	}
 }
-func HandleGetAllBlogs(dbHandler *handler.DB_Handler) gin.HandlerFunc {
+func HandleGetAllBlogs(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+	// we can access handler functions here, ex: dbHandler.DemoFuncHandler()
 	return func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "endpoint: /HandleGetAllBlogs")
 	}
 }
-func handleGetOneBlogByID(dbHandler *handler.DB_Handler) gin.HandlerFunc {
+func handleGetOneBlogByID(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+	// we can access handler functions here, ex: dbHandler.DemoFuncHandler()
 	return func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "endpoint: /handleGetOneBlogByID")
 	}
 }
-func HandleUpdateOneBlogById(dbHandler *handler.DB_Handler) gin.HandlerFunc {
+func HandleUpdateOneBlogById(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+	// we can access handler functions here, ex: dbHandler.DemoFuncHandler()
 	return func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "endpoint: /HandleUpdateOneBlogById")
 	}
 }
-func HandleDeleteOneBlogById(dbHandler *handler.DB_Handler) gin.HandlerFunc {
+func HandleDeleteOneBlogById(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+	// we can access handler functions here, ex: dbHandler.DemoFuncHandler()
 	return func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "endpoint: /HandleDeleteOneBlogById")
 	}
 }
-func HandleCreateOneTutorail(dbHandler *handler.DB_Handler) gin.HandlerFunc {
+func HandleCreateOneTutorail(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+	// we can access handler functions here, ex: dbHandler.DemoFuncHandler()
 	return func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "endpoint: /HandleCreateOneTutorail")
 	}
 }
-func HandleGetAllTutorial(dbHandler *handler.DB_Handler) gin.HandlerFunc {
+func HandleGetAllTutorial(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+	// we can access handler functions here, ex: dbHandler.DemoFuncHandler()
 	return func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "endpoint: /HandleGetAllTutorial")
 	}
 }
-func handleGetOneTutorialByID(dbHandler *handler.DB_Handler) gin.HandlerFunc {
+func handleGetOneTutorialByID(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+	// we can access handler functions here, ex: dbHandler.DemoFuncHandler()
 	return func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "endpoint: /handleGetOneTutorialByID")
 	}
 }
-func HandleUpdateOneTutorialById(dbHandler *handler.DB_Handler) gin.HandlerFunc {
+func HandleUpdateOneTutorialById(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+	// we can access handler functions here, ex: dbHandler.DemoFuncHandler()
 	return func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "endpoint: /HandleUpdateOneTutorialById")
 	}
 }
-func HandleDeleteOneTutorialById(dbHandler *handler.DB_Handler) gin.HandlerFunc {
+func HandleDeleteOneTutorialById(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+	// we can access handler functions here, ex: dbHandler.DemoFuncHandler()
 	return func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "endpoint: /HandleDeleteOneTutorialById")
 	}
 }
-func HandlerGetAllUsers(dbHandler *handler.DB_Handler) gin.HandlerFunc {
+func HandlerGetAllUsers(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+	// we can access handler functions here, ex: dbHandler.DemoFuncHandler()
 	return func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "endpoint: /HandlerGetAllUsers")
 	}
 }
-func HandlerGetOneUserByUsername(dbHandler *handler.DB_Handler) gin.HandlerFunc {
+func HandlerGetOneUserByUsernameOrEmail(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+	// we can access handler functions here, ex: dbHandler.DemoFuncHandler()
+	return func(ctx *gin.Context) {
+		ctx.String(http.StatusOK, "endpoint: /HandlerGetOneUserByUsernameOrEmail")
+	}
+}
+func HandlerGetOneUserByUsername(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+	// we can access handler functions here, ex: dbHandler.DemoFuncHandler()
 	return func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "endpoint: /HandlerGetOneUserByUsername")
 	}
 }
-func HandlerGetOneUserByEmail(dbHandler *handler.DB_Handler) gin.HandlerFunc {
+func HandlerGetOneUserByEmail(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+	// we can access handler functions here, ex: dbHandler.DemoFuncHandler()
 	return func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "endpoint: /HandlerGetOneUserByEmail")
 	}
 }
-func HandlerCreateOneUser(dbHandler *handler.DB_Handler) gin.HandlerFunc {
+func HandlerCreateOneUser(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+	// we can access handler functions here, ex: dbHandler.DemoFuncHandler()
 	return func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "endpoint: /HandlerCreateOneUser")
 	}
 }
-func HandlerUpdateOneUserByUsernameOrEmail(dbHandler *handler.DB_Handler) gin.HandlerFunc {
+func HandlerUpdateOneUserByUsernameOrEmail(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+	// we can access handler functions here, ex: dbHandler.DemoFuncHandler()
 	return func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "endpoint: /HandlerUpdateOneUserByUsernameOrEmail")
 	}
 }
-func HandlerDeleteOneUserByUsernameOrEmail(dbHandler *handler.DB_Handler) gin.HandlerFunc {
+func HandlerDeleteOneUserByUsernameOrEmail(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+	// we can access handler functions here, ex: dbHandler.DemoFuncHandler()
 	return func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "endpoint: /HandlerDeleteOneUserByUsernameOrEmail")
 	}

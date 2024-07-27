@@ -8,7 +8,7 @@ import (
 
 var LOG = logger.Logging()
 
-func ApiRoutes(server *gin.Engine, dbHandler *handler.DB_Handler) {
+func ApiRoutes(server *gin.Engine, dbHandler *handler.HandlerForDBHandlers) {
 	LOG.Debug("Creating public and private routes")
 
 	// public roup
@@ -23,7 +23,6 @@ func ApiRoutes(server *gin.Engine, dbHandler *handler.DB_Handler) {
 		public_router.DELETE("/blogs/:blog_id", HandleDeleteOneBlogById(dbHandler))
 
 		// tutorial api's
-		public_router.GET("/", handlePublic(dbHandler))
 		public_router.POST("/tutorial", HandleCreateOneTutorail(dbHandler))
 		public_router.GET("/tutorials", HandleGetAllTutorial(dbHandler))
 		public_router.GET("/tutorials/:tutorial_id", handleGetOneTutorialByID(dbHandler))
@@ -32,12 +31,11 @@ func ApiRoutes(server *gin.Engine, dbHandler *handler.DB_Handler) {
 
 		// user api's
 		public_router.GET("/users", HandlerGetAllUsers(dbHandler))
-		public_router.GET("/users/:username", HandlerGetOneUserByUsername(dbHandler))
-		public_router.GET("/users/:email", HandlerGetOneUserByEmail(dbHandler))
+		public_router.GET("/users/:username_or_email", HandlerGetOneUserByUsernameOrEmail(dbHandler))
+		// public_router.GET("/users/:email", HandlerGetOneUserByEmail(dbHandler))
 		public_router.POST("/user", HandlerCreateOneUser(dbHandler))
 		public_router.POST("/user/:username_or_email", HandlerUpdateOneUserByUsernameOrEmail(dbHandler))
 		public_router.DELETE("/user/:username_or_email", HandlerDeleteOneUserByUsernameOrEmail(dbHandler))
-
 	}
 
 	// private group
