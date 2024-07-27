@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-
-	// "path/filepath"
 	"runtime"
 	"strings"
 	"time"
@@ -19,6 +17,8 @@ const (
 	Info
 	Warning
 	Error
+	Fatal
+	Panic
 )
 
 // Logger is a custom logger that wraps the standard log.Logger.
@@ -50,25 +50,40 @@ func getCallerInfo() (string, string, int) {
 	return funcName, file, line
 }
 
+// getColorCode returns the ANSI color code for a given log level.
+func getColorCode(level LogLevel) string {
+	switch level {
+	case Debug:
+		return "\033[32m" // Green
+	case Info:
+		return "\033[34m" // Blue
+	case Warning:
+		return "\033[33m" // Yellow
+	case Error:
+		return "\033[31m" // Red
+	case Fatal:
+		return "\033[35m" // Magenta
+	case Panic:
+		return "\033[41m" // Red Background
+	default:
+		return "\033[0m" // Reset
+	}
+}
+
 // customLog formats the log record into the desired format, including the function name, filename, and line number.
 func (l *Logger) customLog(level LogLevel, format string, args ...interface{}) {
 	funcName, file, line := getCallerInfo()
 	msg := fmt.Sprintf(format, args...)
 	now := time.Now().Format("2006-01-02:15:04:05,999")
-	switch level {
-	case Debug:
-		// For Debug, show full path and function name
-		logMessage := fmt.Sprintf("%s DEBUG    [%s:%d] %s() %s", now, file, line, funcName, msg)
-		l.Logger.Output(3, logMessage)
-	case Info:
-		fallthrough
-	case Warning:
-		fallthrough
-	case Error:
-		// For Info, Warning, and Error, show relative path (containing only the package name) and function name
-		// _, filename := filepath.Split(file)
-		logMessage := fmt.Sprintf("%s %-8s [%s:%d] %s() %s", now, strings.ToUpper(level.String()), file, line, funcName, msg)
-		l.Logger.Output(3, logMessage)
+	colorCode := getColorCode(level)
+	resetCode := "\033[0m" // Reset color
+
+	logMessage := fmt.Sprintf("%s %s %-8s [%s:%d] %s() %s%s", now, colorCode, strings.ToUpper(level.String()), file, line, funcName, msg, resetCode)
+	l.Logger.Output(3, logMessage)
+
+	if level == Fatal {
+		// Exit with status code 1 for fatal errors
+		os.Exit(1)
 	}
 }
 
@@ -92,6 +107,12 @@ func (l *Logger) Error(format string, args ...interface{}) {
 	l.customLog(Error, format, args...)
 }
 
+// Fatal logs a fatal error message and exits the application.
+func (l *Logger) Fatal(format string, args ...interface{}) {
+	l.customLog(Fatal, format, args...)
+}
+
+// String converts a LogLevel to its string representation.
 func (l LogLevel) String() string {
 	switch l {
 	case Debug:
@@ -102,6 +123,10 @@ func (l LogLevel) String() string {
 		return "WARNING"
 	case Error:
 		return "ERROR"
+	case Fatal:
+		return "FATAL"
+	case Panic:
+		return "PANIC"
 	default:
 		return "UNKNOWN"
 	}
@@ -113,8 +138,7 @@ func Logging() *Logger {
 	return logger_singleton
 }
 
-// testing logger
-func LogInsideFunction() {
+func Test() {
 	logger := AppLogger(os.Stdout)
 	logger.Debug("custom message")
 	logger.Info("custom message")
@@ -124,4 +148,11 @@ func LogInsideFunction() {
 	Logging().Debug("message")
 	Logging().Info("message")
 	Logging().Error("message")
+
+	Logging().Info("This is an info message.")
+	Logging().Error("This is an error message.")
+	Logging().Warning("This is a warning message.")
+	Logging().Debug("This is a debug message.")
+	Logging().Fatal("This is a fatal message.")
+	Logging().Panic("This is a panic message.")
 }

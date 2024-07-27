@@ -18,7 +18,7 @@ func main() {
 	client, ctx, cancel, err := db.ConnectToDBAndGetClientCtxCancelErr()
 	if err != nil {
 		LOG.Error("Failed to connect to the database: %v", err)
-		LOG.Fatal(err)
+		// LOG.Fatal(err)
 	}
 	// closing db
 	defer db.Close(client, ctx, cancel)
@@ -26,7 +26,7 @@ func main() {
 	// ping
 	if err := db.Ping(client, ctx); err != nil {
 		LOG.Error("Failed to ping the database: %v", err)
-		LOG.Fatal(err)
+		// LOG.Fatal(err)
 	}
 
 	// creating handler which is present in handler to access db methods
@@ -35,6 +35,8 @@ func main() {
 			Client_Obj: client,
 		},
 	}
+
+
 
 	// passing handler to api routes
 	router.ApiRoutes(server, &dbHandler)
