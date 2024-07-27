@@ -1,31 +1,26 @@
 package router
 
 import (
-	"net/http"
-
+	"github.com/bugsfounder/bugsfounderweb/logger"
 	"github.com/gin-gonic/gin"
 )
 
+var LOG = logger.Logging()
+
 func ApiRoutes(server *gin.Engine) {
+	LOG.Debug("Creating public and private routes")
+
 	// public roup
 	public_router := server.Group("/api/public")
 	{
-		public_router.GET("/", func(ctx *gin.Context) {
-			ctx.String(http.StatusOK, "Welcome to the public endpoint")
-		})
-		public_router.GET("/info", func(ctx *gin.Context) {
-			ctx.String(http.StatusOK, "public info")
-		})
+		public_router.GET("/", handlePublic)
+		public_router.GET("/info", handlePublicInfo)
 	}
 
 	// private group
 	private := server.Group("/api/private")
 	{
-		private.GET("/", func(ctx *gin.Context) {
-			ctx.String(http.StatusOK, "Welcome to the private endpoint")
-		})
-		private.GET("/info", func(ctx *gin.Context) {
-			ctx.String(http.StatusOK, "private info")
-		})
+		private.GET("/", handlePrivate)
+		private.GET("/info", handlePrivateInfo)
 	}
 }
