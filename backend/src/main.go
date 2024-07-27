@@ -33,7 +33,6 @@ func main() {
 	dbHandler := handler.HandlerForDBHandlers{
 		Client: db.Client{
 			Client_Obj: client,
-			Ctx:        ctx,
 		},
 	}
 
