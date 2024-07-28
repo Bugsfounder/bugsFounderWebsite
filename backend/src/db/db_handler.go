@@ -76,7 +76,7 @@ func (client *Client) GetAllBlogs() ([]models.Blog, error) {
 	return allBlogsFromDatabase, nil
 
 }
-func (client *Client) GetOneBlogByURL(url string) (*models.Blog, error) {
+func (client *Client) GetOneBlogByURL(blogURL string) (*models.Blog, error) {
 	LOG.Debug("")
 	ctx, cancel := withTimeout()
 	defer cancel()
@@ -85,7 +85,7 @@ func (client *Client) GetOneBlogByURL(url string) (*models.Blog, error) {
 
 	var blog models.Blog
 
-	err := collection.FindOne(ctx, bson.M{"url": url}).Decode(&blog)
+	err := collection.FindOne(ctx, bson.M{"url": blogURL}).Decode(&blog)
 
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
@@ -143,9 +143,25 @@ func (client *Client) GetAllTutorial() ([]models.Tutorial, error) {
 	return allTutorialsFromDatabase, nil
 
 }
-func (client *Client) GetOneTutorialByURL() {
+func (client *Client) GetOneTutorialByURL(tutorial_url string) (*models.Tutorial, error) {
 	LOG.Debug("")
+	ctx, cancel := withTimeout()
+	defer cancel()
 
+	collection := client.Client_Obj.Database("bugsfounderDB").Collection("tutorials")
+
+	var tutorial models.Tutorial
+
+	err := collection.FindOne(ctx, bson.M{"url": tutorial_url}).Decode(&tutorial)
+
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return &tutorial, nil
 }
 func (client *Client) handleGetOneTutorialBySubURL() {
 	LOG.Debug("")

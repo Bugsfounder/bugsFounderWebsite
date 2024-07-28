@@ -29,14 +29,10 @@ func HandleGetAllBlogs(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc 
 
 func handleGetOneBlogByURL(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
-
-	return func(ctx *gin.Context) {
-		ctx.String(http.StatusOK, "endpoint: /handleGetOneBlogByURL")
-	}
+	return dbHandler.GetOneBlogByURL
 }
 func HandleUpdateOneBlogByURL(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
-
 	return func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "endpoint: /HandleUpdateOneBlogByURL")
 	}
@@ -61,10 +57,7 @@ func HandleGetAllTutorial(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFu
 }
 func handleGetOneTutorialByURL(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
-
-	return func(ctx *gin.Context) {
-		ctx.String(http.StatusOK, "endpoint: /handleGetOneTutorialByURL")
-	}
+	return dbHandler.GetOneTutorialByURL
 }
 func handleGetOneTutorialBySubURL(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
