@@ -35,9 +35,23 @@ func (client *Client) DemoFunc() {
 	LOG.Info("Document inserted successfully")
 }
 
-func (client *Client) CreateOneBlog() {
+func (client *Client) CreateOneBlog(blog *models.Blog) (*mongo.InsertOneResult, error) {
 	LOG.Debug("")
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 
+	collection := client.Client_Obj.Database("bugsfounderDB").Collection("blogs")
+
+	// set the createdAt and updated at field
+	// blog.CreatedAt = time.Now()
+	// blog.UpdatedAt = time.Now()
+
+	// insert the blog into the collection
+	result, err := collection.InsertOne(ctx, blog)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 func (client *Client) GetAllBlogs() ([]models.Blog, error) {
 	LOG.Debug("")
@@ -104,8 +118,23 @@ func (client *Client) DeleteOneBlogByURL() {
 	LOG.Debug("")
 
 }
-func (client *Client) CreateOneTutorail() {
+func (client *Client) CreateOneTutorial(tutorial *models.Tutorial) (*mongo.InsertOneResult, error) {
 	LOG.Debug("")
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	collection := client.Client_Obj.Database("bugsfounderDB").Collection("tutorials")
+
+	// set the createdAt and updated at field
+	// tutorial.CreatedAt = time.Now()
+	// tutorial.UpdatedAt = time.Now()
+
+	// insert the blog into the collection
+	result, err := collection.InsertOne(ctx, tutorial)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 
 }
 func (client *Client) GetAllTutorial() ([]models.Tutorial, error) {
@@ -243,8 +272,23 @@ func (client *Client) GetOneUserByEmail() {
 	LOG.Debug("")
 
 }
-func (client *Client) CreateOneUser() {
+func (client *Client) CreateOneUser(user *models.User) (*mongo.InsertOneResult, error) {
 	LOG.Debug("")
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	collection := client.Client_Obj.Database("bugsfounderDB").Collection("tutorials")
+
+	// set the createdAt and updated at field
+	// user.CreatedAt = time.Now()
+	// user.UpdatedAt = time.Now()
+
+	// insert the blog into the collection
+	result, err := collection.InsertOne(ctx, user)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 
 }
 func (client *Client) UpdateOneUserByUsernameOrEmail() {

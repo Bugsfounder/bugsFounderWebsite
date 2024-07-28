@@ -11,27 +11,27 @@ var LOG = logger.Logging()
 func ApiRoutes(server *gin.Engine, dbHandler *handler.HandlerForDBHandlers) {
 	LOG.Debug("Creating public and private routes")
 
-	// public roup
+	// public group
 	public_router := server.Group("/api/public")
 	{
 		// blog api's
 		public_router.GET("/", handlePublic(dbHandler))
 		public_router.POST("/blog", HandleCreateOneBlog(dbHandler))
-		public_router.GET("/blogs", HandleGetAllBlogs(dbHandler))
-		public_router.GET("/blogs/:blog_url", handleGetOneBlogByURL(dbHandler))
+		public_router.GET("/blogs", HandleGetAllBlogs(dbHandler))               // done
+		public_router.GET("/blogs/:blog_url", handleGetOneBlogByURL(dbHandler)) // done
 		public_router.POST("/blogs/:blog_url", HandleUpdateOneBlogByURL(dbHandler))
 		public_router.DELETE("/blogs/:blog_url", HandleDeleteOneBlogByURL(dbHandler))
 
 		// tutorial api's
-		public_router.POST("/tutorial", HandleCreateOneTutorail(dbHandler))
-		public_router.GET("/tutorials", HandleGetAllTutorial(dbHandler))
-		public_router.GET("/tutorials/:tutorial_url", HandleGetOneTutorialByURL(dbHandler))
-		public_router.GET("/tutorials/:tutorial_url/:sub_tutorial_url", HandleGetSubTutorialByURL(dbHandler))
+		public_router.POST("/tutorial", HandleCreateOneTutorial(dbHandler))
+		public_router.GET("/tutorials", HandleGetAllTutorial(dbHandler))                                      // done
+		public_router.GET("/tutorials/:tutorial_url", HandleGetOneTutorialByURL(dbHandler))                   // done
+		public_router.GET("/tutorials/:tutorial_url/:sub_tutorial_url", HandleGetSubTutorialByURL(dbHandler)) // done
 		public_router.POST("/tutorials/:tutorial_url", HandleUpdateOneTutorialByURL(dbHandler))
 		public_router.DELETE("/tutorials/:tutorial_url", HandleDeleteOneTutorialByURL(dbHandler))
 
 		// user api's
-		public_router.GET("/users", HandlerGetAllUsers(dbHandler))
+		public_router.GET("/users", HandlerGetAllUsers(dbHandler)) // done
 		public_router.GET("/users/:username_or_email", HandlerGetOneUserByUsernameOrEmail(dbHandler))
 		// public_router.GET("/users/:email", HandlerGetOneUserByEmail(dbHandler))
 		public_router.POST("/user", HandlerCreateOneUser(dbHandler))

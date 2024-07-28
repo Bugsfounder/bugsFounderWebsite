@@ -18,9 +18,7 @@ func handlePublic(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 func HandleCreateOneBlog(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
 
-	return func(ctx *gin.Context) {
-		ctx.String(http.StatusOK, "endpoint: /HandleCreateOneBlog")
-	}
+	return dbHandler.CreateOneBlog
 }
 func HandleGetAllBlogs(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
@@ -44,12 +42,10 @@ func HandleDeleteOneBlogByURL(dbHandler *handler.HandlerForDBHandlers) gin.Handl
 		ctx.String(http.StatusOK, "endpoint: /HandleDeleteOneBlogByURL")
 	}
 }
-func HandleCreateOneTutorail(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+func HandleCreateOneTutorial(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
 
-	return func(ctx *gin.Context) {
-		ctx.String(http.StatusOK, "endpoint: /HandleCreateOneTutorail")
-	}
+	return dbHandler.CreateOneTutorial
 }
 func HandleGetAllTutorial(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
@@ -104,10 +100,7 @@ func HandlerGetOneUserByEmail(dbHandler *handler.HandlerForDBHandlers) gin.Handl
 }
 func HandlerCreateOneUser(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
-
-	return func(ctx *gin.Context) {
-		ctx.String(http.StatusOK, "endpoint: /HandlerCreateOneUser")
-	}
+	return dbHandler.CreateOneUser
 }
 func HandlerUpdateOneUserByUsernameOrEmail(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")

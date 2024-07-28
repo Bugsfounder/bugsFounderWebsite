@@ -5,7 +5,9 @@ import (
 
 	"github.com/bugsfounder/bugsfounderweb/db"
 	"github.com/bugsfounder/bugsfounderweb/logger"
+	"github.com/bugsfounder/bugsfounderweb/models"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 var LOG = logger.Logging()
@@ -19,9 +21,27 @@ func (h_DB *HandlerForDBHandlers) DemoFuncHandler() {
 	h_DB.Client.DemoFunc()
 }
 
-func (h_DB *HandlerForDBHandlers) CreateOneBlog() {
+func (h_DB *HandlerForDBHandlers) CreateOneBlog(ctx *gin.Context) {
 	LOG.Debug("")
-	// access db functions ex: h.Client.DemoFunc() // in db
+
+	var blog models.Blog
+	if err := ctx.ShouldBindJSON(&blog); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "invalid request"})
+		return
+	}
+
+	result, err := h_DB.Client.CreateOneBlog(&blog)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			ctx.JSON(http.StatusNotFound, gin.H{"message": "no document found"})
+		} else {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		}
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"inserted_id": result.InsertedID})
+
 }
 func (h_DB *HandlerForDBHandlers) GetAllBlogs(ctx *gin.Context) {
 	LOG.Debug("")
@@ -54,9 +74,26 @@ func (h_DB *HandlerForDBHandlers) DeleteOneBlogByURL() {
 	LOG.Debug("")
 	// access db functions ex: h.Client.DemoFunc() // in db
 }
-func (h_DB *HandlerForDBHandlers) CreateOneTutorial() {
+func (h_DB *HandlerForDBHandlers) CreateOneTutorial(ctx *gin.Context) {
 	LOG.Debug("")
-	// access db functions ex: h.Client.DemoFunc() // in db
+
+	var tutorial models.Tutorial
+	if err := ctx.ShouldBindJSON(&tutorial); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "invalid request"})
+		return
+	}
+
+	result, err := h_DB.Client.CreateOneTutorial(&tutorial)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			ctx.JSON(http.StatusNotFound, gin.H{"message": "no document found"})
+		} else {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		}
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"inserted_id": result.InsertedID})
 }
 func (h_DB *HandlerForDBHandlers) GetAllTutorial(ctx *gin.Context) {
 	LOG.Debug("")
@@ -121,9 +158,25 @@ func (h_DB *HandlerForDBHandlers) GetOneUserByEmail() {
 	LOG.Debug("")
 	// access db functions ex: h.Client.DemoFunc() // in db
 }
-func (h_DB *HandlerForDBHandlers) CreateOneUser() {
+func (h_DB *HandlerForDBHandlers) CreateOneUser(ctx *gin.Context) {
 	LOG.Debug("")
-	// access db functions ex: h.Client.DemoFunc() // in db
+	var user models.User
+	if err := ctx.ShouldBindJSON(&user); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "invalid request"})
+		return
+	}
+
+	result, err := h_DB.Client.CreateOneUser(&user)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			ctx.JSON(http.StatusNotFound, gin.H{"message": "no document found"})
+		} else {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		}
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"inserted_id": result.InsertedID})
 }
 func (h_DB *HandlerForDBHandlers) UpdateOneUserByUsernameOrEmail() {
 	LOG.Debug("")
