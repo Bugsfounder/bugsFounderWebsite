@@ -25,8 +25,8 @@ func ApiRoutes(server *gin.Engine, dbHandler *handler.HandlerForDBHandlers) {
 		// tutorial api's
 		public_router.POST("/tutorial", HandleCreateOneTutorail(dbHandler))
 		public_router.GET("/tutorials", HandleGetAllTutorial(dbHandler))
-		public_router.GET("/tutorials/:tutorial_url", handleGetOneTutorialByURL(dbHandler))
-		public_router.GET("/tutorials/:tutorial_url/:sub_tutorial_url", handleGetOneTutorialBySubURL(dbHandler))
+		public_router.GET("/tutorials/:tutorial_url", HandleGetOneTutorialByURL(dbHandler))
+		public_router.GET("/tutorials/:tutorial_url/:sub_tutorial_url", HandleGetSubTutorialByURL(dbHandler))
 		public_router.POST("/tutorials/:tutorial_url", HandleUpdateOneTutorialByURL(dbHandler))
 		public_router.DELETE("/tutorials/:tutorial_url", HandleDeleteOneTutorialByURL(dbHandler))
 

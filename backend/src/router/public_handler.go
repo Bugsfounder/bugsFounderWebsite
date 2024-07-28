@@ -55,16 +55,13 @@ func HandleGetAllTutorial(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFu
 	LOG.Debug("")
 	return dbHandler.GetAllTutorial
 }
-func handleGetOneTutorialByURL(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+func HandleGetOneTutorialByURL(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
 	return dbHandler.GetOneTutorialByURL
 }
-func handleGetOneTutorialBySubURL(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+func HandleGetSubTutorialByURL(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
-
-	return func(ctx *gin.Context) {
-		ctx.String(http.StatusOK, "endpoint: /handleGetOneTutorialBySubURL")
-	}
+	return dbHandler.GetSubTutorialByURL
 }
 func HandleUpdateOneTutorialByURL(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")

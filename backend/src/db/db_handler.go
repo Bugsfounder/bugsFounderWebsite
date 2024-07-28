@@ -163,8 +163,35 @@ func (client *Client) GetOneTutorialByURL(tutorial_url string) (*models.Tutorial
 
 	return &tutorial, nil
 }
-func (client *Client) handleGetOneTutorialBySubURL() {
+func (client *Client) GetSubTutorialByURL(tutorialURL, subTutorialURL string) (*models.Sub_Tutorial, error) {
 	LOG.Debug("")
+	ctx, cancel := withTimeout()
+	defer cancel()
+
+	collection := client.Client_Obj.Database("bugsfounderDB").Collection("tutorials")
+
+	// define the filter to match the tutorial and the sub-tutorial
+	filter := bson.M{
+		"url":               tutorialURL,
+		"sub_tutorials.url": subTutorialURL,
+	}
+
+	// Find the tutorial document
+	var tutorial models.Tutorial
+	err := collection.FindOne(ctx, filter).Decode(&tutorial)
+	if err != nil {
+		return nil, err
+	}
+
+	// Extract the sub-tutorial
+	for _, subTutorial := range tutorial.Sub_Tutorials {
+		if subTutorial.Url == subTutorialURL {
+			return &subTutorial, nil
+		}
+	}
+
+	return nil, mongo.ErrNoDocuments
+
 }
 func (client *Client) UpdateOneTutorialByURL() {
 	LOG.Debug("")

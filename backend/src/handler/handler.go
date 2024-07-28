@@ -79,6 +79,19 @@ func (h_DB *HandlerForDBHandlers) GetOneTutorialByURL(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, tutorial)
 }
+func (h_DB *HandlerForDBHandlers) GetSubTutorialByURL(ctx *gin.Context) {
+	LOG.Debug("")
+
+	tutorial_url := ctx.Param("tutorial_url")
+	sub_tutorial_url := ctx.Param("sub_tutorial_url")
+
+	subTutorial, err := h_DB.Client.GetSubTutorialByURL(tutorial_url, sub_tutorial_url)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+	ctx.JSON(http.StatusOK, subTutorial)
+}
 func (h_DB *HandlerForDBHandlers) UpdateOneTutorialByURL() {
 	LOG.Debug("")
 	// access db functions ex: h.Client.DemoFunc() // in db
