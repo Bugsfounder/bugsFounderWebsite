@@ -8,6 +8,7 @@ type Blog struct {
 	Author    string    `json:"author"`
 	Tags      []string  `json:"tags"`
 	CreatedAt time.Time `json:"created_at"`
+	Url       string    `json:"url"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
@@ -17,6 +18,7 @@ type Tutorial struct {
 	Author        string         `json:"author"`
 	Tags          []string       `json:"tags"`
 	Sub_Tutorials []Sub_Tutorial `json:"sub_tutorials"`
+	Url           string         `json:"url"`
 	CreatedAt     time.Time      `json:"created_at"`
 	UpdatedAt     time.Time      `json:"updated_at"`
 }
@@ -26,6 +28,7 @@ type Sub_Tutorial struct {
 	Content   string    `json:"content"`
 	Author    string    `json:"author"`
 	Tags      []string  `json:"tags"`
+	Url       string    `json:"url"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }

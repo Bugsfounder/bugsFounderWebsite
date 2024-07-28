@@ -39,16 +39,18 @@ func (client *Client) CreateOneBlog() {
 	LOG.Debug("")
 
 }
-func (client *Client) GetAllBlogs() []models.Blog {
+func (client *Client) GetAllBlogs() ([]models.Blog, error) {
 	LOG.Debug("")
 	ctx, cancel := withTimeout()
 	defer cancel()
+
 	// select the database and collection
 	collection := client.Client_Obj.Database("bugsfounderDB").Collection("blogs")
 
 	cursor, err := collection.Find(ctx, bson.M{})
 	if err != nil {
-		LOG.Fatal("%v", err)
+		LOG.Error("%v", err)
+		return nil, err
 	}
 
 	defer cursor.Close(ctx)
@@ -59,28 +61,30 @@ func (client *Client) GetAllBlogs() []models.Blog {
 		var blog models.Blog
 		err := cursor.Decode(&blog)
 		if err != nil {
-			LOG.Fatal("Failed to decode document: %v", err)
+			LOG.Error("Failed to decode document: %v", err)
+			return nil, err
 		}
 
 		allBlogsFromDatabase = append(allBlogsFromDatabase, blog)
 	}
 
 	if err := cursor.Err(); err != nil {
-		LOG.Fatal("Cursor error: %v", err)
+		LOG.Error("Cursor error: %v", err)
+		return nil, err
 	}
 
-	return allBlogsFromDatabase
+	return allBlogsFromDatabase, nil
 
 }
-func (client *Client) GetOneBlogByID() {
+func (client *Client) GetOneBlogByURL() {
 	LOG.Debug("")
 
 }
-func (client *Client) UpdateOneBlogById() {
+func (client *Client) UpdateOneBlogByURL() {
 	LOG.Debug("")
 
 }
-func (client *Client) DeleteOneBlogById() {
+func (client *Client) DeleteOneBlogByURL() {
 	LOG.Debug("")
 
 }
@@ -88,7 +92,7 @@ func (client *Client) CreateOneTutorail() {
 	LOG.Debug("")
 
 }
-func (client *Client) GetAllTutorial() []models.Tutorial {
+func (client *Client) GetAllTutorial() ([]models.Tutorial, error) {
 	LOG.Debug("")
 	ctx, cancel := withTimeout()
 	defer cancel()
@@ -97,7 +101,8 @@ func (client *Client) GetAllTutorial() []models.Tutorial {
 
 	cursor, err := collection.Find(ctx, bson.M{})
 	if err != nil {
-		LOG.Fatal("%v", err)
+		LOG.Error("%v", err)
+		return nil, err
 	}
 	defer cursor.Close(ctx)
 
@@ -107,32 +112,37 @@ func (client *Client) GetAllTutorial() []models.Tutorial {
 		var tutorial models.Tutorial
 		err := cursor.Decode(&tutorial)
 		if err != nil {
-			LOG.Fatal("Failed to decode document: %v", err)
+			LOG.Error("Failed to decode document: %v", err)
+			return nil, err
 		}
 
 		allTutorialsFromDatabase = append(allTutorialsFromDatabase, tutorial)
 	}
 
 	if err := cursor.Err(); err != nil {
-		LOG.Fatal("Cursor error: %v", err)
+		LOG.Error("Cursor error: %v", err)
+		return nil, err
 	}
 
-	return allTutorialsFromDatabase
+	return allTutorialsFromDatabase, nil
 
 }
-func (client *Client) GetOneTutorialByID() {
+func (client *Client) GetOneTutorialByURL() {
 	LOG.Debug("")
 
 }
-func (client *Client) UpdateOneTutorialById() {
+func (client *Client) handleGetOneTutorialBySubURL() {
+	LOG.Debug("")
+}
+func (client *Client) UpdateOneTutorialByURL() {
 	LOG.Debug("")
 
 }
-func (client *Client) DeleteOneTutorialById() {
+func (client *Client) DeleteOneTutorialByURL() {
 	LOG.Debug("")
 
 }
-func (client *Client) GetAllUsers() []models.User {
+func (client *Client) GetAllUsers() ([]models.User, error) {
 	LOG.Debug("")
 	ctx, cancel := withTimeout()
 	defer cancel()
@@ -141,7 +151,8 @@ func (client *Client) GetAllUsers() []models.User {
 
 	cursor, err := collection.Find(ctx, bson.M{})
 	if err != nil {
-		LOG.Fatal("%v", err)
+		LOG.Error("%v", err)
+		return nil, err
 	}
 	defer cursor.Close(ctx)
 
@@ -151,17 +162,19 @@ func (client *Client) GetAllUsers() []models.User {
 		var user models.User
 		err := cursor.Decode(&user)
 		if err != nil {
-			LOG.Fatal("Failed to decode document: %v", err)
+			LOG.Error("Failed to decode document: %v", err)
+			return nil, err
 		}
 
 		allUsersFromDatabase = append(allUsersFromDatabase, user)
 	}
 
 	if err := cursor.Err(); err != nil {
-		LOG.Fatal("Cursor error: %v", err)
+		LOG.Error("Cursor error: %v", err)
+		return nil, err
 	}
 
-	return allUsersFromDatabase
+	return allUsersFromDatabase, nil
 }
 func (client *Client) GetOneUserByUsername() {
 	LOG.Debug("")

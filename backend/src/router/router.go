@@ -18,16 +18,17 @@ func ApiRoutes(server *gin.Engine, dbHandler *handler.HandlerForDBHandlers) {
 		public_router.GET("/", handlePublic(dbHandler))
 		public_router.POST("/blog", HandleCreateOneBlog(dbHandler))
 		public_router.GET("/blogs", HandleGetAllBlogs(dbHandler))
-		public_router.GET("/blogs/:blog_id", handleGetOneBlogByID(dbHandler))
-		public_router.POST("/blogs/:blog_id", HandleUpdateOneBlogById(dbHandler))
-		public_router.DELETE("/blogs/:blog_id", HandleDeleteOneBlogById(dbHandler))
+		public_router.GET("/blogs/:blog_url", handleGetOneBlogByURL(dbHandler))
+		public_router.POST("/blogs/:blog_url", HandleUpdateOneBlogByURL(dbHandler))
+		public_router.DELETE("/blogs/:blog_url", HandleDeleteOneBlogByURL(dbHandler))
 
 		// tutorial api's
 		public_router.POST("/tutorial", HandleCreateOneTutorail(dbHandler))
 		public_router.GET("/tutorials", HandleGetAllTutorial(dbHandler))
-		public_router.GET("/tutorials/:tutorial_id", handleGetOneTutorialByID(dbHandler))
-		public_router.POST("/tutorials/:tutorial_id", HandleUpdateOneTutorialById(dbHandler))
-		public_router.DELETE("/tutorials/:tutorial_id", HandleDeleteOneTutorialById(dbHandler))
+		public_router.GET("/tutorials/:tutorial_url", handleGetOneTutorialByURL(dbHandler))
+		public_router.GET("/tutorials/:tutorial_url/:sub_tutorial_url", handleGetOneTutorialBySubURL(dbHandler))
+		public_router.POST("/tutorials/:tutorial_url", HandleUpdateOneTutorialByURL(dbHandler))
+		public_router.DELETE("/tutorials/:tutorial_url", HandleDeleteOneTutorialByURL(dbHandler))
 
 		// user api's
 		public_router.GET("/users", HandlerGetAllUsers(dbHandler))
