@@ -76,9 +76,25 @@ func (client *Client) GetAllBlogs() ([]models.Blog, error) {
 	return allBlogsFromDatabase, nil
 
 }
-func (client *Client) GetOneBlogByURL() {
+func (client *Client) GetOneBlogByURL(url string) (*models.Blog, error) {
 	LOG.Debug("")
+	ctx, cancel := withTimeout()
+	defer cancel()
 
+	collection := client.Client_Obj.Database("bugsfounderDB").Collection("blogs")
+
+	var blog models.Blog
+
+	err := collection.FindOne(ctx, bson.M{"url": url}).Decode(&blog)
+
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return &blog, nil
 }
 func (client *Client) UpdateOneBlogByURL() {
 	LOG.Debug("")

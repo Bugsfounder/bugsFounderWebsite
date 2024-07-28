@@ -27,6 +27,10 @@ func main() {
 
 	LOG.Debug("Starting server")
 	server := gin.Default() // gin server
+	server.SetTrustedProxies([]string{"localhost", "0.0.0.0", "127.0.0.1"})
+
+	// Set trusted proxies for production (replace with actual proxy IPs)
+	// r.SetTrustedProxies([]string{"192.168.1.1", "192.168.1.2"})
 
 	// connecting to db
 	client, ctx, cancel, err := db.ConnectToDBAndGetClientCtxCancelErr()

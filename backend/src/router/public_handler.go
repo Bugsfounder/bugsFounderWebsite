@@ -24,14 +24,7 @@ func HandleCreateOneBlog(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFun
 }
 func HandleGetAllBlogs(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
-	return func(ctx *gin.Context) {
-		allBlogs, err := dbHandler.Client.GetAllBlogs()
-		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-			return
-		}
-		ctx.JSON(http.StatusOK, allBlogs)
-	}
+	return dbHandler.GetAllBlogs
 }
 
 func handleGetOneBlogByURL(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
@@ -64,15 +57,7 @@ func HandleCreateOneTutorail(dbHandler *handler.HandlerForDBHandlers) gin.Handle
 }
 func HandleGetAllTutorial(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
-
-	return func(ctx *gin.Context) {
-		allBlogs, err := dbHandler.Client.GetAllTutorial()
-		if err != nil {
-			ctx.JSON(http.StatusBadRequest, err.Error())
-			return
-		}
-		ctx.JSON(http.StatusOK, allBlogs)
-	}
+	return dbHandler.GetAllTutorial
 }
 func handleGetOneTutorialByURL(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
@@ -104,15 +89,7 @@ func HandleDeleteOneTutorialByURL(dbHandler *handler.HandlerForDBHandlers) gin.H
 }
 func HandlerGetAllUsers(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
-
-	return func(ctx *gin.Context) {
-		allUser, err := dbHandler.Client.GetAllUsers()
-		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-			return
-		}
-		ctx.JSON(http.StatusOK, allUser)
-	}
+	return dbHandler.GetAllUsers
 }
 func HandlerGetOneUserByUsernameOrEmail(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
