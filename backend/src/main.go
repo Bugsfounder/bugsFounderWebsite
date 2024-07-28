@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/bugsfounder/bugsfounderweb/db"
 	"github.com/bugsfounder/bugsfounderweb/handler"
 	"github.com/bugsfounder/bugsfounderweb/logger"
@@ -10,7 +13,18 @@ import (
 
 var LOG = logger.Logging()
 
+func CustomPanic(message string) {
+	const (
+		RedBG = "\033[41m"
+		White = "\033[97m"
+		Reset = "\033[0m"
+	)
+	fmt.Printf("%s%sPanic: %s%s\n", RedBG, White, message, Reset)
+	os.Exit(1)
+}
+
 func main() {
+
 	LOG.Debug("Starting server")
 	server := gin.Default() // gin server
 
@@ -36,7 +50,7 @@ func main() {
 		},
 	}
 
-
+	LOG.Panic("panic")
 
 	// passing handler to api routes
 	router.ApiRoutes(server, &dbHandler)

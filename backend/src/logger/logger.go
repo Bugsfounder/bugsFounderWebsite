@@ -112,6 +112,18 @@ func (l *Logger) Fatal(format string, args ...interface{}) {
 	l.customLog(Fatal, format, args...)
 }
 
+func (l *Logger) Panic(message string) {
+	funcName, file, line := getCallerInfo()
+	now := time.Now().Format("2006-01-02:15:04:05,999")
+	const (
+		RedBG = "\033[41m"
+		White = "\033[97m"
+		Reset = "\033[0m"
+	)
+	fmt.Printf("%s %s %-8s %s:%d %s() Panic: %s%s\n", now, RedBG, White, file, line, funcName, message, Reset)
+	os.Exit(1)
+}
+
 // String converts a LogLevel to its string representation.
 func (l LogLevel) String() string {
 	switch l {
