@@ -66,13 +66,52 @@ func (h_DB *HandlerForDBHandlers) GetOneBlogByURL(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, blog)
 
 }
-func (h_DB *HandlerForDBHandlers) UpdateOneBlogByURL() {
+func (h_DB *HandlerForDBHandlers) UpdateOneBlogByURL(ctx *gin.Context) {
 	LOG.Debug("")
-	// access db functions ex: h.Client.DemoFunc() // in db
+	blogURL := ctx.Param("blog_url")
+
+	LOG.Debug("blog_url: %v", blogURL)
+
+	// define a variable to hold the updated blog data
+	var updatedBlog models.Blog
+
+	// Bind the JSON data from the request body to the updatedBlog variable
+	if err := ctx.BindJSON(&updatedBlog); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "invalid request data"})
+		return
+	}
+
+	// call the db handler method to update the blog
+	result, err := h_DB.Client.UpdateOneBlogByURL(blogURL, &updatedBlog)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	// Return the result of the update operation
+	ctx.JSON(http.StatusOK, result)
+
 }
-func (h_DB *HandlerForDBHandlers) DeleteOneBlogByURL() {
+func (h_DB *HandlerForDBHandlers) DeleteOneBlogByURL(ctx *gin.Context) {
 	LOG.Debug("")
-	// access db functions ex: h.Client.DemoFunc() // in db
+	blogURL := ctx.Param("blog_url")
+	LOG.Debug("blog_url: %v", blogURL)
+
+	// call the db handler method to delete the blog
+	result, err := h_DB.Client.DeleteOneBlogByURL(blogURL)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	if result.DeletedCount == 0 {
+		ctx.JSON(http.StatusNotFound, gin.H{"message": "blog not found"})
+		return
+	}
+
+	// return success message
+	ctx.JSON(http.StatusOK, gin.H{"message": "blog deleted successfully"})
 }
 func (h_DB *HandlerForDBHandlers) CreateOneTutorial(ctx *gin.Context) {
 	LOG.Debug("")
@@ -95,6 +134,26 @@ func (h_DB *HandlerForDBHandlers) CreateOneTutorial(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{"inserted_id": result.InsertedID})
 }
+
+func (h_DB *HandlerForDBHandlers) CreateSubTutorial(ctx *gin.Context) {
+	LOG.Debug("")
+	tutorialURL := ctx.Param("tutorial_url")
+
+	var subTutorial models.Sub_Tutorial
+	if err := ctx.BindJSON(&subTutorial); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "Invalid request"})
+		return
+	}
+
+	result, err := h_DB.Client.CreateSubTutorial(tutorialURL, &subTutorial)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, result)
+}
+
 func (h_DB *HandlerForDBHandlers) GetAllTutorial(ctx *gin.Context) {
 	LOG.Debug("")
 	allTutorial, err := h_DB.Client.GetAllTutorial()
@@ -129,14 +188,93 @@ func (h_DB *HandlerForDBHandlers) GetSubTutorialByURL(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, subTutorial)
 }
-func (h_DB *HandlerForDBHandlers) UpdateOneTutorialByURL() {
+func (h_DB *HandlerForDBHandlers) UpdateOneTutorialByURL(ctx *gin.Context) {
 	LOG.Debug("")
-	// access db functions ex: h.Client.DemoFunc() // in db
+	tutorialURL := ctx.Param("tutorial_url")
+
+	// define a variable to hold the updated blog data
+	var updatedTutorial models.Tutorial
+
+	// Bind the JSON data from the request body to the updatedBlog variable
+	if err := ctx.BindJSON(&updatedTutorial); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "invalid request data"})
+		return
+	}
+
+	// call the db handler method to update the blog
+	result, err := h_DB.Client.UpdateOneTutorialByURL(tutorialURL, &updatedTutorial)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	// Return the result of the update operation
+	ctx.JSON(http.StatusOK, result)
+
 }
-func (h_DB *HandlerForDBHandlers) DeleteOneTutorialByURL() {
+func (h_DB *HandlerForDBHandlers) UpdateSubTutorialByURL(ctx *gin.Context) {
 	LOG.Debug("")
-	// access db functions ex: h.Client.DemoFunc() // in db
+	tutorialURL := ctx.Param("tutorial_url")
+	subTutorialURL := ctx.Param("sub_tutorial_url")
+
+	var updatedSubTutorial models.Sub_Tutorial
+	if err := ctx.ShouldBindJSON(&updatedSubTutorial); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "Invalid request payload"})
+		return
+	}
+
+	result, err := h_DB.Client.UpdateSubTutorialByURL(tutorialURL, subTutorialURL, &updatedSubTutorial)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	if result.MatchedCount == 0 {
+		ctx.JSON(http.StatusNotFound, gin.H{"message": "Sub-Tutorial not found"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "Sub-Tutorial updated successfully"})
 }
+func (h_DB *HandlerForDBHandlers) DeleteOneTutorialByURL(ctx *gin.Context) {
+	LOG.Debug("")
+	tutorialURL := ctx.Param("tutorial_url")
+
+	result, err := h_DB.Client.DeleteOneTutorialByURL(tutorialURL)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	if result.DeletedCount == 0 {
+		ctx.JSON(http.StatusNotFound, gin.H{"message": "Tutorial not found"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "Tutorial deleted successfully"})
+}
+
+func (h_DB *HandlerForDBHandlers) DeleteSubTutorialByURL(ctx *gin.Context) {
+	LOG.Debug("")
+
+	tutorialURL := ctx.Param("tutorial_url")
+	subTutorialURL := ctx.Param("sub_tutorial_url")
+
+	result, err := h_DB.Client.DeleteSubTutorialByURL(tutorialURL, subTutorialURL)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	if result.ModifiedCount == 0 {
+		ctx.JSON(http.StatusNotFound, gin.H{"message": "Sub-Tutorial not found"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "Sub-Tutorial deleted successfully"})
+}
+
 func (h_DB *HandlerForDBHandlers) GetAllUsers(ctx *gin.Context) {
 	LOG.Debug("")
 	allUser, err := h_DB.Client.GetAllUsers()
@@ -146,17 +284,24 @@ func (h_DB *HandlerForDBHandlers) GetAllUsers(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, allUser)
 }
-func (h_DB *HandlerForDBHandlers) HandlerGetOneUserByUsernameOrEmail() {
+func (h_DB *HandlerForDBHandlers) GetOneUserByUsernameOrEmail(ctx *gin.Context) {
 	LOG.Debug("")
-	// access db functions ex: h.Client.DemoFunc() // in db
-}
-func (h_DB *HandlerForDBHandlers) GetOneUserByUsername() {
-	LOG.Debug("")
-	// access db functions ex: h.Client.DemoFunc() // in db
-}
-func (h_DB *HandlerForDBHandlers) GetOneUserByEmail() {
-	LOG.Debug("")
-	// access db functions ex: h.Client.DemoFunc() // in db
+	usernameOrEmail := ctx.Param("username_or_email")
+
+	user, err := h_DB.Client.GetOneUserByUsernameOrEmail(usernameOrEmail)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	if user == nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"message": "User not found"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, user)
+
 }
 func (h_DB *HandlerForDBHandlers) CreateOneUser(ctx *gin.Context) {
 	LOG.Debug("")
@@ -178,11 +323,48 @@ func (h_DB *HandlerForDBHandlers) CreateOneUser(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{"inserted_id": result.InsertedID})
 }
-func (h_DB *HandlerForDBHandlers) UpdateOneUserByUsernameOrEmail() {
+func (h_DB *HandlerForDBHandlers) UpdateOneUserByUsernameOrEmail(ctx *gin.Context) {
 	LOG.Debug("")
-	// access db functions ex: h.Client.DemoFunc() // in db
+	// Get the email or username from the URL parameters
+	username_or_email := ctx.Param("username_or_email")
+	LOG.Debug("username_or_email: %v", username_or_email)
+
+	// Bind the JSON body to the User model
+	var updatedUser models.User
+	if err := ctx.ShouldBindJSON(&updatedUser); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "Invalid request payload"})
+		return
+	}
+
+	// Call the DB handler method to update the user
+	result, err := h_DB.Client.UpdateOneUserByUsernameOrEmail(username_or_email, &updatedUser)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	if result.MatchedCount == 0 {
+		ctx.JSON(http.StatusNotFound, gin.H{"message": "User not found"})
+		return
+	}
+
+	// Return success message
+	ctx.JSON(http.StatusOK, gin.H{"message": "User updated successfully"})
 }
-func (h_DB *HandlerForDBHandlers) DeleteOneUserByUsernameOrEmail() {
+func (h_DB *HandlerForDBHandlers) DeleteOneUserByUsernameOrEmail(ctx *gin.Context) {
 	LOG.Debug("")
-	// access db functions ex: h.Client.DemoFunc() // in db
+	usernameOrEmail := ctx.Param("username_or_email")
+
+	result, err := h_DB.Client.DeleteOneUserByUsernameOrEmail(usernameOrEmail)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	if result.DeletedCount == 0 {
+		ctx.JSON(http.StatusNotFound, gin.H{"message": "User not found"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
 }
