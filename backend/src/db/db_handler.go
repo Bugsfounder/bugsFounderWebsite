@@ -54,6 +54,7 @@ func (client *Client) CreateOneBlog(blog *models.Blog) (*mongo.InsertOneResult, 
 	}
 	return result, nil
 }
+
 func (client *Client) GetAllBlogs() ([]models.Blog, error) {
 	LOG.Debug("")
 	ctx, cancel := withTimeout()
@@ -91,6 +92,7 @@ func (client *Client) GetAllBlogs() ([]models.Blog, error) {
 	return allBlogsFromDatabase, nil
 
 }
+
 func (client *Client) GetOneBlogByURL(blogURL string) (*models.Blog, error) {
 	LOG.Debug("")
 	ctx, cancel := withTimeout()
@@ -111,6 +113,7 @@ func (client *Client) GetOneBlogByURL(blogURL string) (*models.Blog, error) {
 
 	return &blog, nil
 }
+
 func (client *Client) UpdateOneBlogByURL(blogURL string, updatedBlog *models.Blog) (*mongo.UpdateResult, error) {
 	LOG.Debug("")
 	ctx, cancel := withTimeout()
@@ -162,6 +165,7 @@ func (client *Client) UpdateOneBlogByURL(blogURL string, updatedBlog *models.Blo
 
 	return result, nil
 }
+
 func (client *Client) DeleteOneBlogByURL(blogURL string) (*mongo.DeleteResult, error) {
 	LOG.Debug("")
 	ctx, cancel := withTimeout()
@@ -180,6 +184,7 @@ func (client *Client) DeleteOneBlogByURL(blogURL string) (*mongo.DeleteResult, e
 
 	return result, nil
 }
+
 func (client *Client) CreateOneTutorial(tutorial *models.Tutorial) (*mongo.InsertOneResult, error) {
 	LOG.Debug("")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -265,6 +270,7 @@ func (client *Client) GetAllTutorial() ([]models.Tutorial, error) {
 	return allTutorialsFromDatabase, nil
 
 }
+
 func (client *Client) GetOneTutorialByURL(tutorial_url string) (*models.Tutorial, error) {
 	LOG.Debug("")
 	ctx, cancel := withTimeout()
@@ -285,6 +291,7 @@ func (client *Client) GetOneTutorialByURL(tutorial_url string) (*models.Tutorial
 
 	return &tutorial, nil
 }
+
 func (client *Client) GetSubTutorialByURL(tutorialURL, subTutorialURL string) (*models.Sub_Tutorial, error) {
 	LOG.Debug("")
 	ctx, cancel := withTimeout()
@@ -315,6 +322,7 @@ func (client *Client) GetSubTutorialByURL(tutorialURL, subTutorialURL string) (*
 	return nil, mongo.ErrNoDocuments
 
 }
+
 func (client *Client) UpdateOneTutorialByURL(tutorialURL string, updatedTutorial *models.Tutorial) (*mongo.UpdateResult, error) {
 	LOG.Debug("")
 
@@ -362,6 +370,7 @@ func (client *Client) UpdateOneTutorialByURL(tutorialURL string, updatedTutorial
 
 	return result, nil
 }
+
 func (client *Client) UpdateSubTutorialByURL(tutorialURL, subTutorialURL string, updatedSubTutorial *models.Sub_Tutorial) (*mongo.UpdateResult, error) {
 	LOG.Debug("")
 
@@ -410,6 +419,7 @@ func (client *Client) UpdateSubTutorialByURL(tutorialURL, subTutorialURL string,
 
 	return result, nil
 }
+
 func (client *Client) DeleteOneTutorialByURL(tutorialURL string) (*mongo.DeleteResult, error) {
 	LOG.Debug("")
 
@@ -453,6 +463,7 @@ func (client *Client) DeleteSubTutorialByURL(tutorialURL, subTutorialURL string)
 
 	return result, nil
 }
+
 func (client *Client) GetAllUsers() ([]models.User, error) {
 	LOG.Debug("")
 	ctx, cancel := withTimeout()
@@ -487,6 +498,7 @@ func (client *Client) GetAllUsers() ([]models.User, error) {
 
 	return allUsersFromDatabase, nil
 }
+
 func (client *Client) GetOneUserByUsernameOrEmail(usernameOrEmail string) (*models.User, error) {
 	LOG.Debug("")
 
@@ -590,6 +602,7 @@ func (client *Client) UpdateOneUserByUsernameOrEmail(emailOrUsername string, upd
 
 	return result, nil
 }
+
 func (client *Client) DeleteOneUserByUsernameOrEmail(usernameOrEmail string) (*mongo.DeleteResult, error) {
 	LOG.Debug("")
 	ctx, cancel := withTimeout()

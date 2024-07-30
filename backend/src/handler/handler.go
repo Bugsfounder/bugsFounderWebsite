@@ -16,11 +16,13 @@ type HandlerForDBHandlers struct {
 	Client db.Client
 }
 
+// DemoFuncHandler
 func (h_DB *HandlerForDBHandlers) DemoFuncHandler() {
 	LOG.Debug("")
 	h_DB.Client.DemoFunc()
 }
 
+// CreateOneBlog
 func (h_DB *HandlerForDBHandlers) CreateOneBlog(ctx *gin.Context) {
 	LOG.Debug("")
 
@@ -43,6 +45,8 @@ func (h_DB *HandlerForDBHandlers) CreateOneBlog(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"inserted_id": result.InsertedID})
 
 }
+
+// GetAllBlogs
 func (h_DB *HandlerForDBHandlers) GetAllBlogs(ctx *gin.Context) {
 	LOG.Debug("")
 	// access db functions ex: h.Client.DemoFunc() // in db
@@ -53,6 +57,8 @@ func (h_DB *HandlerForDBHandlers) GetAllBlogs(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, allBlogs)
 }
+
+// GetOneBlogByURL
 func (h_DB *HandlerForDBHandlers) GetOneBlogByURL(ctx *gin.Context) {
 	LOG.Debug("")
 
@@ -66,6 +72,8 @@ func (h_DB *HandlerForDBHandlers) GetOneBlogByURL(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, blog)
 
 }
+
+// UpdateOneBlogByURL
 func (h_DB *HandlerForDBHandlers) UpdateOneBlogByURL(ctx *gin.Context) {
 	LOG.Debug("")
 	blogURL := ctx.Param("blog_url")
@@ -93,6 +101,8 @@ func (h_DB *HandlerForDBHandlers) UpdateOneBlogByURL(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, result)
 
 }
+
+// DeleteOneBlogByURL
 func (h_DB *HandlerForDBHandlers) DeleteOneBlogByURL(ctx *gin.Context) {
 	LOG.Debug("")
 	blogURL := ctx.Param("blog_url")
@@ -113,6 +123,8 @@ func (h_DB *HandlerForDBHandlers) DeleteOneBlogByURL(ctx *gin.Context) {
 	// return success message
 	ctx.JSON(http.StatusOK, gin.H{"message": "blog deleted successfully"})
 }
+
+// CreateOneTutorial
 func (h_DB *HandlerForDBHandlers) CreateOneTutorial(ctx *gin.Context) {
 	LOG.Debug("")
 
@@ -135,6 +147,7 @@ func (h_DB *HandlerForDBHandlers) CreateOneTutorial(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"inserted_id": result.InsertedID})
 }
 
+// CreateSubTutorial
 func (h_DB *HandlerForDBHandlers) CreateSubTutorial(ctx *gin.Context) {
 	LOG.Debug("")
 	tutorialURL := ctx.Param("tutorial_url")
@@ -154,6 +167,7 @@ func (h_DB *HandlerForDBHandlers) CreateSubTutorial(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, result)
 }
 
+// GetAllTutorial
 func (h_DB *HandlerForDBHandlers) GetAllTutorial(ctx *gin.Context) {
 	LOG.Debug("")
 	allTutorial, err := h_DB.Client.GetAllTutorial()
@@ -163,6 +177,8 @@ func (h_DB *HandlerForDBHandlers) GetAllTutorial(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, allTutorial)
 }
+
+// GetOneTutorialByURL
 func (h_DB *HandlerForDBHandlers) GetOneTutorialByURL(ctx *gin.Context) {
 	LOG.Debug("")
 
@@ -175,6 +191,8 @@ func (h_DB *HandlerForDBHandlers) GetOneTutorialByURL(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, tutorial)
 }
+
+// GetSubTutorialByURL
 func (h_DB *HandlerForDBHandlers) GetSubTutorialByURL(ctx *gin.Context) {
 	LOG.Debug("")
 
@@ -188,6 +206,8 @@ func (h_DB *HandlerForDBHandlers) GetSubTutorialByURL(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, subTutorial)
 }
+
+// UpdateOneTutorialByURL
 func (h_DB *HandlerForDBHandlers) UpdateOneTutorialByURL(ctx *gin.Context) {
 	LOG.Debug("")
 	tutorialURL := ctx.Param("tutorial_url")
@@ -213,6 +233,8 @@ func (h_DB *HandlerForDBHandlers) UpdateOneTutorialByURL(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, result)
 
 }
+
+// UpdateSubTutorialByURL
 func (h_DB *HandlerForDBHandlers) UpdateSubTutorialByURL(ctx *gin.Context) {
 	LOG.Debug("")
 	tutorialURL := ctx.Param("tutorial_url")
@@ -237,6 +259,8 @@ func (h_DB *HandlerForDBHandlers) UpdateSubTutorialByURL(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{"message": "Sub-Tutorial updated successfully"})
 }
+
+// DeleteOneTutorialByURL
 func (h_DB *HandlerForDBHandlers) DeleteOneTutorialByURL(ctx *gin.Context) {
 	LOG.Debug("")
 	tutorialURL := ctx.Param("tutorial_url")
@@ -255,6 +279,7 @@ func (h_DB *HandlerForDBHandlers) DeleteOneTutorialByURL(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "Tutorial deleted successfully"})
 }
 
+// DeleteSubTutorialByURL
 func (h_DB *HandlerForDBHandlers) DeleteSubTutorialByURL(ctx *gin.Context) {
 	LOG.Debug("")
 
@@ -275,6 +300,7 @@ func (h_DB *HandlerForDBHandlers) DeleteSubTutorialByURL(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "Sub-Tutorial deleted successfully"})
 }
 
+// GetAllUsers
 func (h_DB *HandlerForDBHandlers) GetAllUsers(ctx *gin.Context) {
 	LOG.Debug("")
 	allUser, err := h_DB.Client.GetAllUsers()
@@ -284,6 +310,8 @@ func (h_DB *HandlerForDBHandlers) GetAllUsers(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, allUser)
 }
+
+// GetOneUserByUsernameOrEmail
 func (h_DB *HandlerForDBHandlers) GetOneUserByUsernameOrEmail(ctx *gin.Context) {
 	LOG.Debug("")
 	usernameOrEmail := ctx.Param("username_or_email")
@@ -303,6 +331,8 @@ func (h_DB *HandlerForDBHandlers) GetOneUserByUsernameOrEmail(ctx *gin.Context) 
 	ctx.JSON(http.StatusOK, user)
 
 }
+
+// CreateOneUser
 func (h_DB *HandlerForDBHandlers) CreateOneUser(ctx *gin.Context) {
 	LOG.Debug("")
 	var user models.User
@@ -323,6 +353,8 @@ func (h_DB *HandlerForDBHandlers) CreateOneUser(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{"inserted_id": result.InsertedID})
 }
+
+// UpdateOneUserByUsernameOrEmail
 func (h_DB *HandlerForDBHandlers) UpdateOneUserByUsernameOrEmail(ctx *gin.Context) {
 	LOG.Debug("")
 	// Get the email or username from the URL parameters
@@ -351,6 +383,8 @@ func (h_DB *HandlerForDBHandlers) UpdateOneUserByUsernameOrEmail(ctx *gin.Contex
 	// Return success message
 	ctx.JSON(http.StatusOK, gin.H{"message": "User updated successfully"})
 }
+
+// DeleteOneUserByUsernameOrEmail
 func (h_DB *HandlerForDBHandlers) DeleteOneUserByUsernameOrEmail(ctx *gin.Context) {
 	LOG.Debug("")
 	usernameOrEmail := ctx.Param("username_or_email")
