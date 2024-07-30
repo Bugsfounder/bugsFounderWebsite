@@ -17,36 +17,42 @@ func ApiRoutes(server *gin.Engine, dbHandler *handler.HandlerForDBHandlers) {
 		public_router.GET("/", handlePublic(dbHandler))
 
 		// blog api's
-		public_router.POST("/blogs", HandleCreateOneBlog(dbHandler))                  // done
-		public_router.GET("/blogs", HandleGetAllBlogs(dbHandler))                     // done
-		public_router.GET("/blogs/:blog_url", handleGetOneBlogByURL(dbHandler))       // done
-		public_router.PUT("/blogs/:blog_url", HandleUpdateOneBlogByURL(dbHandler))    // done
-		public_router.DELETE("/blogs/:blog_url", HandleDeleteOneBlogByURL(dbHandler)) // done
+		public_router.POST("/blog", HandleCreateOneBlog(dbHandler))                  // done - tested
+		public_router.GET("/blog", HandleGetAllBlogs(dbHandler))                     // done - tested
+		public_router.GET("/blog/:blog_url", handleGetOneBlogByURL(dbHandler))       // done - tested
+		public_router.PUT("/blog/:blog_url", HandleUpdateOneBlogByURL(dbHandler))    // done - tested
+		public_router.DELETE("/blog/:blog_url", HandleDeleteOneBlogByURL(dbHandler)) // done - tested
 
 		// tutorial api's
-		public_router.POST("/tutorials", HandleCreateOneTutorial(dbHandler))                                        // done
-		public_router.POST("/tutorials/:tutorial_url", HandleCreateSubTutorial(dbHandler))                          // done
-		public_router.GET("/tutorials", HandleGetAllTutorial(dbHandler))                                            // done
-		public_router.GET("/tutorials/:tutorial_url", HandleGetOneTutorialByURL(dbHandler))                         // done
-		public_router.GET("/tutorials/:tutorial_url/:sub_tutorial_url", HandleGetSubTutorialByURL(dbHandler))       // done
-		public_router.PUT("/tutorials/:tutorial_url", HandleUpdateOneTutorialByURL(dbHandler))                      // done
-		public_router.PUT("/tutorials/:tutorial_url/:sub_tutorial_url", HandleUpdateSubTutorialByURL(dbHandler))    // done
-		public_router.DELETE("/tutorials/:tutorial_url", HandleDeleteOneTutorialByURL(dbHandler))                   // done
-		public_router.DELETE("/tutorials/:tutorial_url/:sub_tutorial_url", HandleDeleteSubTutorialByURL(dbHandler)) // done
+		public_router.POST("/tutorial", HandleCreateOneTutorial(dbHandler))                                        // done - tested
+		public_router.POST("/tutorial/:tutorial_url", HandleCreateSubTutorial(dbHandler))                          // done - tested
+		public_router.GET("/tutorial", HandleGetAllTutorial(dbHandler))                                            // done - tested
+		public_router.GET("/tutorial/:tutorial_url", HandleGetOneTutorialByURL(dbHandler))                         // done - tested
+		public_router.GET("/tutorial/:tutorial_url/:sub_tutorial_url", HandleGetSubTutorialByURL(dbHandler))       // done - tested
+		public_router.PUT("/tutorial/:tutorial_url", HandleUpdateOneTutorialByURL(dbHandler))                      // done - tested
+		public_router.PUT("/tutorial/:tutorial_url/:sub_tutorial_url", HandleUpdateSubTutorialByURL(dbHandler))    // done - tested
+		public_router.DELETE("/tutorial/:tutorial_url", HandleDeleteOneTutorialByURL(dbHandler))                   // done - tested
+		public_router.DELETE("/tutorial/:tutorial_url/:sub_tutorial_url", HandleDeleteSubTutorialByURL(dbHandler)) // done - tested
 
 		// user api's
 		// public_router.GET("/users/:email", HandlerGetOneUserByEmail(dbHandler))
-		public_router.POST("/users", HandlerCreateOneUser(dbHandler))                                       // done
-		public_router.GET("/users", HandlerGetAllUsers(dbHandler))                                          // done
-		public_router.PUT("/users/:username_or_email", HandlerUpdateOneUserByUsernameOrEmail(dbHandler))    // done
-		public_router.GET("/users/:username_or_email", HandlerGetOneUserByUsernameOrEmail(dbHandler))       // done
-		public_router.DELETE("/users/:username_or_email", HandlerDeleteOneUserByUsernameOrEmail(dbHandler)) // done
+		public_router.POST("/user/signup", Signup(dbHandler))                                                     // done - tested
+		public_router.GET("/user/getAllUser", HandlerGetAllUsers(dbHandler))                                      // done - tested
+		public_router.POST("/user/login", Login(dbHandler))                                                       // done - tested
+		public_router.POST("/user/logout", Logout(dbHandler))                                                     // done
+		public_router.PUT("/user/update/:username_or_email", HandlerUpdateOneUserByUsernameOrEmail(dbHandler))    // done - tested
+		public_router.DELETE("/user/delete/:username_or_email", HandlerDeleteOneUserByUsernameOrEmail(dbHandler)) // done - tested
 	}
 
 	// private group
-	private := server.Group("/api/private")
+	private_router := server.Group("/api/private")
 	{
-		private.GET("/", handlePrivate)
-		private.GET("/info", handlePrivateInfo)
+		// private_router.Use(dbHandler.TokenAuthMiddleware())
+		// {
+		// 	private_router.GET("/protected", protectedEndpoint)
+		// 	// other protected routes
+		// }
+		private_router.GET("/", handlePrivate)
+		private_router.GET("/info", handlePrivateInfo)
 	}
 }

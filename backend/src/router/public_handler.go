@@ -92,14 +92,18 @@ func HandlerGetAllUsers(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc
 	return dbHandler.GetAllUsers
 }
 
-func HandlerGetOneUserByUsernameOrEmail(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+func Login(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
-	return dbHandler.GetOneUserByUsernameOrEmail
+	return dbHandler.Login
 }
 
-func HandlerCreateOneUser(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+func Signup(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
-	return dbHandler.CreateOneUser
+	return dbHandler.Signup
+}
+func Logout(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+	LOG.Debug("")
+	return dbHandler.Logout
 }
 
 func HandlerUpdateOneUserByUsernameOrEmail(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {

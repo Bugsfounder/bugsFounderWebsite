@@ -2,10 +2,12 @@ package handler
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/bugsfounder/bugsfounderweb/db"
 	"github.com/bugsfounder/bugsfounderweb/logger"
 	"github.com/bugsfounder/bugsfounderweb/models"
+	"github.com/bugsfounder/bugsfounderweb/utils"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -312,46 +314,85 @@ func (h_DB *HandlerForDBHandlers) GetAllUsers(ctx *gin.Context) {
 }
 
 // GetOneUserByUsernameOrEmail
-func (h_DB *HandlerForDBHandlers) GetOneUserByUsernameOrEmail(ctx *gin.Context) {
+func (h_DB *HandlerForDBHandlers) Login(ctx *gin.Context) {
 	LOG.Debug("")
-	usernameOrEmail := ctx.Param("username_or_email")
 
-	user, err := h_DB.Client.GetOneUserByUsernameOrEmail(usernameOrEmail)
+	var loginRequest struct {
+		UsernameOrEmail string `json:"username_or_email" binding:"required"`
+		Password        string `json:"password" binding:"required"`
+	}
 
+	if err := ctx.ShouldBindJSON(&loginRequest); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid input"})
+		return
+	}
+
+	token, err := h_DB.Client.GetOneUserByUsernameOrEmail(loginRequest.UsernameOrEmail, loginRequest.Password)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 
-	if user == nil {
-		ctx.JSON(http.StatusNotFound, gin.H{"message": "User not found"})
-		return
-	}
-
-	ctx.JSON(http.StatusOK, user)
-
+	ctx.JSON(http.StatusOK, gin.H{"token": token})
 }
 
-// CreateOneUser
-func (h_DB *HandlerForDBHandlers) CreateOneUser(ctx *gin.Context) {
+func (h_DB *HandlerForDBHandlers) Logout(ctx *gin.Context) {
 	LOG.Debug("")
+
+	// Extract the token from the Authorization header
+	authHeader := ctx.GetHeader("Authorization")
+	if authHeader == "" {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header missing"})
+		return
+	}
+
+	// Validate the token
+	tokenString := strings.TrimSpace(strings.Replace(authHeader, "Bearer", "", 1))
+	if tokenString == "" {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+		return
+	}
+
+	// Parse and validate the token (assuming you have a function for this)
+	claims, err := utils.ValidateJWT(tokenString)
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+		return
+	}
+
+	// Optionally: Add the token to a blacklist (not implemented here)
+	// blacklist.Add(tokenString)
+	LOG.Info("Logging out user: %s with email: %s", claims.Username, claims.Email)
+
+	// If token is valid, perform the logout operation
+	// (Logout logic can vary based on your requirements)
+	ctx.JSON(http.StatusOK, gin.H{"message": "Successfully logged out"})
+}
+
+// Signup
+func (h_DB *HandlerForDBHandlers) Signup(ctx *gin.Context) {
+	LOG.Debug("")
+
 	var user models.User
 	if err := ctx.ShouldBindJSON(&user); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"message": "invalid request"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "invalid input"})
 		return
 	}
 
-	result, err := h_DB.Client.CreateOneUser(&user)
+	_, err := h_DB.Client.CreateOneUser(&user)
 	if err != nil {
-		if err == mongo.ErrNoDocuments {
-			ctx.JSON(http.StatusNotFound, gin.H{"message": "no document found"})
-		} else {
-			ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
-		}
+		ctx.JSON(http.StatusConflict, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"inserted_id": result.InsertedID})
+	// generating jwt token
+	token, err := utils.GenerateJWT(user.Username, user.Email)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"token": token})
 }
 
 // UpdateOneUserByUsernameOrEmail
@@ -401,4 +442,30 @@ func (h_DB *HandlerForDBHandlers) DeleteOneUserByUsernameOrEmail(ctx *gin.Contex
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
+}
+
+func (h_DB *HandlerForDBHandlers) TokenAuthMiddleware() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		tokenString := ctx.GetHeader("Authorization")
+		if tokenString == "" {
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is required"})
+			ctx.Abort()
+			return
+		}
+
+		isBlacklisted, err := h_DB.Client.IsTokenBlacklisted(tokenString)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to verify token"})
+			ctx.Abort()
+			return
+		}
+
+		if isBlacklisted {
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Token is blacklisted"})
+			ctx.Abort()
+			return
+		}
+
+		ctx.Next()
+	}
 }

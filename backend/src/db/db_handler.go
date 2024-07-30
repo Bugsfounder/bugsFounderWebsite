@@ -2,12 +2,14 @@ package db
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/bugsfounder/bugsfounderweb/models"
 	"github.com/bugsfounder/bugsfounderweb/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type Client struct {
@@ -499,7 +501,7 @@ func (client *Client) GetAllUsers() ([]models.User, error) {
 	return allUsersFromDatabase, nil
 }
 
-func (client *Client) GetOneUserByUsernameOrEmail(usernameOrEmail string) (*models.User, error) {
+func (client *Client) GetOneUserByUsernameOrEmail(usernameOrEmail, password string) (string, error) {
 	LOG.Debug("")
 
 	ctx, cancel := withTimeout()
@@ -508,7 +510,6 @@ func (client *Client) GetOneUserByUsernameOrEmail(usernameOrEmail string) (*mode
 	collection := client.Client_Obj.Database("bugsfounderDB").Collection("users")
 
 	var user models.User
-
 	var filter bson.M
 
 	if utils.IsValidEmail(usernameOrEmail) {
@@ -521,12 +522,25 @@ func (client *Client) GetOneUserByUsernameOrEmail(usernameOrEmail string) (*mode
 
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return nil, nil
+			return "", nil
 		}
-		return nil, err
+		return "", err
 	}
 
-	return &user, nil
+	// compare the hashed password with the provided password
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	if err != nil {
+		// password do not match
+		return "nil", errors.New("invalid username/email or password")
+	}
+
+	// Generate a JWT token
+	token, err := utils.GenerateJWT(user.Username, user.Email)
+	if err != nil {
+		return "", err
+	}
+
+	return token, nil
 }
 
 func (client *Client) CreateOneUser(user *models.User) (*mongo.InsertOneResult, error) {
@@ -536,9 +550,36 @@ func (client *Client) CreateOneUser(user *models.User) (*mongo.InsertOneResult, 
 
 	collection := client.Client_Obj.Database("bugsfounderDB").Collection("users")
 
+	// check if email or username already exists
+	emailFilter := bson.M{"email": user.Email}
+	usernameFilter := bson.M{"username": user.Username}
+
+	emailCount, err := collection.CountDocuments(ctx, emailFilter)
+	if err != nil {
+		return nil, err
+	}
+	if emailCount > 0 {
+		return nil, errors.New("email already exists")
+	}
+
+	usernameCount, err := collection.CountDocuments(ctx, usernameFilter)
+	if err != nil {
+		return nil, err
+	}
+	if usernameCount > 0 {
+		return nil, errors.New("username already exists")
+	}
+
+	// Hash the password
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, err
+	}
+	user.Password = string(hashedPassword)
+
 	// set the createdAt and updated at field
-	// user.CreatedAt = time.Now()
-	// user.UpdatedAt = time.Now()
+	user.CreatedAt = time.Now()
+	user.UpdatedAt = time.Now()
 
 	// insert the blog into the collection
 	result, err := collection.InsertOne(ctx, user)
