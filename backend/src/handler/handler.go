@@ -451,3 +451,52 @@ func (h_DB *HandlerForDBHandlers) TokenAuthMiddleware() gin.HandlerFunc {
 		ctx.Next()
 	}
 }
+
+// search
+func (h_DB *HandlerForDBHandlers) SearchBlogTitle(ctx *gin.Context) {
+	query := ctx.Param("query")
+
+	resultCount, err := h_DB.Client.SearchBlogTitle(query)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"message": resultCount})
+
+}
+func (h_DB *HandlerForDBHandlers) SearchTutorialTitle(ctx *gin.Context) {
+	query := ctx.Param("query")
+
+	resultCount, err := h_DB.Client.SearchTutorialTitle(query)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": resultCount})
+}
+func (h_DB *HandlerForDBHandlers) SearchSubTutorialTitle(ctx *gin.Context) {
+	title := ctx.Param("title")
+	sub_title := ctx.Param("sub_title")
+
+	resultCount, err := h_DB.Client.SearchSubTutorialTitle(title, sub_title)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": resultCount})
+}
+
+func (h_DB *HandlerForDBHandlers) Search(ctx *gin.Context) {
+	query := ctx.Param("query")
+
+	result, err := h_DB.Client.Search(query)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"result": result})
+}

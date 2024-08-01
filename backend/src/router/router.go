@@ -43,6 +43,12 @@ func ApiRoutes(server *gin.Engine, dbHandler *handler.HandlerForDBHandlers) {
 		public_router.POST("/user/logout", Logout(dbHandler))                                                     // done - tested
 		public_router.PUT("/user/update/:username_or_email", HandlerUpdateOneUserByUsernameOrEmail(dbHandler))    // done - tested
 		public_router.DELETE("/user/delete/:username_or_email", HandlerDeleteOneUserByUsernameOrEmail(dbHandler)) // done - tested
+
+		// search api's
+		public_router.GET("/search/blog_title/:query", HandleSearchBlogTitle(dbHandler))         // done - tested
+		public_router.GET("/search/tutorial_title/:query", HandleSearchTutorialTitle(dbHandler)) // done - tested
+		public_router.GET("/search/:title/:sub_title", HandlerSearchSubTutorialTitle(dbHandler)) // done - tested
+		public_router.GET("/search/:query", HandlerSearch(dbHandler))                            // done - tested
 	}
 
 	// private group

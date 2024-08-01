@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"errors"
+	"strings"
 	"time"
 
 	"github.com/bugsfounder/bugsfounderweb/models"
@@ -44,10 +45,6 @@ func (client *Client) CreateOneBlog(blog *models.Blog) (*mongo.InsertOneResult, 
 	defer cancel()
 
 	collection := client.Client_Obj.Database("bugsfounderDB").Collection("blogs")
-
-	// set the createdAt and updated at field
-	// blog.CreatedAt = time.Now()
-	// blog.UpdatedAt = time.Now()
 
 	// insert the blog into the collection
 	result, err := collection.InsertOne(ctx, blog)
@@ -128,15 +125,6 @@ func (client *Client) UpdateOneBlogByURL(blogURL string, updatedBlog *models.Blo
 
 	// define the filter and update
 	filter := bson.M{"url": blogURL}
-	// update := bson.M{
-	// 	"$set": bson.M{
-	// 		"title":      updatedBlog.Title,
-	// 		"content":    updatedBlog.Content,
-	// 		"author":     updatedBlog.Author,
-	// 		"tags":       updatedBlog.Tags,
-	// 		"updated_at": updatedBlog.UpdatedAt,
-	// 	},
-	// }
 
 	updateFields := bson.M{}
 	if updatedBlog.Title != "" {
@@ -195,8 +183,8 @@ func (client *Client) CreateOneTutorial(tutorial *models.Tutorial) (*mongo.Inser
 	collection := client.Client_Obj.Database("bugsfounderDB").Collection("tutorials")
 
 	// set the createdAt and updated at field
-	// tutorial.CreatedAt = time.Now()
-	// tutorial.UpdatedAt = time.Now()
+	tutorial.CreatedAt = time.Now()
+	tutorial.UpdatedAt = time.Now()
 
 	// insert the blog into the collection
 	result, err := collection.InsertOne(ctx, tutorial)
@@ -665,4 +653,191 @@ func (client *Client) DeleteOneUserByUsernameOrEmail(usernameOrEmail string) (*m
 	}
 
 	return result, nil
+}
+
+// search
+
+func (client *Client) SearchBlogTitle(title string) (int64, error) {
+	LOG.Debug("")
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	collection := client.Client_Obj.Database("bugsfounderDB").Collection("blogs")
+
+	// check if email or username already exists
+	BlogFilter := bson.M{"title": title}
+
+	SearchBlogTitleCount, err := collection.CountDocuments(ctx, BlogFilter)
+	if err != nil {
+		return -1, err
+	}
+
+	// insert the blog into the collection
+	return SearchBlogTitleCount, nil
+}
+func (client *Client) SearchTutorialTitle(title string) (int64, error) {
+	LOG.Debug("")
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	collection := client.Client_Obj.Database("bugsfounderDB").Collection("tutorials")
+
+	// check if email or username already exists
+	tutorialFilter := bson.M{"title": title}
+
+	tutorialTitleCount, err := collection.CountDocuments(ctx, tutorialFilter)
+	if err != nil {
+		return -1, err
+	}
+
+	// insert the blog into the collection
+	return tutorialTitleCount, nil
+}
+func (client *Client) SearchSubTutorialTitle(tutorialTitle, subTutorialTitle string) (int64, error) {
+	LOG.Debug("")
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	collection := client.Client_Obj.Database("bugsfounderDB").Collection("tutorials")
+
+	// check if email or username already exists
+	tutorialFilter := bson.M{"title": tutorialTitle, "sub_tutorials.title": subTutorialTitle}
+
+	tutorialTitleCount, err := collection.CountDocuments(ctx, tutorialFilter)
+	if err != nil {
+		return -1, err
+	}
+
+	// insert the blog into the collection
+	return tutorialTitleCount, nil
+}
+
+func (client *Client) Search(query string) ([]interface{}, error) {
+	queryWords := strings.Split(query, " ")
+
+	var results []interface{}
+
+	// search for each query words in blog
+	blogs, err := client.searchCollection("blogs", queryWords)
+	if err != nil {
+		return nil, err
+	}
+	results = append(results, map[string]interface{}{"blogs": blogs})
+
+	// search for each query words in tutorial
+	tutorials, err := client.searchCollection("tutorials", queryWords)
+	if err != nil {
+		return nil, err
+	}
+	results = append(results, map[string]interface{}{"tutorials": tutorials})
+
+	// search for each query words in subTutorial
+	subTutorials, err := client.searchSubTutorials(queryWords)
+	if err != nil {
+		return nil, err
+	}
+	results = append(results, map[string]interface{}{"subTutorials": subTutorials})
+
+	return results, nil
+
+}
+
+func (client *Client) searchCollection(collectionName string, queryWords []string) ([]interface{}, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	collection := client.Client_Obj.Database("bugsfounderDB").Collection(collectionName)
+
+	var filters []bson.M
+	for _, word := range queryWords {
+		filters = append(filters, bson.M{"$or": []bson.M{
+			{"title": bson.M{"$regex": word, "$options": "i"}},
+			{"content": bson.M{"$regex": word, "$options": "i"}},
+		}})
+	}
+	filter := bson.M{"$and": filters}
+
+	cursor, err := collection.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var results []interface{}
+	for cursor.Next(ctx) {
+		var result bson.M
+		if err := cursor.Decode(&result); err != nil {
+			return nil, err
+		}
+		results = append(results, result)
+	}
+
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return results, nil
+}
+
+// searchSubTutorials searches sub-tutorials within tutorials
+func (client *Client) searchSubTutorials(queryWords []string) ([]interface{}, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	collection := client.Client_Obj.Database("bugsfounderDB").Collection("tutorials")
+
+	// Create filter for tutorials
+	var tutorialFilters []bson.M
+	for _, word := range queryWords {
+		tutorialFilters = append(tutorialFilters, bson.M{"$or": []bson.M{
+			{"title": bson.M{"$regex": word, "$options": "i"}},
+			{"description": bson.M{"$regex": word, "$options": "i"}},
+		}})
+	}
+	tutorialFilter := bson.M{"$and": tutorialFilters}
+
+	cursor, err := collection.Find(ctx, tutorialFilter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var subTutorials []interface{}
+	for cursor.Next(ctx) {
+		var tutorial models.Tutorial
+		if err := cursor.Decode(&tutorial); err != nil {
+			return nil, err
+		}
+
+		// Filter sub-tutorials that match the query
+		var matchingSubTutorials []models.Sub_Tutorial
+		for _, subTutorial := range tutorial.Sub_Tutorials {
+			if containsAllWords(subTutorial.Title, queryWords) || containsAllWords(subTutorial.Content, queryWords) {
+				matchingSubTutorials = append(matchingSubTutorials, subTutorial)
+			}
+		}
+
+		if len(matchingSubTutorials) > 0 {
+			subTutorials = append(subTutorials, map[string]interface{}{
+				"tutorial":     tutorial.Title, // You can include more tutorial details if needed
+				"subTutorials": matchingSubTutorials,
+			})
+		}
+	}
+
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return subTutorials, nil
+}
+
+// containsAllWords checks if all queryWords are present in the text
+func containsAllWords(text string, queryWords []string) bool {
+	for _, word := range queryWords {
+		if !strings.Contains(strings.ToLower(text), strings.ToLower(word)) {
+			return false
+		}
+	}
+	return true
 }

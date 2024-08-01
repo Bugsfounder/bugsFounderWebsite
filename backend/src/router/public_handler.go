@@ -115,3 +115,23 @@ func HandlerDeleteOneUserByUsernameOrEmail(dbHandler *handler.HandlerForDBHandle
 	LOG.Debug("")
 	return dbHandler.DeleteOneUserByUsernameOrEmail
 }
+
+func HandlerSearch(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+	LOG.Debug("")
+	return dbHandler.Search
+
+}
+func HandleSearchBlogTitle(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+	LOG.Debug("")
+	return dbHandler.SearchBlogTitle
+
+}
+func HandleSearchTutorialTitle(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+	LOG.Debug("")
+	return dbHandler.SearchTutorialTitle
+}
+func HandlerSearchSubTutorialTitle(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
+	LOG.Debug("")
+	return dbHandler.SearchSubTutorialTitle
+
+}
