@@ -501,7 +501,7 @@ func (client *Client) GetAllUsers() ([]models.User, error) {
 	return allUsersFromDatabase, nil
 }
 
-func (client *Client) GetOneUserByUsernameOrEmail(usernameOrEmail, password string) (string, error) {
+func (client *Client) GetOneUserByUsernameOrEmail(usernameOrEmail, password string) (*models.User, error) {
 	LOG.Debug("")
 
 	ctx, cancel := withTimeout()
@@ -509,7 +509,7 @@ func (client *Client) GetOneUserByUsernameOrEmail(usernameOrEmail, password stri
 
 	collection := client.Client_Obj.Database("bugsfounderDB").Collection("users")
 
-	var user models.User
+	var user *models.User
 	var filter bson.M
 
 	if utils.IsValidEmail(usernameOrEmail) {
@@ -522,25 +522,25 @@ func (client *Client) GetOneUserByUsernameOrEmail(usernameOrEmail, password stri
 
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return "", nil
+			return nil, nil
 		}
-		return "", err
+		return nil, err
 	}
 
 	// compare the hashed password with the provided password
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
 		// password do not match
-		return "nil", errors.New("invalid username/email or password")
+		return nil, errors.New("invalid username/email or password")
 	}
 
-	// Generate a JWT token
-	token, err := utils.GenerateJWT(user.Username, user.Email)
-	if err != nil {
-		return "", err
-	}
+	// // Generate a JWT token
+	// token, err := utils.GenerateJWT(user.Username, user.Email)
+	// if err != nil {
+	// 	return "", err
+	// }
 
-	return token, nil
+	return user, nil
 }
 
 func (client *Client) CreateOneUser(user *models.User) (*mongo.InsertOneResult, error) {

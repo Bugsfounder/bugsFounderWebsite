@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"strings"
 
 	"github.com/bugsfounder/bugsfounderweb/db"
 	"github.com/bugsfounder/bugsfounderweb/logger"
@@ -313,7 +312,7 @@ func (h_DB *HandlerForDBHandlers) GetAllUsers(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, allUser)
 }
 
-// GetOneUserByUsernameOrEmail
+// Login
 func (h_DB *HandlerForDBHandlers) Login(ctx *gin.Context) {
 	LOG.Debug("")
 
@@ -327,46 +326,21 @@ func (h_DB *HandlerForDBHandlers) Login(ctx *gin.Context) {
 		return
 	}
 
-	token, err := h_DB.Client.GetOneUserByUsernameOrEmail(loginRequest.UsernameOrEmail, loginRequest.Password)
+	user, err := h_DB.Client.GetOneUserByUsernameOrEmail(loginRequest.UsernameOrEmail, loginRequest.Password)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"token": token})
-}
-
-func (h_DB *HandlerForDBHandlers) Logout(ctx *gin.Context) {
-	LOG.Debug("")
-
-	// Extract the token from the Authorization header
-	authHeader := ctx.GetHeader("Authorization")
-	if authHeader == "" {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header missing"})
-		return
-	}
-
-	// Validate the token
-	tokenString := strings.TrimSpace(strings.Replace(authHeader, "Bearer", "", 1))
-	if tokenString == "" {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
-		return
-	}
-
-	// Parse and validate the token (assuming you have a function for this)
-	claims, err := utils.ValidateJWT(tokenString)
+	// generating jwt token
+	token, err := utils.GenerateJWT(user.Username, user.Email)
 	if err != nil {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
 		return
 	}
 
-	// Optionally: Add the token to a blacklist (not implemented here)
-	// blacklist.Add(tokenString)
-	LOG.Info("Logging out user: %s with email: %s", claims.Username, claims.Email)
-
-	// If token is valid, perform the logout operation
-	// (Logout logic can vary based on your requirements)
-	ctx.JSON(http.StatusOK, gin.H{"message": "Successfully logged out"})
+	// ctx.JSON(http.StatusOK, gin.H{"token": token, "user": user})
+	ctx.JSON(http.StatusOK, gin.H{"token": token})
 }
 
 // Signup
@@ -393,6 +367,14 @@ func (h_DB *HandlerForDBHandlers) Signup(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"token": token})
+}
+
+func (h_DB *HandlerForDBHandlers) Logout(ctx *gin.Context) {
+	LOG.Debug("Received a logout request")
+
+	// Clear JWT token by setting an empty value and expired time in the cookie
+	ctx.SetCookie("token", "", -1, "/", "", false, true)
+	ctx.JSON(http.StatusOK, gin.H{"message": "logged out"})
 }
 
 // UpdateOneUserByUsernameOrEmail

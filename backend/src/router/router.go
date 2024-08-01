@@ -35,11 +35,12 @@ func ApiRoutes(server *gin.Engine, dbHandler *handler.HandlerForDBHandlers) {
 		public_router.DELETE("/tutorial/:tutorial_url/:sub_tutorial_url", HandleDeleteSubTutorialByURL(dbHandler)) // done - tested
 
 		// user api's
+		// TODO: update jwt logic, make it more secure same like shown in the udemy course
 		// public_router.GET("/users/:email", HandlerGetOneUserByEmail(dbHandler))
 		public_router.POST("/user/signup", Signup(dbHandler))                                                     // done - tested
 		public_router.GET("/user/getAllUser", HandlerGetAllUsers(dbHandler))                                      // done - tested
 		public_router.POST("/user/login", Login(dbHandler))                                                       // done - tested
-		public_router.POST("/user/logout", Logout(dbHandler))                                                     // done
+		public_router.POST("/user/logout", Logout(dbHandler))                                                     // done - tested
 		public_router.PUT("/user/update/:username_or_email", HandlerUpdateOneUserByUsernameOrEmail(dbHandler))    // done - tested
 		public_router.DELETE("/user/delete/:username_or_email", HandlerDeleteOneUserByUsernameOrEmail(dbHandler)) // done - tested
 	}
