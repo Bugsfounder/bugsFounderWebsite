@@ -1,8 +1,9 @@
 package admin
 
-import "errors"
+import (
+	"errors"
+)
 
-// step 1: define admin mode type and constants
 type AdminMode int
 
 const (
@@ -20,10 +21,10 @@ var (
 )
 
 const (
-	MaxAdmins   = 0
 	MaxManagers = 1
 	MaxEditors  = 3
 	MaxViewers  = 5
+	MaxAdmins   = MaxManagers + MaxEditors + MaxViewers
 )
 
 type AdminCount struct {
@@ -35,30 +36,43 @@ type AdminCount struct {
 
 var adminCount = AdminCount{}
 
-func validateAndAddAdminMode(mode AdminMode) error {
+func ValidateAndAddAdminMode(mode AdminMode, count AdminCount) error {
 	switch mode {
 	case Manager:
-		if adminCount.Managers >= MaxManagers {
+		if count.Managers > MaxManagers {
 			return ErrExceedsMaxManagers
 		}
-		adminCount.Managers++
+		count.Managers++
 	case Editor:
-		if adminCount.Editors >= MaxEditors {
+		if count.Editors > MaxEditors {
 			return ErrExceedsMaxEditors
 		}
-		adminCount.Editors++
+		count.Editors++
 	case Viewer:
-		if adminCount.Viewers >= MaxViewers {
+		if count.Viewers > MaxViewers {
 			return ErrExceedsMaxViewers
 		}
-		adminCount.Viewers++
+		count.Viewers++
 	default:
 		return ErrInvalidAdminMode
 	}
 
-	adminCount.Total++
-	if adminCount.Total > MaxAdmins {
+	count.Total++
+	if count.Total > MaxAdmins {
 		return ErrExceedsMaxAdmins
 	}
 	return nil
+}
+
+func ValidateAndRemoveAdminMode(mode AdminMode, count AdminCount) {
+	switch mode {
+	case Manager:
+		count.Managers--
+	case Editor:
+		count.Editors--
+	case Viewer:
+		count.Viewers--
+	}
+
+	count.Total--
 }

@@ -48,18 +48,13 @@ func ApiRoutes(server *gin.Engine, dbHandler *handler.HandlerForDBHandlers) {
 		public_router.GET("/search/blog_title/:query", HandleSearchBlogTitle(dbHandler))         // done - tested
 		public_router.GET("/search/tutorial_title/:query", HandleSearchTutorialTitle(dbHandler)) // done - tested
 		public_router.GET("/search/:title/:sub_title", HandlerSearchSubTutorialTitle(dbHandler)) // done - tested
-		public_router.GET("/search/:query", HandlerSearch(dbHandler))                            // done - tested
+		public_router.GET("/search/all/:query", HandlerSearch(dbHandler))                        // done - tested
 	}
 
 	// private group
-	private_router := server.Group("/api/private")
+	private_router := server.Group("/api/private/admin")
 	{
-		// private_router.Use(dbHandler.TokenAuthMiddleware())
-		// {
-		// 	private_router.GET("/protected", protectedEndpoint)
-		// 	// other protected routes
-		// }
-		private_router.GET("/", handlePrivate)
-		private_router.GET("/info", handlePrivateInfo)
+		private_router.POST("/", CreateOneAdmin(dbHandler))
+		private_router.DELETE("/:username", DeleteAdminByUsername(dbHandler))
 	}
 }

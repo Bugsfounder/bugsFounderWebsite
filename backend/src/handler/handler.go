@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 
+	"github.com/bugsfounder/bugsfounderweb/admin"
 	"github.com/bugsfounder/bugsfounderweb/db"
 	"github.com/bugsfounder/bugsfounderweb/logger"
 	"github.com/bugsfounder/bugsfounderweb/models"
@@ -493,4 +494,73 @@ func (h_DB *HandlerForDBHandlers) Search(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"result": result})
+}
+
+// admin
+
+func (h_DB *HandlerForDBHandlers) CreateOneAdmin(ctx *gin.Context) {
+	LOG.Debug("")
+
+	var adminModel models.Admin
+	if err := ctx.ShouldBindJSON(&adminModel); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "invalid request"})
+		return
+	}
+
+	// Check admin count
+	adminCount, err := h_DB.Client.GetAdminCount()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	count := admin.AdminCount{
+		Total:    adminCount,
+		Managers: adminCount,
+		Editors:  adminCount,
+		Viewers:  adminCount,
+	}
+
+	// Validate and add admin mode
+	err = admin.ValidateAndAddAdminMode(adminModel.AdminMode, count)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	// Create the admin
+	result, err := h_DB.Client.CreateOneAdmin(&adminModel)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			ctx.JSON(http.StatusNotFound, gin.H{"message": "no document found"})
+		} else {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		}
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"inserted_id": result.InsertedID})
+}
+
+func (h_DB *HandlerForDBHandlers) DeleteAdminByUsername(ctx *gin.Context) {
+	LOG.Debug("")
+
+	username := ctx.Param("username")
+	if username == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "username is required"})
+		return
+	}
+
+	// Delete the admin
+	result, err := h_DB.Client.DeleteAdminByUsername(username)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			ctx.JSON(http.StatusNotFound, gin.H{"message": "no document found"})
+		} else {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		}
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"deleted_count": result.DeletedCount})
 }
