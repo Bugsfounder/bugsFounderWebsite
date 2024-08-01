@@ -123,15 +123,15 @@ func HandlerSearch(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 }
 func HandleSearchBlogTitle(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
-	return dbHandler.SearchBlogTitle
+	return dbHandler.SearchBlogURL
 
 }
 func HandleSearchTutorialTitle(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
-	return dbHandler.SearchTutorialTitle
+	return dbHandler.SearchTutorialURL
 }
 func HandlerSearchSubTutorialTitle(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
-	return dbHandler.SearchSubTutorialTitle
+	return dbHandler.SearchSubTutorialURL
 
 }

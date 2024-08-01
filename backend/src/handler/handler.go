@@ -453,10 +453,10 @@ func (h_DB *HandlerForDBHandlers) TokenAuthMiddleware() gin.HandlerFunc {
 }
 
 // search
-func (h_DB *HandlerForDBHandlers) SearchBlogTitle(ctx *gin.Context) {
+func (h_DB *HandlerForDBHandlers) SearchBlogURL(ctx *gin.Context) {
 	query := ctx.Param("query")
 
-	resultCount, err := h_DB.Client.SearchBlogTitle(query)
+	resultCount, err := h_DB.Client.SearchBlogURL(query)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -464,10 +464,10 @@ func (h_DB *HandlerForDBHandlers) SearchBlogTitle(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": resultCount})
 
 }
-func (h_DB *HandlerForDBHandlers) SearchTutorialTitle(ctx *gin.Context) {
+func (h_DB *HandlerForDBHandlers) SearchTutorialURL(ctx *gin.Context) {
 	query := ctx.Param("query")
 
-	resultCount, err := h_DB.Client.SearchTutorialTitle(query)
+	resultCount, err := h_DB.Client.SearchTutorialURL(query)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -475,13 +475,13 @@ func (h_DB *HandlerForDBHandlers) SearchTutorialTitle(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{"message": resultCount})
 }
-func (h_DB *HandlerForDBHandlers) SearchSubTutorialTitle(ctx *gin.Context) {
+func (h_DB *HandlerForDBHandlers) SearchSubTutorialURL(ctx *gin.Context) {
 	title := ctx.Param("title")
 	sub_title := ctx.Param("sub_title")
 
-	resultCount, err := h_DB.Client.SearchSubTutorialTitle(title, sub_title)
+	resultCount, err := h_DB.Client.SearchSubTutorialURL(title, sub_title)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})  
 		return
 	}
 

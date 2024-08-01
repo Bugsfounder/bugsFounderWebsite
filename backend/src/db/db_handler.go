@@ -657,7 +657,7 @@ func (client *Client) DeleteOneUserByUsernameOrEmail(usernameOrEmail string) (*m
 
 // search
 
-func (client *Client) SearchBlogTitle(title string) (int64, error) {
+func (client *Client) SearchBlogURL(url string) (int64, error) {
 	LOG.Debug("")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -665,17 +665,17 @@ func (client *Client) SearchBlogTitle(title string) (int64, error) {
 	collection := client.Client_Obj.Database("bugsfounderDB").Collection("blogs")
 
 	// check if email or username already exists
-	BlogFilter := bson.M{"title": title}
+	BlogFilter := bson.M{"url": url}
 
-	SearchBlogTitleCount, err := collection.CountDocuments(ctx, BlogFilter)
+	SearchBlogURLCount, err := collection.CountDocuments(ctx, BlogFilter)
 	if err != nil {
 		return -1, err
 	}
 
 	// insert the blog into the collection
-	return SearchBlogTitleCount, nil
+	return SearchBlogURLCount, nil
 }
-func (client *Client) SearchTutorialTitle(title string) (int64, error) {
+func (client *Client) SearchTutorialURL(url string) (int64, error) {
 	LOG.Debug("")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -683,17 +683,17 @@ func (client *Client) SearchTutorialTitle(title string) (int64, error) {
 	collection := client.Client_Obj.Database("bugsfounderDB").Collection("tutorials")
 
 	// check if email or username already exists
-	tutorialFilter := bson.M{"title": title}
+	tutorialFilter := bson.M{"url": url}
 
-	tutorialTitleCount, err := collection.CountDocuments(ctx, tutorialFilter)
+	tutorialURLCount, err := collection.CountDocuments(ctx, tutorialFilter)
 	if err != nil {
 		return -1, err
 	}
 
 	// insert the blog into the collection
-	return tutorialTitleCount, nil
+	return tutorialURLCount, nil
 }
-func (client *Client) SearchSubTutorialTitle(tutorialTitle, subTutorialTitle string) (int64, error) {
+func (client *Client) SearchSubTutorialURL(tutorialURL, subTutorialURL string) (int64, error) {
 	LOG.Debug("")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -701,15 +701,15 @@ func (client *Client) SearchSubTutorialTitle(tutorialTitle, subTutorialTitle str
 	collection := client.Client_Obj.Database("bugsfounderDB").Collection("tutorials")
 
 	// check if email or username already exists
-	tutorialFilter := bson.M{"title": tutorialTitle, "sub_tutorials.title": subTutorialTitle}
+	tutorialFilter := bson.M{"url": tutorialURL, "sub_tutorials.url": subTutorialURL}
 
-	tutorialTitleCount, err := collection.CountDocuments(ctx, tutorialFilter)
+	tutorialURLCount, err := collection.CountDocuments(ctx, tutorialFilter)
 	if err != nil {
 		return -1, err
 	}
 
 	// insert the blog into the collection
-	return tutorialTitleCount, nil
+	return tutorialURLCount, nil
 }
 
 func (client *Client) Search(query string) ([]interface{}, error) {
