@@ -39,17 +39,17 @@ var adminCount = AdminCount{}
 func ValidateAndAddAdminMode(mode AdminMode, count AdminCount) error {
 	switch mode {
 	case Manager:
-		if count.Managers > MaxManagers {
+		if count.Managers >= MaxManagers {
 			return ErrExceedsMaxManagers
 		}
 		count.Managers++
 	case Editor:
-		if count.Editors > MaxEditors {
+		if count.Editors >= MaxEditors {
 			return ErrExceedsMaxEditors
 		}
 		count.Editors++
 	case Viewer:
-		if count.Viewers > MaxViewers {
+		if count.Viewers >= MaxViewers {
 			return ErrExceedsMaxViewers
 		}
 		count.Viewers++
