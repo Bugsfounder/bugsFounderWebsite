@@ -17,12 +17,6 @@ type HandlerForDBHandlers struct {
 	Client db.Client
 }
 
-// DemoFuncHandler
-func (h_DB *HandlerForDBHandlers) DemoFuncHandler() {
-	LOG.Debug("")
-	h_DB.Client.DemoFunc()
-}
-
 // CreateOneBlog
 func (h_DB *HandlerForDBHandlers) CreateOneBlog(ctx *gin.Context) {
 	LOG.Debug("")
@@ -481,7 +475,7 @@ func (h_DB *HandlerForDBHandlers) SearchSubTutorialURL(ctx *gin.Context) {
 
 	resultCount, err := h_DB.Client.SearchSubTutorialURL(title, sub_title)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})  
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 

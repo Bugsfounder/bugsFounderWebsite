@@ -10,7 +10,6 @@ import (
 func handlePublic(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
 	return func(ctx *gin.Context) {
-		dbHandler.DemoFuncHandler()
 		ctx.String(http.StatusOK, "Welcome to the public endpoint")
 	}
 }
