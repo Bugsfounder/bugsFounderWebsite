@@ -10,7 +10,7 @@ function Sidebar() {
 
     return (
         <>
-            <aside className={sidebarOpen ? `mt-[100.5px]  dark:text-slate-300 md:pt-7 w-60 fixed h-screen bg-slate-200 dark:bg-slate-800 flex px-5 sm:w-80` : `mt-[100.5px]  md:pt-7 `}>
+            <aside className={sidebarOpen ? ` dark:text-slate-300 md:pt-7 w-60 fixed h-screen bg-slate-200 dark:bg-slate-800 flex px-5 sm:w-80 shadow-lg  dark:shadow-slate-500 shadow-slate-800` : ` md:pt-7 `}>
                 <div className="sidebar">
                     <div className={sidebarOpen ? `title flex justify-between w-52  sm:w-72` : `px-5`}>
 
@@ -45,9 +45,10 @@ function Sidebar() {
                     </div>
                 </div>
             </aside>
-
         </>
     );
 }
 
 export default Sidebar;
+
+// margin-left: 211px;

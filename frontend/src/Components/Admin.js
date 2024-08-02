@@ -7,10 +7,12 @@ const Admin = () => {
     return (
         <>
             <Navbar />
-            <div className="flex">
+            <div className="flex mt-[100.5px]">
                 <Sidebar />
                 <div className="container w-10/12  m-auto">
-                    <Outlet context={{}} />
+                    <div className=" dark:text-gray-300 mt-10 ">
+                        <Outlet context={{}} />
+                    </div>
                 </div>
             </div>
         </>
