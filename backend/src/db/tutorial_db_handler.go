@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/bugsfounder/bugsfounderweb/models"
@@ -16,6 +17,13 @@ func (client *Client) CreateOneTutorial(tutorial *models.Tutorial) (*mongo.Inser
 
 	collection := client.Client_Obj.Database("bugsfounderDB").Collection("tutorials")
 
+	tutorialCount, err := client.SearchTutorialURL(tutorial.Url)
+	if err != nil {
+		return nil, err
+	}
+	if tutorialCount > 0 {
+		return nil, errors.New("tutorial url already exists")
+	}
 	// set the createdAt and updated at field
 	tutorial.CreatedAt = time.Now()
 	tutorial.UpdatedAt = time.Now()
@@ -163,6 +171,14 @@ func (client *Client) CreateSubTutorial(tutorialURL string, subTutorial *models.
 	defer cancel()
 
 	collection := client.Client_Obj.Database("bugsfounderDB").Collection("tutorials")
+
+	subTutorialCount, err := client.SearchSubTutorialURL(tutorialURL, subTutorial.Url)
+	if err != nil {
+		return nil, err
+	}
+	if subTutorialCount > 0 {
+		return nil, errors.New("sub tutorial url already exits")
+	}
 
 	// Set the CreatedAt and UpdatedAt fields for the sub-tutorial
 	subTutorial.CreatedAt = time.Now()

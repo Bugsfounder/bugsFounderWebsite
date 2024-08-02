@@ -38,7 +38,7 @@ func (client *Client) CreateOneAdmin(adminModel *models.Admin) (*mongo.InsertOne
 	if err != nil {
 		return nil, err
 	}
-	
+
 	// Validate and add admin mode
 	err = admin.ValidateAndAddAdminMode(adminModel.AdminMode, counts) // Pass the correct AdminMode value
 	if err != nil {

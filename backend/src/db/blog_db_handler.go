@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/bugsfounder/bugsfounderweb/models"
@@ -15,7 +16,13 @@ func (client *Client) CreateOneBlog(blog *models.Blog) (*mongo.InsertOneResult, 
 	defer cancel()
 
 	collection := client.Client_Obj.Database("bugsfounderDB").Collection("blogs")
-
+	urlCount, err := client.SearchBlogURL(blog.Url)
+	if err != nil {
+		return nil, err
+	}
+	if urlCount > 0 {
+		return nil, errors.New("blog url already exists")
+	}
 	// insert the blog into the collection
 	result, err := collection.InsertOne(ctx, blog)
 	if err != nil {

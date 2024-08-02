@@ -545,3 +545,11 @@ blog_Manager->app_manager->api_handper
       ]
     }
     ```
+
+#### updated user enums
+
+```
+1 -> reset password
+2 -> reset email
+3 -> reset username
+```

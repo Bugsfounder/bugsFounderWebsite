@@ -136,16 +136,13 @@ func (client *Client) CreateOneUser(user *models.User) (*mongo.InsertOneResult, 
 
 }
 
-func (client *Client) UpdateOneUserByUsernameOrEmail(emailOrUsername string, updatedUser *models.User) (*mongo.UpdateResult, error) {
+func (client *Client) UpdateOneUserByUsernameOrEmail(emailOrUsername string, updatedUser *models.UpdateUser) (*mongo.UpdateResult, error) {
 	LOG.Debug("")
 
 	ctx, cancel := withTimeout()
 	defer cancel()
 
 	collection := client.Client_Obj.Database("bugsfounderDB").Collection("users")
-
-	// set the updatedAt file
-	updatedUser.UpdatedAt = time.Now()
 
 	// define the filter and update
 	var filter bson.M
@@ -155,6 +152,73 @@ func (client *Client) UpdateOneUserByUsernameOrEmail(emailOrUsername string, upd
 		filter = bson.M{"username": emailOrUsername}
 
 	}
+	userObj := collection.FindOne(ctx, filter)
+	var user models.User
+	err := userObj.Decode(&user)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, errors.New("no data found in database")
+		} else {
+			return nil, err
+		}
+	}
+
+	updateField := bson.M{}
+	if updatedUser.Update == models.UPDATE_PASSWORD {
+		// email and username is required and has to be correct
+		if user.Email == updatedUser.Email && user.Username == updatedUser.Username {
+			LOG.Debug("UPDATE_PASSWORD")
+			// then update password otherwise not
+			// Hash the password
+			if updatedUser.Email != "" {
+				hashedPassword, err := bcrypt.GenerateFromPassword([]byte(updatedUser.Password), bcrypt.DefaultCost)
+				if err != nil {
+					return nil, err
+				}
+				updateField["password"] = string(hashedPassword)
+			}
+		} else {
+			return nil, errors.New("username or email is invalid")
+		}
+
+	} else if updatedUser.Update == models.UPDATE_EMAIL {
+		LOG.Debug("UPDATE_EMAIL")
+		// password and username has to be correct
+		if user.Username == updatedUser.Username {
+			err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(updatedUser.Password))
+			if err != nil {
+				return nil, errors.New("unable to update email password is not matched")
+			}
+			// update email here
+			if updatedUser.Email != "" {
+				updateField["email"] = updatedUser.Email
+			}
+		} else {
+			return nil, errors.New("username or email is invalid")
+		}
+
+	} else if updatedUser.Update == models.UPDATE_USERNAME {
+		LOG.Debug("UPDATE_USERNAME")
+		// password and email has to be correct
+		if user.Email == updatedUser.Email {
+			err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(updatedUser.Password))
+			if err != nil {
+				return nil, errors.New("unable to update username password is not matched")
+			}
+
+			// update username here
+			if updatedUser.Username != "" {
+				updateField["username"] = updatedUser.Username
+			}
+		} else {
+			return nil, errors.New("username or email is invalid")
+		}
+
+	} else {
+		// invalid update request err
+		return nil, errors.New("invalid update request")
+	}
+
 	// update := bson.M{
 	// 	"$set": bson.M{
 	// 		"email":      updatedUser.Email,
@@ -164,21 +228,24 @@ func (client *Client) UpdateOneUserByUsernameOrEmail(emailOrUsername string, upd
 	// 	},
 	// }
 
-	// build the update object based on non-empty fields
-	updateFields := bson.M{}
+	// set the updatedAt file
 
-	if updatedUser.Email != "" {
-		updateFields["email"] = updatedUser.Email
-	}
-	if updatedUser.Username != "" {
-		updateFields["username"] = updatedUser.Username
-	}
-	if updatedUser.Password != "" {
-		updateFields["password"] = updatedUser.Password
-	}
+	// // build the update object based on non-empty fields
+	// updateFields := bson.M{}
 
+	// if updatedUser.Email != "" {
+	// 	updateFields["email"] = updatedUser.Email
+	// }
+	// if updatedUser.Username != "" {
+	// 	updateFields["username"] = updatedUser.Username
+	// }
+	// if updatedUser.Password != "" {
+	// 	updateFields["password"] = updatedUser.Password
+	// }
+
+	updatedUser.UpdatedAt = time.Now()
 	update := bson.M{
-		"$set": updateFields,
+		"$set": updateField,
 	}
 
 	// update the blog in the collection

@@ -64,3 +64,19 @@ type Admin struct {
 	CreatedAt time.Time       `json:"created_at"`
 	UpdatedAt time.Time       `json:"updated_at"`
 }
+
+type UPDATE_USER_INFO int
+
+const (
+	UPDATE_PASSWORD UPDATE_USER_INFO = iota + 1
+	UPDATE_EMAIL
+	UPDATE_USERNAME
+)
+
+type UpdateUser struct {
+	Email     string           `json:"email"`
+	Username  string           `json:"username"`
+	Password  string           `json:"password"`
+	Update    UPDATE_USER_INFO `json:"update"`
+	UpdatedAt time.Time        `json:"updated_at"`
+}

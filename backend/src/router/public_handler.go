@@ -98,6 +98,7 @@ func Login(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 
 func Signup(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
+	LOG.Debug("")
 	return dbHandler.Signup
 }
 func Logout(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {

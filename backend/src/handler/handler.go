@@ -379,7 +379,7 @@ func (h_DB *HandlerForDBHandlers) UpdateOneUserByUsernameOrEmail(ctx *gin.Contex
 	LOG.Debug("username_or_email: %v", username_or_email)
 
 	// Bind the JSON body to the User model
-	var updatedUser models.User
+	var updatedUser models.UpdateUser
 	if err := ctx.ShouldBindJSON(&updatedUser); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": "Invalid request payload"})
 		return
