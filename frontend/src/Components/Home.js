@@ -89,7 +89,7 @@ const Home = () => {
 
     return (
         <>
-            <div className="welcome lg:flex order-0 pt2 bg-gray-100 dark:bg-slate-800 rounded-full">
+            <div className="mt-[132.5px] welcome lg:flex order-0 pt2 bg-gray-100 dark:bg-slate-800 rounded-full">
                 <div className="">
                     <img src={bannerImage} alt="" className='w-2000 rounded-br-[500px]' />
                 </div>

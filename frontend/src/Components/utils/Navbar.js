@@ -61,7 +61,7 @@ const Navbar = () => {
 
     return (
         <>
-            <div className="navSection fixed w-full top-0 left-0">
+            <div className="navSection fixed w-full top-0 left-0 z-10">
                 <nav className='dark:bg-slate-900  dark:text-slate-300 bg-gray-100 text-black text-bold flex justify-between items-center p-3 md:p-6' id='navbar'>
                     <div className='md:order-2'>
                         <div className="hamburger cursor-pointer md:hidden" onClick={hamburgerClicked}>
@@ -82,7 +82,7 @@ const Navbar = () => {
                         </div>
                     </div>
 
-                    <div className="logo md:order-1">
+                    <div className="logo md:order-1 ">
                         {/* <Link to="/"><img src={NavLogo} id="aboutLogo" alt="Loading..." className='rounded-full w-14 h-14' /></Link> */}
                         <Link to="/"><span className='font-extrabold text-xl' id="aboutLogo"> <span className='dark:text-white text-gray-400'>Bugs</span><span className='text-sky-600'>Founder</span></span></Link>
                     </div>
@@ -109,8 +109,7 @@ const Navbar = () => {
                     </div>
                 </div>
             </div>
-            <div className="mt-[132.5px]">
-            </div>
+
         </>
     )
 }

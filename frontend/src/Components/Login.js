@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { SocialIcon } from 'react-social-icons'
 const Login = () => {
     return (
-        <section class="bg-gray-50 dark:bg-gray-900">
+        <section class="bg-gray-50 dark:bg-gray-900 mt-[132.5px]">
             <div class="flex flex-col items-center justify-center md:px-4 md:py-20 py-8 mx-auto my-10">
                 <Link to="/" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
                     <img class="w-8 h-8 mr-2" src={Logo} alt="logo" />

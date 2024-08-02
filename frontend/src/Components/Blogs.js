@@ -111,7 +111,7 @@ const Blogs = () => {
     }, []);
 
     return (
-        <div className="blogSection my-10 p-3">
+        <div className="mt-[132.5px] blogSection my-10 p-3">
             <h1 className="text-2xl font-bold my-8 dark:text-white">Blogs</h1>
             {
                 loadedBlogs.map(blog => (

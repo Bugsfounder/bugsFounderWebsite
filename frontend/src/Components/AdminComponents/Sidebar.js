@@ -1,10 +1,7 @@
-import React, { useState } from 'react'
-import { useParams } from 'react-router'
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const Tutorial = () => {
-
-    let { tutorial_id } = useParams()
+function Sidebar() {
     const [sidebarOpen, setSidebarOpen] = useState(true);
 
     const toggleSidebar = () => {
@@ -53,4 +50,4 @@ const Tutorial = () => {
     );
 }
 
-export default Tutorial
+export default Sidebar;

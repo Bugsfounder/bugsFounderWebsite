@@ -10,10 +10,14 @@ import BlogsPage from './Pages/BlogsPage';
 import BlogPage from './Pages/BlogPage';
 import TutorialsPage from './Pages/TutorialsPage';
 import TutorialPage from './Pages/TutorialPage';
-import Admin from './Pages/Admin';
+import Admin from './Pages/admin/AdminPage';
 import SignupPage from './Pages/SignupPage';
 import LoginPage from './Pages/LoginPage';
 import SearchPage from './Pages/SearchPage';
+import Admins from './Components/AdminComponents/Admins';
+import Blogs from './Components/AdminComponents/Blogs';
+import Tutorials from './Components/AdminComponents/Tutorials';
+import Users from './Components/AdminComponents/Users';
 
 const router = createBrowserRouter([
   {
@@ -68,10 +72,27 @@ const router = createBrowserRouter([
     ]
   },
   {
-    path: "/admin",
+    path: "/kubari/admin",
     element: <Admin />,
     errorElement: <ErrorPage />,
-    children: [{}]
+    children: [
+      {
+        path: "admins",
+        element: <Admins />
+      },
+      {
+        path: "blogs",
+        element: <Blogs />
+      },
+      {
+        path: "tutorials",
+        element: <Tutorials />
+      },
+      {
+        path: "users",
+        element: <Users />
+      },
+    ]
   },
 ])
 

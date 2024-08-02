@@ -13,7 +13,7 @@ const Tutorials = () => {
             description: "Exploring the latest trends and technologies in web development for 2024.",
             author: "John Doe",
             createdAt: "2024-07-01",
-            url: "/blogs/The-Future-of-Web-Development"
+            url: "/tutorials/The-Future-of-Web-Development"
         },
         {
             id: "2",
@@ -21,7 +21,7 @@ const Tutorials = () => {
             description: "A comprehensive guide to becoming proficient in React.js within a month.",
             author: "Jane Smith",
             createdAt: "2024-06-15",
-            url: "/blogs/Mastering-React-in-30-Days"
+            url: "/tutorials/Mastering-React-in-30-Days"
         },
         {
             id: "3",
@@ -29,7 +29,7 @@ const Tutorials = () => {
             description: "An overview of the most popular JavaScript libraries and their use cases.",
             author: "Alex Johnson",
             createdAt: "2024-05-20",
-            url: "/blogs/Top-10-JavaScript-Libraries"
+            url: "/tutorials/Top-10-JavaScript-Libraries"
         },
         {
             id: "4",
@@ -37,7 +37,7 @@ const Tutorials = () => {
             description: "A deep dive into asynchronous programming in JavaScript using async/await.",
             author: "Emily Davis",
             createdAt: "2024-04-10",
-            url: "/blogs/Understanding-Async-Await"
+            url: "/tutorials/Understanding-Async-Await"
         },
         {
             id: "5",
@@ -45,7 +45,7 @@ const Tutorials = () => {
             description: "Comparing CSS Grid and Flexbox for modern web layout design.",
             author: "Michael Brown",
             createdAt: "2024-03-30",
-            url: "/blogs/CSS-Grid-vs-Flexbox"
+            url: "/tutorials/CSS-Grid-vs-Flexbox"
         },
         {
             id: "6",
@@ -53,7 +53,7 @@ const Tutorials = () => {
             description: "A beginner's guide to adding type safety to your JavaScript projects with TypeScript.",
             author: "Sarah Wilson",
             createdAt: "2024-02-25",
-            url: "/blogs/Getting-Started-with-TypeScript"
+            url: "/tutorials/Getting-Started-with-TypeScript"
         },
         {
             id: "7",
@@ -61,7 +61,7 @@ const Tutorials = () => {
             description: "Learn how to create fast, reliable, and engaging web apps using PWA principles.",
             author: "David Martinez",
             createdAt: "2024-01-15",
-            url: "/blogs/Building-Progressive-Web-Apps"
+            url: "/tutorials/Building-Progressive-Web-Apps"
         },
         {
             id: "8",
@@ -69,7 +69,7 @@ const Tutorials = () => {
             description: "An introduction to serverless computing and its benefits for scalable applications.",
             author: "Sophia Garcia",
             createdAt: "2023-12-05",
-            url: "/blogs/The-Power-of-Serverless-Architecture"
+            url: "/tutorials/The-Power-of-Serverless-Architecture"
         },
         {
             id: "9",
@@ -77,7 +77,7 @@ const Tutorials = () => {
             description: "A comparison of GraphQL and REST for building robust APIs.",
             author: "James Taylor",
             createdAt: "2023-11-18",
-            url: "/blogs/GraphQL-vs-REST-API"
+            url: "/tutorials/GraphQL-vs-REST-API"
         },
         {
             id: "10",
@@ -85,7 +85,7 @@ const Tutorials = () => {
             description: "Techniques and best practices for improving the performance of your web applications.",
             author: "Olivia Moore",
             createdAt: "2023-10-22",
-            url: "/blogs/Optimizing-Web-Performance"
+            url: "/tutorials/Optimizing-Web-Performance"
         }
     ];
 
@@ -112,7 +112,7 @@ const Tutorials = () => {
     }, []);
 
     return (
-        <div className="blogSection my-10 p-3">
+        <div className="blogSection my-10 p-3 mt-[132.5px]">
             <h1 className="text-2xl font-bold my-8 dark:text-white">Tutorials</h1>
             {
                 loadedBlogs.map(blog => (

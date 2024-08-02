@@ -4,7 +4,7 @@ import { SocialIcon } from 'react-social-icons'
 const About = () => {
     return (
         <div>
-            <div className="about-page dark:bg-slate-900 dark:text-slate-300 p-6">
+            <div className=" mt-[132.5px] about-page dark:bg-slate-900 dark:text-slate-300 p-6">
                 <h1 className="text-3xl font-bold mb-4">About Me</h1>
 
                 <div className="flex flex-col md:items-center mb-6">

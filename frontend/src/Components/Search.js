@@ -112,7 +112,7 @@ const Search = () => {
     }, []);
 
     return (
-        <div className="blogSection my-10 p-3">
+        <div className="blogSection my-10 p-3 mt-[132.5px]">
             <h1 className="text-2xl font-bold my-8 dark:text-white">Search Results for: {query}</h1>
             {
                 loadedBlogs.map(blog => (

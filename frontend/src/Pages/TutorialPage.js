@@ -11,7 +11,7 @@ const TutorialPage = () => {
         description: "Exploring the latest trends and technologies in web development for 2024.",
         author: "John Doe",
         createdAt: "2024-07-01",
-        url: "/blogs/The-Future-of-Web-Development"
+        url: "/tutorials/The-Future-of-Web-Development"
     }
     return (
         <Tutorial />
