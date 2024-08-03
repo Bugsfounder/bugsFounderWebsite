@@ -1,5 +1,5 @@
 import React from 'react'
-import Search from '../Components/Search'
+import Search from '../../Components/MainWebComponents/Search'
 const SearchPage = () => {
     return (
         <Search />

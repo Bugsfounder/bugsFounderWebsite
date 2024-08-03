@@ -1,6 +1,6 @@
 import React from 'react'
-import bannerImage from "../images/banner.jpg"
-import BugsFounder from './utils/BugsFounder'
+import bannerImage from "../../images/banner.jpg"
+import BugsFounder from '../utils/BugsFounder'
 import { Link } from 'react-router-dom';
 const Home = () => {
 

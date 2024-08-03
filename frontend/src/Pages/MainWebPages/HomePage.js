@@ -1,6 +1,6 @@
 import React from 'react'
 import { useOutletContext } from 'react-router'
-import Home from "../Components/Home"
+import Home from '../../Components/MainWebComponents/Home'
 const HomePage = () => {
 
     const { response } = useOutletContext();

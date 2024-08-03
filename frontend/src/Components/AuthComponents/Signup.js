@@ -1,5 +1,5 @@
 import React from 'react'
-import Logo from '../images/banner.jpeg'
+import Logo from '../../images/banner.jpeg'
 import { Link } from 'react-router-dom'
 import { SocialIcon } from 'react-social-icons'
 const Signup = () => {

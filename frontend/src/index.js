@@ -2,22 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import AdminApp from './AdminApp';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ErrorPage from './Pages/ErrorPage';
-import Home from './Pages/HomePage';
-import AboutPage from './Pages/AboutPage';
-import BlogsPage from './Pages/BlogsPage';
-import BlogPage from './Pages/BlogPage';
-import TutorialsPage from './Pages/TutorialsPage';
-import TutorialPage from './Pages/TutorialPage';
-import Admin from './Pages/admin/AdminPage';
-import SignupPage from './Pages/SignupPage';
-import LoginPage from './Pages/LoginPage';
-import SearchPage from './Pages/SearchPage';
-import Admins from './Components/AdminComponents/Admins';
-import Blogs from './Components/AdminComponents/Blogs';
-import Tutorials from './Components/AdminComponents/Tutorials';
-import Users from './Components/AdminComponents/Users';
+import Home from './Pages/MainWebPages/HomePage';
+import AboutPage from './Pages/MainWebPages/AboutPage';
+import BlogsPage from './Pages/MainWebPages/BlogsPage';
+import BlogPage from './Pages/MainWebPages/BlogPage';
+import TutorialsPage from './Pages/MainWebPages/TutorialsPage';
+import TutorialPage from './Pages/MainWebPages/TutorialPage';
+import SignupPage from './Pages/AuthPages/SignupPage';
+import LoginPage from './Pages/AuthPages/LoginPage';
+import SearchPage from './Pages/MainWebPages/SearchPage';
+import AdminBlogsPage from './Pages/AdminPages/AdminBlogsPage';
+import AdminTutorialsPage from './Pages/AdminPages/AdminTutorialsPage';
+import AdminUsersPage from './Pages/AdminPages/AdminUsersPage';
+import AdminAdminsPage from './Pages/AdminPages/AdminAdminsPage';
+import AdminPage from './Pages/AdminPages/AdminPage';
 
 const router = createBrowserRouter([
   {
@@ -73,24 +74,28 @@ const router = createBrowserRouter([
   },
   {
     path: "/kubari/admin",
-    element: <Admin />,
+    element: <AdminApp />,
     errorElement: <ErrorPage />,
     children: [
       {
+        path: "",
+        element: <AdminPage />
+      },
+      {
         path: "admins",
-        element: <Admins />
+        element: <AdminAdminsPage />
       },
       {
         path: "blogs",
-        element: <Blogs />
+        element: <AdminBlogsPage />
       },
       {
         path: "tutorials",
-        element: <Tutorials />
+        element: <AdminTutorialsPage />
       },
       {
         path: "users",
-        element: <Users />
+        element: <AdminUsersPage />
       },
     ]
   },

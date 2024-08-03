@@ -1,5 +1,5 @@
 import React from 'react'
-import profileImage from '../images/logo.jpeg'
+import profileImage from '../../images/logo.jpeg'
 import { SocialIcon } from 'react-social-icons'
 const About = () => {
     return (
