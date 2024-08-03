@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/bugsfounder/bugsfounderweb/db"
 	"github.com/bugsfounder/bugsfounderweb/logger"
@@ -42,15 +43,23 @@ func (h_DB *HandlerForDBHandlers) CreateOneBlog(ctx *gin.Context) {
 }
 
 // GetAllBlogs
+
 func (h_DB *HandlerForDBHandlers) GetAllBlogs(ctx *gin.Context) {
 	LOG.Debug("")
-	// access db functions ex: h.Client.DemoFunc() // in db
-	allBlogs, err := h_DB.Client.GetAllBlogs()
+
+	// Parse pagination parameters
+	page, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
+	limit, _ := strconv.Atoi(ctx.DefaultQuery("limit", "10"))
+	offset := (page - 1) * limit
+
+	// Fetch blogs with offset and limit
+	allBlogs, err := h_DB.Client.GetAllBlogs(offset, limit)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, allBlogs)
+
+	ctx.JSON(http.StatusOK, gin.H{"blogs": allBlogs})
 }
 
 // GetOneBlogByURL

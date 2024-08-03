@@ -8,6 +8,7 @@ import (
 	"github.com/bugsfounder/bugsfounderweb/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func (client *Client) CreateOneBlog(blog *models.Blog) (*mongo.InsertOneResult, error) {
@@ -31,42 +32,40 @@ func (client *Client) CreateOneBlog(blog *models.Blog) (*mongo.InsertOneResult, 
 	return result, nil
 }
 
-func (client *Client) GetAllBlogs() ([]models.Blog, error) {
+func (client *Client) GetAllBlogs(offset, limit int) ([]models.Blog, error) {
 	LOG.Debug("")
-	ctx, cancel := withTimeout()
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
-	// select the database and collection
 	collection := client.Client_Obj.Database("bugsfounderDB").Collection("blogs")
 
-	cursor, err := collection.Find(ctx, bson.M{})
+	findOptions := options.Find()
+	findOptions.SetSkip(int64(offset))
+	findOptions.SetLimit(int64(limit))
+
+	cursor, err := collection.Find(ctx, bson.M{}, findOptions)
 	if err != nil {
 		LOG.Error("%v", err)
 		return nil, err
 	}
-
 	defer cursor.Close(ctx)
 
-	// read all blogs
-	var allBlogsFromDatabase []models.Blog
+	var blogs []models.Blog
 	for cursor.Next(ctx) {
 		var blog models.Blog
-		err := cursor.Decode(&blog)
-		if err != nil {
-			LOG.Error("Failed to decode document: %v", err)
+		if err = cursor.Decode(&blog); err != nil {
+			LOG.Error("%v", err)
 			return nil, err
 		}
-
-		allBlogsFromDatabase = append(allBlogsFromDatabase, blog)
+		blogs = append(blogs, blog)
 	}
 
 	if err := cursor.Err(); err != nil {
-		LOG.Error("Cursor error: %v", err)
+		LOG.Error("%v", err)
 		return nil, err
 	}
 
-	return allBlogsFromDatabase, nil
-
+	return blogs, nil
 }
 
 func (client *Client) GetOneBlogByURL(blogURL string) (*models.Blog, error) {
