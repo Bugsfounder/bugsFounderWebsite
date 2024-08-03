@@ -4,15 +4,20 @@ import './index.css';
 import App from './App';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ErrorPage from './Pages/ErrorPage';
-import Home from './Pages/Home';
-import Author from './Pages/Author';
-import Blogs from './Pages/Blogs';
-import Blog from './Pages/Blog';
-import Tutorials from './Pages/Tutorials';
-import Tutorial from './Pages/Tutorial';
-import Admin from './Pages/Admin';
-import Signup from './Pages/Signup';
-import Login from './Pages/Login';
+import Home from './Pages/HomePage';
+import AboutPage from './Pages/AboutPage';
+import BlogsPage from './Pages/BlogsPage';
+import BlogPage from './Pages/BlogPage';
+import TutorialsPage from './Pages/TutorialsPage';
+import TutorialPage from './Pages/TutorialPage';
+import Admin from './Pages/admin/AdminPage';
+import SignupPage from './Pages/SignupPage';
+import LoginPage from './Pages/LoginPage';
+import SearchPage from './Pages/SearchPage';
+import Admins from './Components/AdminComponents/Admins';
+import Blogs from './Components/AdminComponents/Blogs';
+import Tutorials from './Components/AdminComponents/Tutorials';
+import Users from './Components/AdminComponents/Users';
 
 const router = createBrowserRouter([
   {
@@ -25,47 +30,69 @@ const router = createBrowserRouter([
         element: <Home />
       },
       {
-        path: "/author",
-        element: <Author />
+        path: "/about_me",
+        element: <AboutPage />
       },
       {
         path: "/blogs",
-        element: <Blogs />
+        element: <BlogsPage />
       },
       {
         path: "/blogs/:blog_id",
-        element: <Blog />
+        element: <BlogPage />
       },
       {
         path: "/tutorials",
-        element: <Tutorials />
+        element: <TutorialsPage />
       },
       {
         path: "/tutorials/:tutorial_id",
-        element: <Tutorial />
+        element: <TutorialPage />
       },
+      {
+        path: "/search/:query",
+        element: <SearchPage />
+      },
+
     ]
   },
   {
     path: "/auth",
-    element: <Admin />,
+    element: <App />,
     errorElement: <ErrorPage />,
     children: [
       {
         path: "login",
-        element: <Login />
+        element: <LoginPage />
       },
       {
         path: "signup",
-        element: <Signup />
+        element: <SignupPage />
       },
     ]
   },
   {
-    path: "/admin",
+    path: "/kubari/admin",
     element: <Admin />,
     errorElement: <ErrorPage />,
-    children: [{}]
+    children: [
+      {
+        path: "admins",
+        element: <Admins />
+      },
+      {
+        path: "blogs",
+        element: <Blogs />
+      },
+      {
+        path: "tutorials",
+        element: <Tutorials />
+      },
+      {
+        path: "users",
+        element: <Users />
+      },
+    ]
   },
 ])
 
