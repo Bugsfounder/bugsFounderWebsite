@@ -8,6 +8,7 @@ import (
 	"github.com/bugsfounder/bugsfounderweb/handler"
 	"github.com/bugsfounder/bugsfounderweb/logger"
 	"github.com/bugsfounder/bugsfounderweb/router"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -28,6 +29,14 @@ func main() {
 	LOG.Debug("Starting server")
 	server := gin.Default() // gin server
 	server.SetTrustedProxies([]string{"localhost", "0.0.0.0", "127.0.0.1"})
+	// CORS configuration
+	server.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"}, // Change this to your frontend URL
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 
 	// Set trusted proxies for production (replace with actual proxy IPs)
 	// r.SetTrustedProxies([]string{"192.168.1.1", "192.168.1.2"})
