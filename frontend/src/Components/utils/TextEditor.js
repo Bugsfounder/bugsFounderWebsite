@@ -49,7 +49,7 @@ const TextEditor = ({ editorHtml, setEditorHtml }) => {
                 onChange={setEditorHtml}
                 modules={modules}
                 formats={formats}
-                className='h-96  mb-16'
+                className='h-96 mb-16'
             />
         </div>
     );

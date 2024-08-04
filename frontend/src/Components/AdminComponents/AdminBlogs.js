@@ -79,6 +79,7 @@ const AdminBlogs = () => {
   return (
     <div className="p-6">
       <h1 className="text-center text-2xl font-semibold">Manipulate Blogs</h1>
+      <Link to={`add`}>WriteABlog</Link>
       <div className="blogSection p-3">
         {loadedBlogs.map(blog => (
           <div key={blog.url} className="p-5 dark:text-white dark:bg-slate-800 bg-gray-100 my-3 shadow-sm rounded-md md:flex md:justify-between">
@@ -90,10 +91,10 @@ const AdminBlogs = () => {
               <p>{blog.author} . {blog.createdAt}</p>
             </div>
             <div className="buttons flex">
-              <Link to={`/kubari/admin/blogs/edit/${blog.url}`}>
+              <Link to={`edit/${blog.url}`}>
                 <PencilSquareIcon className="size-9 text-slate-500 cursor-pointer" />
               </Link>
-              <Link to="/kubari/admin/blogs">
+              <Link to="/blogs/">
                 <TrashIcon className="size-9 text-slate-500 cursor-pointer" />
               </Link>
             </div>
