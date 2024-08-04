@@ -19,6 +19,8 @@ import AdminTutorialsPage from './Pages/AdminPages/AdminTutorialsPage';
 import AdminUsersPage from './Pages/AdminPages/AdminUsersPage';
 import AdminAdminsPage from './Pages/AdminPages/AdminAdminsPage';
 import AdminPage from './Pages/AdminPages/AdminPage';
+import AdminEditBlogPage from './Pages/AdminPages/AdminEditBlogPage';
+import AdminAddBlogPage from './Pages/AdminPages/AdminAddBlogPage';
 
 const router = createBrowserRouter([
   {
@@ -88,6 +90,14 @@ const router = createBrowserRouter([
       {
         path: "blogs",
         element: <AdminBlogsPage />
+      },
+      {
+        path: "blogs/add",
+        element: <AdminAddBlogPage />
+      },
+      {
+        path: "blogs/edit/:blog_url",
+        element: <AdminEditBlogPage />
       },
       {
         path: "tutorials",

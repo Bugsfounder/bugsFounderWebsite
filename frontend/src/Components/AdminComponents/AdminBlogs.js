@@ -90,10 +90,10 @@ const AdminBlogs = () => {
               <p>{blog.author} . {blog.createdAt}</p>
             </div>
             <div className="buttons flex">
-              <Link to="/kubari/admin/">
+              <Link to={`/kubari/admin/blogs/edit/${blog.url}`}>
                 <PencilSquareIcon className="size-9 text-slate-500 cursor-pointer" />
               </Link>
-              <Link to="/kubari/admin/">
+              <Link to="/kubari/admin/blogs">
                 <TrashIcon className="size-9 text-slate-500 cursor-pointer" />
               </Link>
             </div>
