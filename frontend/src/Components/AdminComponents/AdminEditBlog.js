@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useOutletContext, useParams } from 'react-router'
+import TextEditor from '../utils/TextEditor';
 
 const AdminEditBlog = () => {
     const { privateAxiosInstance, publicAxiosInstance } = useOutletContext();
+    const [editorHtml, setEditorHtml] = useState('');
     const [oldBlog, setOldBlog] = useState({})
     const [newBlog, setNewBlog] = useState(oldBlog)
 
@@ -10,52 +12,79 @@ const AdminEditBlog = () => {
     let blogHeading = blog_url.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")
 
     const getOldBlogByUrl = async (url) => {
-        const response = await publicAxiosInstance.get(`/blog/${blog_url}`)
-        console.log(response.data)
-        setOldBlog(response.data)
-        setNewBlog(response.data)
+        try {
+            const response = await publicAxiosInstance.get(`/blog/${url}`);
+            console.log(response.data);
+            setOldBlog(response.data);
+            setNewBlog(response.data);
+        } catch (err) {
+            console.error('Error fetching blog: ', err);
+        }
     }
+
     const handleEditFormSubmit = async (event) => {
-        event.preventDefault()
-        // const blog_url = await 
-        console.log("form submit....")
+        event.preventDefault();
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                // 'Authorization': 'Bearer YOUR_ACCESS_TOKEN'
+            }
+        };
+        try {
+            const response = await privateAxiosInstance.put(`/blog/${blog_url}`, newBlog, config);
+            console.log("form submit....", response);
+        } catch (err) {
+            console.error("Unable to put data ", err);
+            // You can also set an error state or show a notification to the user
+            // setError('Failed to fetch blog data');
+        }
     }
 
     useEffect(() => {
-        getOldBlogByUrl(blog_url)
-    }, [])
+        getOldBlogByUrl(blog_url);
+    }, [blog_url]);
 
     const handleChange = (event) => {
-        const { name, value } = event.target
+        const { name, value } = event.target;
         setNewBlog({
             ...newBlog,
             [name]: value
         });
     };
 
+    const handleContentChange = (content) => {
+        setNewBlog({
+            ...newBlog,
+            content
+        });
+        console.log(content);
+    }
+
     return (
         <>
             <div className="p-6">
                 <h1 className='text-3xl text-center'>Update {blogHeading}</h1>
-                <form onSubmit={handleEditFormSubmit} className='flex flex-col space-y-3 text-lg'>
+                <form onSubmit={handleEditFormSubmit} className='flex flex-col space-y-3'>
                     <label className='px-2 font-bold hover:text-slate-400 cursor-pointer' htmlFor="title">Title</label>
-                    <input className='dark:bg-slate-600 p-2 rounded-[10px] h-12' value={newBlog.title} placeholder='Add New   if want to edit otherwise leave it blank' type="text" id="title" name='title' onChange={handleChange} />
+                    <input className='dark:bg-slate-900 border p-2 outline-none h-12' value={newBlog.title} type="text" id="title" name='title' onChange={handleChange} />
 
                     <label className='px-2 font-bold hover:text-slate-400 cursor-pointer' htmlFor="content">Content</label>
-                    <textarea value={newBlog.content} type="text" name="content" id="content" />
+                    <TextEditor editorHtml={newBlog.content} setEditorHtml={handleContentChange} />
 
-                    <label className='px-2 font-bold hover:text-slate-400 cursor-pointer' htmlFor="tags">Tags</label>
-                    <input className='dark:bg-slate-600 p-2 rounded-[10px] h-12' value={newBlog.tags} placeholder='Add New   if want to edit otherwise leave it blank' type="tags" name="tags" id="tags" />
+                    <label className='px-2 font-bold  hover:text-slate-400 cursor-pointer' htmlFor="tags">Tags</label>
+                    <input className='dark:bg-slate-900 border p-2 outline-none h-12' value={newBlog.tags} type="text" name="tags" id="tags" onChange={handleChange} />
 
                     <label className='px-2 font-bold hover:text-slate-400 cursor-pointer' htmlFor="url">Url</label>
-                    <input className='dark:bg-slate-600 p-2 rounded-[10px] h-12' value={newBlog.url} placeholder='Add New   if want to edit otherwise leave it blank' type="text" name="url" id="url" />
+                    <input className='dark:bg-slate-900 border p-2 outline-none  h-12' value={newBlog.url} type="text" name="url" id="url" onChange={handleChange} />
 
                     <label className='px-2 font-bold hover:text-slate-400 cursor-pointer' htmlFor="author">Author</label>
-                    <input className='dark:bg-slate-600 p-2 rounded-[10px] h-12' value={newBlog.author} placeholder='Add New   if want to edit otherwise leave it blank' type="text" name="author" id="author" />
+                    <input className='dark:bg-slate-900 border p-2 outline-none h-12' value={newBlog.author} type="text" name="author" id="author" onChange={handleChange} />
+
+                    <button type='submit' className='w-40 py-3 px-5 dark:bg-slate-800  bg-gray-500 border font-bold hover:dark:bg-slate-900 '>Update</button>
                 </form>
             </div>
         </>
     )
 }
 
-export default AdminEditBlog
+export default AdminEditBlog;
