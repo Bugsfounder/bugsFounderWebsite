@@ -66,19 +66,19 @@ const AdminEditBlog = () => {
                 <h1 className='text-3xl text-center'>Update {blogHeading}</h1>
                 <form onSubmit={handleEditFormSubmit} className='flex flex-col space-y-3'>
                     <label className='px-2 font-bold hover:text-slate-400 cursor-pointer' htmlFor="title">Title</label>
-                    <input className='dark:bg-slate-900 border p-2 outline-none h-12' value={newBlog.title} type="text" id="title" name='title' onChange={handleChange} />
+                    <input required className='dark:bg-slate-900 border p-2 outline-none h-12' value={newBlog.title} type="text" id="title" name='title' onChange={handleChange} />
 
                     <label className='px-2 font-bold hover:text-slate-400 cursor-pointer' htmlFor="content">Content</label>
                     <TextEditor editorHtml={newBlog.content} setEditorHtml={handleContentChange} />
 
                     <label className='px-2 font-bold  hover:text-slate-400 cursor-pointer' htmlFor="tags">Tags</label>
-                    <input className='dark:bg-slate-900 border p-2 outline-none h-12' value={newBlog.tags} type="text" name="tags" id="tags" onChange={handleChange} />
+                    <input required className='dark:bg-slate-900 border p-2 outline-none h-12' value={newBlog.tags} type="text" name="tags" id="tags" onChange={handleChange} />
 
                     <label className='px-2 font-bold hover:text-slate-400 cursor-pointer' htmlFor="url">Url</label>
-                    <input className='dark:bg-slate-900 border p-2 outline-none  h-12' value={newBlog.url} type="text" name="url" id="url" onChange={handleChange} />
+                    <input required className='dark:bg-slate-900 border p-2 outline-none  h-12' value={newBlog.url} type="text" name="url" id="url" onChange={handleChange} />
 
                     <label className='px-2 font-bold hover:text-slate-400 cursor-pointer' htmlFor="author">Author</label>
-                    <input className='dark:bg-slate-900 border p-2 outline-none h-12' value={newBlog.author} type="text" name="author" id="author" onChange={handleChange} />
+                    <input required className='dark:bg-slate-900 border p-2 outline-none h-12' value={newBlog.author} type="text" name="author" id="author" onChange={handleChange} />
 
                     <button type='submit' className='w-40 py-3 px-5 dark:bg-slate-800  bg-gray-500 border font-bold hover:dark:bg-slate-900 '>Update</button>
                 </form>
