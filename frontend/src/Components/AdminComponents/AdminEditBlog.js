@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { useOutletContext, useParams } from 'react-router'
+import { useNavigate, useOutletContext, useParams } from 'react-router'
 import TextEditor from '../utils/TextEditor';
 
 const AdminEditBlog = () => {
+    const navigate = useNavigate()
     const { privateAxiosInstance, publicAxiosInstance } = useOutletContext();
     const [editorHtml, setEditorHtml] = useState('');
     const [oldBlog, setOldBlog] = useState({})
@@ -32,7 +33,8 @@ const AdminEditBlog = () => {
         };
         try {
             const response = await privateAxiosInstance.put(`/blog/${blog_url}`, newBlog, config);
-            console.log("form submit....", response);
+            // console.log("form submit....", response);
+            navigate(`/blogs/${blog_url}`)
         } catch (err) {
             console.error("Unable to put data ", err);
             // You can also set an error state or show a notification to the user

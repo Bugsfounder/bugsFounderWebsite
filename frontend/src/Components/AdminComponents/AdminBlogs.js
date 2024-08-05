@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid';
+import { PencilSquareIcon, TrashIcon, PlusCircleIcon } from '@heroicons/react/24/solid';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import ConfirmationModal from '../utils/ConfigmationModal';
 
 const AdminBlogs = () => {
   const { privateAxiosInstance, publicAxiosInstance } = useOutletContext();
   const [blogs, setBlogs] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [blogToDelete, setBlogToDelete] = useState(null);
 
   const getBlogs = () => {
-    publicAxiosInstance.get(`/blog?page=${page}&limit=3`)
+    publicAxiosInstance.get(`/blog?page=${page}&limit=6`)
       .then(response => {
         if (response.data.blogs && response.data.blogs.length > 0) {
           setBlogs(prevBlogs => {
@@ -27,6 +30,25 @@ const AdminBlogs = () => {
       });
   }
 
+  const handleDelete = (blog) => {
+    setBlogToDelete(blog);
+    setIsModalOpen(true);
+  }
+
+  const confirmDelete = () => {
+    if (blogToDelete) {
+      privateAxiosInstance.delete(`/blog/${blogToDelete.url}`)
+        .then(response => {
+          setBlogs(blogs.filter(blog => blog.url !== blogToDelete.url));
+          setIsModalOpen(false);
+          setBlogToDelete(null);
+        })
+        .catch(err => {
+          console.log("got error", err);
+        });
+    }
+  }
+
   useEffect(() => {
     getBlogs();
   }, []);
@@ -34,9 +56,11 @@ const AdminBlogs = () => {
   return (
     <div className="p-6">
       <h1 className="text-center text-2xl font-semibold">Manipulate Blogs</h1>
-      <Link to={`add`}>
-        <TrashIcon className="size-9 text-slate-500 cursor-pointer" />
-      </Link>
+      <div className='px-4 flex justify-end'>
+        <Link to="add">
+          <PlusCircleIcon className="size-10 text-slate-600 hover:text-slate-700 cursor-pointer " />
+        </Link>
+      </div>
       <InfiniteScroll
         dataLength={blogs.length}
         next={getBlogs}
@@ -48,7 +72,7 @@ const AdminBlogs = () => {
           {blogs.map(blog => (
             <div key={blog.url} className="p-5 dark:text-white dark:bg-slate-800 bg-gray-100 my-3 shadow-sm rounded-md md:flex md:justify-between">
               <div className="contentDir">
-                <Link to={`/blogs/` + blog.url} className="text-sky-600 text-xl">
+                <Link to={`/blogs/${blog.url}`} className="text-sky-600 text-xl">
                   <h1>{blog.title}</h1>
                 </Link>
                 <p>{blog.description}</p>
@@ -58,14 +82,20 @@ const AdminBlogs = () => {
                 <Link to={`edit/${blog.url}`}>
                   <PencilSquareIcon className="size-9 text-slate-500 cursor-pointer" />
                 </Link>
-                <Link to="/blogs/">
-                  <TrashIcon className="size-9 text-slate-500 cursor-pointer" />
-                </Link>
+                <button onClick={() => handleDelete(blog)}>
+                  <TrashIcon className="size-9 text-slate-500 cursor-pointer mb-4" />
+                </button>
               </div>
             </div>
           ))}
         </div>
       </InfiniteScroll>
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={confirmDelete}
+        message="Are you sure you want to delete this blog?"
+      />
     </div>
   );
 };

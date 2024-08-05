@@ -24,7 +24,7 @@ func (h_DB *HandlerForDBHandlers) CreateOneBlog(ctx *gin.Context) {
 
 	var blog models.Blog
 	if err := ctx.ShouldBindJSON(&blog); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"message": "invalid request"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "invalid request", "err": err.Error()})
 		return
 	}
 
