@@ -3,6 +3,7 @@ import { Link, useOutletContext } from 'react-router-dom';
 import { PencilSquareIcon, TrashIcon, PlusCircleIcon } from '@heroicons/react/24/solid';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ConfirmationModal from '../utils/ConfigmationModal';
+import { NotificationManager } from 'react-notifications';
 
 const AdminBlogs = () => {
   const { privateAxiosInstance, publicAxiosInstance } = useOutletContext();
@@ -26,7 +27,14 @@ const AdminBlogs = () => {
         }
       })
       .catch(err => {
-        console.log("got error", err);
+        if (err.response) {
+          NotificationManager.error(`Data: ${err.response.data}\nStatus: ${err.response.status}\nHeaders: ${err.response.headers}`)
+        } else if (err.request) {
+          NotificationManager.error(`${err.message}`)
+        } else {
+          NotificationManager.error(`${err.message}`)
+        }
+        // NotificationManager.error("Something Went Wrong")
       });
   }
 
@@ -34,7 +42,6 @@ const AdminBlogs = () => {
     setBlogToDelete(blog);
     setIsModalOpen(true);
   }
-
   const confirmDelete = () => {
     if (blogToDelete) {
       privateAxiosInstance.delete(`/blog/${blogToDelete.url}`)
@@ -65,8 +72,8 @@ const AdminBlogs = () => {
         dataLength={blogs.length}
         next={getBlogs}
         hasMore={hasMore}
-        loader={<h4>Loading...</h4>}
-        endMessage={<p className="text-center">No more blogs</p>}
+        loader={<h4 className='text-center font-bold'>Loading...</h4>}
+        endMessage={<p className="text-center font-bold">No more blogs</p>}
       >
         <div className="blogSection p-3">
           {blogs.map(blog => (

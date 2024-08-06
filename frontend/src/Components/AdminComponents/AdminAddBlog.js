@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router';
 import TextEditor from '../utils/TextEditor';
-
+import { NotificationManager } from 'react-notifications';
 const AdminAddBlog = () => {
     const navigate = useNavigate()
     const { privateAxiosInstance } = useOutletContext();
@@ -29,22 +29,15 @@ const AdminAddBlog = () => {
             const response = await privateAxiosInstance.post('/blog', newBlog, config);
             // console.log("form submit....", response);
             navigate(`/blogs/${newBlog.url}`)
+            NotificationManager.success("Blog Added Successfully!")
         } catch (err) {
-            console.error("Error:", err);
             if (err.response) {
-                // The request was made and the server responded with a status code
-                // that falls out of the range of 2xx
-                console.error("Response data:", err.response.data);
-                console.error("Response status:", err.response.status);
-                console.error("Response headers:", err.response.headers);
+                NotificationManager.error(`Data: ${err.response.data}\nStatus: ${err.response.status}\nHeaders: ${err.response.headers}`)
             } else if (err.request) {
-                // The request was made but no response was received
-                console.error("Request data:", err.request);
+                NotificationManager.error(`${err.message}`)
             } else {
-                // Something happened in setting up the request that triggered an Error
-                console.error("Error message:", err.message);
+                NotificationManager.error(`${err.message}`)
             }
-            alert("Failed to add blog post.");
         }
     }
 

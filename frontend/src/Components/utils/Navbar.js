@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { HomeIcon, UserCircleIcon, SunIcon, MoonIcon } from '@heroicons/react/24/solid'
+import { NotificationContainer } from 'react-notifications';
 
 const Navbar = () => {
     const navigate = useNavigate(0)
@@ -61,6 +62,7 @@ const Navbar = () => {
 
     return (
         <>
+            <NotificationContainer />
             <div className="navSection fixed w-full top-0 left-0 z-10">
                 <nav className='dark:bg-slate-900  dark:text-slate-300 bg-gray-100 text-black text-bold flex justify-between items-center p-3 md:p-6' id='navbar'>
                     <div className='md:order-2'>

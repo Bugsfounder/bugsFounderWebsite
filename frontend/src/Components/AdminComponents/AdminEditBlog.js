@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useOutletContext, useParams } from 'react-router'
 import TextEditor from '../utils/TextEditor';
-
+import { NotificationManager } from 'react-notifications';
 const AdminEditBlog = () => {
     const navigate = useNavigate()
     const { privateAxiosInstance, publicAxiosInstance } = useOutletContext();
@@ -19,7 +19,13 @@ const AdminEditBlog = () => {
             setOldBlog(response.data);
             setNewBlog(response.data);
         } catch (err) {
-            console.error('Error fetching blog: ', err);
+            if (err.response) {
+                NotificationManager.error(`Data: ${err.response.data}\nStatus: ${err.response.status}\nHeaders: ${err.response.headers}`)
+            } else if (err.request) {
+                NotificationManager.error(`${err.message}`)
+            } else {
+                NotificationManager.error(`${err.message}`)
+            }
         }
     }
 
@@ -34,11 +40,16 @@ const AdminEditBlog = () => {
         try {
             const response = await privateAxiosInstance.put(`/blog/${blog_url}`, newBlog, config);
             // console.log("form submit....", response);
+            NotificationManager.success("Blog Updated Successfully!")
             navigate(`/blogs/${blog_url}`)
         } catch (err) {
-            console.error("Unable to put data ", err);
-            // You can also set an error state or show a notification to the user
-            // setError('Failed to fetch blog data');
+            if (err.response) {
+                NotificationManager.error(`Data: ${err.response.data}\nStatus: ${err.response.status}\nHeaders: ${err.response.headers}`)
+            } else if (err.request) {
+                NotificationManager.error(`${err.message}`)
+            } else {
+                NotificationManager.error(`${err.message}`)
+            }
         }
     }
 

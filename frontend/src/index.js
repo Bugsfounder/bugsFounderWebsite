@@ -21,6 +21,7 @@ import AdminAdminsPage from './Pages/AdminPages/AdminAdminsPage';
 import AdminPage from './Pages/AdminPages/AdminPage';
 import AdminEditBlogPage from './Pages/AdminPages/AdminEditBlogPage';
 import AdminAddBlogPage from './Pages/AdminPages/AdminAddBlogPage';
+import 'react-notifications/lib/notifications.css';
 
 const router = createBrowserRouter([
   {

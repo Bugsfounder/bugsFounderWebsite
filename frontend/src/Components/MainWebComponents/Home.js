@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import bannerImage from "../../images/banner.jpg"
 import BugsFounder from '../utils/BugsFounder'
 import { Link } from 'react-router-dom';
+
 const Home = () => {
 
     const blogs = [
