@@ -3,12 +3,22 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from './Components/utils/Navbar';
 import Footer from './Components/utils/Footer';
+
+const publicAxiosInstance = axios.create({
+  baseURL: 'http://localhost:8080/api/public',
+  withCredentials: true, // If your backend requires credentials
+});
 function App() {
   return (
     <div>
       <Navbar />
-      <div className="container w-10/12 m-auto">
-        <Outlet context={{}} />
+      <div className="container m-auto h-screen  mt-[130.5px]">
+        <div className="dark:text-gray-300 mt-10">
+          <Outlet context={{
+            publicAxiosInstance,
+
+          }} />
+        </div>
       </div>
       <Footer />
     </div>

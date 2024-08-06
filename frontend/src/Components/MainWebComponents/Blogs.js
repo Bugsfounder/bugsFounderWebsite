@@ -1,106 +1,102 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid';
-import axios from 'axios';
-
-// Axios instance for public API
-const publicAxiosInstance = axios.create({
-    baseURL: 'http://localhost:8080/api/public',
-    withCredentials: true, // If your backend requires credentials
-});
-
-// Axios instance for private API
-const privateAxiosInstance = axios.create({
-    baseURL: 'http://localhost:8080/api/private/admin',
-    withCredentials: true, // If your backend requires credentials
-});
-
+import React, { useEffect, useState } from 'react';
+import { Link, useOutletContext } from 'react-router-dom';
+import { PencilSquareIcon, TrashIcon, PlusCircleIcon } from '@heroicons/react/24/solid';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import ConfirmationModal from '../utils/ConfigmationModal';
+import { NotificationManager } from 'react-notifications';
+import formatDate from '../utils/FormatDate';
 const Blogs = () => {
-    const [loadedBlogs, setLoadedBlogs] = useState([]);
+    const { privateAxiosInstance, publicAxiosInstance } = useOutletContext();
+    const [blogs, setBlogs] = useState([]);
     const [page, setPage] = useState(1);
-    const [hasMore, setHasMore] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [blogToDelete, setBlogToDelete] = useState(null);
 
-    const loadMoreBlogs = useCallback(async () => {
-        try {
-            console.log(`Fetching blogs for page: ${page}`);
-            setHasMore(true); // If no more blogs are returned, set hasMore to false
-            const response = await publicAxiosInstance.get(`/blog?page=${page}&limit=3`);
-            const newBlogs = response.data.blogs;
-            console.log(newBlogs);
-            if (newBlogs.length > 0) {
-                // Check for duplicates before updating state
-                setLoadedBlogs(prevBlogs => {
-                    const blogIds = new Set(prevBlogs.map(blog => blog.id));
-                    const filteredNewBlogs = newBlogs.filter(blog => !blogIds.has(blog.id));
-                    return [...prevBlogs, ...filteredNewBlogs];
-                });
-                setPage(prevPage => prevPage + 1); // Increment page number only if new blogs are loaded
-                setHasMore(false); // If no more blogs are returned, set hasMore to false
-            } else {
-                setHasMore(false); // If no more blogs are returned, set hasMore to false
-            }
-        } catch (error) {
-            console.error('Error fetching blogs:', error);
-        }
-    }, [page]);
-
-    useEffect(() => {
-        loadMoreBlogs();
-    }, []); // Call loadMoreBlogs only once on initial render
-
-    useEffect(() => {
-        const handleScroll = () => {
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight && hasMore) {
-                loadMoreBlogs(); // Load more blogs when scrolling to the bottom
-            }
-        };
-
-        const debounceScroll = debounce(handleScroll, 200); // Debounce the scroll event handler
-
-        window.addEventListener('scroll', debounceScroll);
-        return () => window.removeEventListener('scroll', debounceScroll);
-    }, [hasMore, loadMoreBlogs]);
-
-    // Debounce function to limit the rate at which a function can fire
-    function debounce(func, wait) {
-        let timeout;
-        return function (...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
+    const getBlogs = () => {
+        publicAxiosInstance.get(`/blog?page=${page}&limit=6`)
+            .then(response => {
+                if (response.data.blogs && response.data.blogs.length > 0) {
+                    setBlogs(prevBlogs => {
+                        const newBlogs = response.data.blogs.filter(blog => !prevBlogs.some(b => b.url === blog.url));
+                        console.log(response.data.blogs)
+                        return [...prevBlogs, ...newBlogs];
+                    });
+                    setPage(prevPage => prevPage + 1);
+                } else {
+                    setHasMore(false);
+                }
+            })
+            .catch(err => {
+                if (err.response) {
+                    NotificationManager.error(`Data: ${err.response.data}\nStatus: ${err.response.status}\nHeaders: ${err.response.headers}`)
+                } else if (err.request) {
+                    NotificationManager.error(`${err.message}`)
+                } else {
+                    NotificationManager.error(`${err.message}`)
+                }
+                // NotificationManager.error("Something Went Wrong")
+            });
     }
 
+    const handleDelete = (blog) => {
+        setBlogToDelete(blog);
+        setIsModalOpen(true);
+    }
+    const confirmDelete = () => {
+        if (blogToDelete) {
+            privateAxiosInstance.delete(`/blog/${blogToDelete.url}`)
+                .then(response => {
+                    setBlogs(blogs.filter(blog => blog.url !== blogToDelete.url));
+                    setIsModalOpen(false);
+                    setBlogToDelete(null);
+                })
+                .catch(err => {
+                    console.log("got error", err);
+                });
+        }
+    }
+
+    useEffect(() => {
+        getBlogs();
+    }, []);
+
     return (
-        <div className=" blogSection my-10 p-3 mt-[150.5px]">
-            <h1 className="text-2xl font-semibold dark:text-white">Blogs</h1>
-            <div className="blogSection">
-                {loadedBlogs.map(blog => (
-                    <div key={blog.url} className="p-5 dark:text-white dark:bg-slate-800 bg-gray-100 my-3 shadow-sm rounded-md md:flex md:justify-between">
-                        <div className="contentDir">
-                            <Link to={`/blogs/` + blog.url} className="text-sky-600 text-xl">
-                                <h1>{blog.title}</h1>
-                            </Link>
-                            <p>{blog.description}</p>
-                            <p>{blog.author} . {blog.createdAt}</p>
+        <div className="p-6">
+            <h1 className="text-2xl font-semibold">Blogs</h1>
+            <InfiniteScroll
+                dataLength={blogs.length}
+                next={getBlogs}
+                hasMore={hasMore}
+                loader={<h4 className='text-center font-bold'>Loading...</h4>}
+                endMessage={<p className="text-center font-bold">No more blogs</p>}
+            >
+                <div className="blogSection py-3">
+                    {blogs.map(blog => (
+                        <div key={blog.url} className="p-5 dark:text-white dark:bg-slate-800 bg-gray-100 my-3 shadow-sm rounded-md md:flex md:justify-between" >
+                            <div className="contentDir">
+                                <Link to={`/blogs/${blog.url}`} className="text-sky-600 text-xl">
+                                    <h1>{blog.title}</h1>
+                                </Link>
+                                <p className='text-sm mb-3'>{blog.author} . <span className='text-slate-400'>{formatDate(blog.created_at)} </span></p>
+                                <p className='text-sm flex flex-wrap  space-y-2 items-center'>
+                                    <span></span>
+                                    {blog.tags.slice(0, 10).map(tag => (<p className='dark:bg-slate-700 bg-slate-300 p-1 mr-2  dark:text-slate-300 rounded-[10px] '>{tag}</p>))}
+                                </p>
+                            </div>
                         </div>
-                        {/* <div className="buttons flex">
-                            <Link to="/kubari/admin/">
-                                <PencilSquareIcon className="size-9 text-slate-500 cursor-pointer" />
-                            </Link>
-                            <Link to="/kubari/admin/">
-                                <TrashIcon className="size-9 text-slate-500 cursor-pointer" />
-                            </Link>
-                        </div> */}
-                    </div>
-                ))}
-                {hasMore && <p className="text-gray-500 pl-1 hover:dark:text-gray-600 text-center">Loading more blogs...</p>}
-            </div>
+                    ))}
+                </div>
+            </InfiniteScroll>
+            <ConfirmationModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onConfirm={confirmDelete}
+                message="Are you sure you want to delete this blog?"
+            />
         </div>
     );
 };
 
 export default Blogs;
+

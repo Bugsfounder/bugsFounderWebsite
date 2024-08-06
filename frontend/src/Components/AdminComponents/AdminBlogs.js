@@ -4,6 +4,7 @@ import { PencilSquareIcon, TrashIcon, PlusCircleIcon } from '@heroicons/react/24
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ConfirmationModal from '../utils/ConfigmationModal';
 import { NotificationManager } from 'react-notifications';
+import formatDate from '../utils/FormatDate';
 
 const AdminBlogs = () => {
   const { privateAxiosInstance, publicAxiosInstance } = useOutletContext();
@@ -82,15 +83,18 @@ const AdminBlogs = () => {
                 <Link to={`/blogs/${blog.url}`} className="text-sky-600 text-xl">
                   <h1>{blog.title}</h1>
                 </Link>
-                <p>{blog.description}</p>
-                <p>{blog.author} . {blog.createdAt}</p>
+                <p className='text-sm mb-3'>{blog.author} . <span className='text-slate-400'>{formatDate(blog.created_at)} </span></p>
+                <p className='text-sm flex flex-wrap  space-y-2 items-center'>
+                  <span></span>
+                  {blog.tags.slice(0, 10).map(tag => (<p className='dark:bg-slate-700 bg-slate-300 p-1 mr-2  dark:text-slate-300 rounded-[10px] '>{tag}</p>))}
+                </p>
               </div>
               <div className="buttons flex">
                 <Link to={`edit/${blog.url}`}>
                   <PencilSquareIcon className="size-9 text-slate-500 cursor-pointer" />
                 </Link>
                 <button onClick={() => handleDelete(blog)}>
-                  <TrashIcon className="size-9 text-slate-500 cursor-pointer mb-4" />
+                  <TrashIcon className="size-9 text-slate-500 cursor-pointer mb-16" />
                 </button>
               </div>
             </div>
