@@ -1,4 +1,10 @@
-function formatDate(dateString) {
+export function calculateReadingTime(wordCount) {
+    const wordsPerMinute = 250; // average reading speed
+    const readingTime = wordCount / wordsPerMinute;
+    return Math.ceil(readingTime); // round up to the nearest minute
+}
+
+export default function formatDate(dateString) {
 
     const handledDate = handleDefaultDate(dateString);
     // Parse the date string
@@ -40,5 +46,3 @@ function handleDefaultDate(dateString) {
 
     return inputDate;
 }
-
-export default formatDate;

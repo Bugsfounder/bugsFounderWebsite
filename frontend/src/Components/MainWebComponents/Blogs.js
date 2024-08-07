@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
-import { PencilSquareIcon, TrashIcon, PlusCircleIcon } from '@heroicons/react/24/solid';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import ConfirmationModal from '../utils/ConfigmationModal';
 import { NotificationManager } from 'react-notifications';
-import formatDate from '../utils/FormatDate';
+import formatDate from '../utils/Utility';
 const Blogs = () => {
-    const { privateAxiosInstance, publicAxiosInstance } = useOutletContext();
+    const { publicAxiosInstance } = useOutletContext();
     const [blogs, setBlogs] = useState([]);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [blogToDelete, setBlogToDelete] = useState(null);
 
     const getBlogs = () => {
         publicAxiosInstance.get(`/blog?page=${page}&limit=6`)
@@ -35,34 +31,16 @@ const Blogs = () => {
                 } else {
                     NotificationManager.error(`${err.message}`)
                 }
-                // NotificationManager.error("Something Went Wrong")
             });
     }
 
-    const handleDelete = (blog) => {
-        setBlogToDelete(blog);
-        setIsModalOpen(true);
-    }
-    const confirmDelete = () => {
-        if (blogToDelete) {
-            privateAxiosInstance.delete(`/blog/${blogToDelete.url}`)
-                .then(response => {
-                    setBlogs(blogs.filter(blog => blog.url !== blogToDelete.url));
-                    setIsModalOpen(false);
-                    setBlogToDelete(null);
-                })
-                .catch(err => {
-                    console.log("got error", err);
-                });
-        }
-    }
 
     useEffect(() => {
         getBlogs();
     }, []);
 
     return (
-        <div className="p-6">
+        <div className="p-6  h-screen">
             <h1 className="text-2xl font-semibold">Blogs</h1>
             <InfiniteScroll
                 dataLength={blogs.length}
@@ -88,12 +66,6 @@ const Blogs = () => {
                     ))}
                 </div>
             </InfiniteScroll>
-            <ConfirmationModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onConfirm={confirmDelete}
-                message="Are you sure you want to delete this blog?"
-            />
         </div>
     );
 };

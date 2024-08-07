@@ -12,7 +12,7 @@ function App() {
   return (
     <div>
       <Navbar />
-      <div className="container m-auto h-screen  mt-[130.5px]">
+      <div className="container m-auto  mt-[130.5px]">
         <div className="dark:text-gray-300 mt-10">
           <Outlet context={{
             publicAxiosInstance,

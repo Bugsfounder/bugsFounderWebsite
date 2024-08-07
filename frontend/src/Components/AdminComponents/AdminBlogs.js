@@ -4,7 +4,7 @@ import { PencilSquareIcon, TrashIcon, PlusCircleIcon } from '@heroicons/react/24
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ConfirmationModal from '../utils/ConfigmationModal';
 import { NotificationManager } from 'react-notifications';
-import formatDate from '../utils/FormatDate';
+import formatDate from '../utils/Utility';
 
 const AdminBlogs = () => {
   const { privateAxiosInstance, publicAxiosInstance } = useOutletContext();
