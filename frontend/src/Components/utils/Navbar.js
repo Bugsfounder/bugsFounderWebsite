@@ -57,7 +57,7 @@ const Navbar = () => {
             aboutLogo.classList.remove("hidden")
             hamburger.classList.remove("mt-3")
         }
-        console.log(hamburger, itemsNav, navbar, aboutLogo);
+        // console.log(hamburger, itemsNav, navbar, aboutLogo);
     }
 
     return (

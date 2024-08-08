@@ -61,7 +61,7 @@ const AdminAddBlog = () => {
             ...newBlog,
             content
         });
-        console.log(content);
+        // console.log(content);
     }
 
     return (

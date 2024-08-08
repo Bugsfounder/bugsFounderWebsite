@@ -3,6 +3,9 @@ import { useOutletContext, useParams } from 'react-router'
 import { NotificationManager } from 'react-notifications'
 import formatDate, { calculateReadingTime } from '../utils/Utility'
 import DOMPurify from 'dompurify'
+import hljs from "highlight.js"
+import 'highlight.js/styles/monokai.css';
+
 
 const Blog = () => {
     const { publicAxiosInstance } = useOutletContext()
@@ -28,9 +31,15 @@ const Blog = () => {
         getBlog();
     }, [])
 
+    useEffect(() => {
+        document.querySelectorAll("pre").forEach((block) => {
+            hljs.highlightElement(block)
+        })
+    }, [htmlContent])
+
     return (
 
-        <div className="mt-[132.5px] blogSection dark:text-white p-3">
+        <div className="mt-[132.5px] mb-10 blogSection dark:text-white p-3">
             <h1 className='class="text-center text-xl md:text-3xl justify-center lg:text-4xl font-semibold text-gray-800 dark:text-white mb-1 mt-[20px] flex"'>{blog.title}</h1>
             <div className='class="flex items-center mb-6 flex-col md:flex-row md:justify-center"'>{blog.author} &nbsp; &middot;  &nbsp;
                 <span className='text-slate-400'>

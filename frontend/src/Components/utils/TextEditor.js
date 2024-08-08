@@ -2,13 +2,16 @@ import React, { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import hljs from "highlight.js"
-import 'highlight.js/styles/github.css'
+import { NotificationManager } from 'react-notifications';
+
 
 const TextEditor = ({ editorHtml, setEditorHtml }) => {
 
     useEffect(() => {
         // Apply syntax highlighting to code blocks
-        document.querySelectorAll('pre code').forEach((block) => {
+        document.querySelectorAll('pre').forEach((block) => {
+            block.classList.add('p-6')
+            block.classList.add('rounded-[10px]')
             hljs.highlightBlock(block);
         });
     }, [editorHtml]);
@@ -16,7 +19,7 @@ const TextEditor = ({ editorHtml, setEditorHtml }) => {
     const modules = {
         toolbar: [
             [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-            [{ 'font': [] }],
+            [{ 'font': ['cascadia-code', 'serif', 'monospace'] }],
             [{ 'size': [] }],
             ['bold', 'italic', 'underline', 'strike'],
             [{ 'color': [] }, { 'background': [] }],
@@ -30,6 +33,7 @@ const TextEditor = ({ editorHtml, setEditorHtml }) => {
             ['clean'] // Remove formatting button
         ],
     };
+
 
     const formats = [
         'header', 'font', 'size',

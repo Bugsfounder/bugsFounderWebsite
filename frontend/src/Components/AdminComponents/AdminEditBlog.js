@@ -15,7 +15,7 @@ const AdminEditBlog = () => {
     const getOldBlogByUrl = async (url) => {
         try {
             const response = await publicAxiosInstance.get(`/blog/${url}`);
-            console.log(response.data);
+            // console.log(response.data);
             setOldBlog(response.data);
             setNewBlog(response.data);
         } catch (err) {
@@ -70,7 +70,7 @@ const AdminEditBlog = () => {
             ...newBlog,
             content
         });
-        console.log(content);
+        // console.log(content);
     }
 
     return (
