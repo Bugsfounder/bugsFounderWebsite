@@ -52,7 +52,7 @@ const Blog = () => {
         <div className="mt-[132.5px] mb-10 blogSection dark:text-white p-3">
             <h1 className='class="text-center text-xl md:text-3xl justify-center lg:text-4xl font-semibold text-gray-800 dark:text-white mb-1 mt-[20px] flex"'>{blog.title}</h1>
             <div className='class="flex items-center mb-6 flex-col md:flex-row md:justify-center"'>{blog.author} &nbsp; &middot;
-                <span className='text-slate-400'> {blog.updated_at}
+                <span className='text-slate-400'>
                     &nbsp; {readingTime} min read </span> </div>
             <div className="cont leading-relaxed text-dark dark:text-gray-100" dangerouslySetInnerHTML={{ __html: htmlContent }} />
         </div>

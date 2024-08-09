@@ -94,7 +94,7 @@ func (h_DB *HandlerForDBHandlers) UpdateOneBlogByURL(ctx *gin.Context) {
 	}
 
 	// call the db handler method to update the blog
-	result, err := h_DB.Client.UpdateOneBlogByURL(blogURL, &updatedBlog)
+	result, updated_blog, err := h_DB.Client.UpdateOneBlogByURL(blogURL, &updatedBlog)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
@@ -102,7 +102,7 @@ func (h_DB *HandlerForDBHandlers) UpdateOneBlogByURL(ctx *gin.Context) {
 	}
 
 	// Return the result of the update operation
-	ctx.JSON(http.StatusOK, result)
+	ctx.JSON(http.StatusOK, gin.H{"result": result, "updated_fields": updated_blog})
 
 }
 

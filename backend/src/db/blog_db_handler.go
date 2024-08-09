@@ -89,7 +89,7 @@ func (client *Client) GetOneBlogByURL(blogURL string) (*models.Blog, error) {
 	return &blog, nil
 }
 
-func (client *Client) UpdateOneBlogByURL(blogURL string, updatedBlog *models.Blog) (*mongo.UpdateResult, error) {
+func (client *Client) UpdateOneBlogByURL(blogURL string, updatedBlog *models.Blog) (*mongo.UpdateResult, *models.Blog, error) {
 	LOG.Debug("")
 	ctx, cancel := withTimeout()
 	defer cancel()
@@ -126,10 +126,10 @@ func (client *Client) UpdateOneBlogByURL(blogURL string, updatedBlog *models.Blo
 	// update the blog in the collection
 	result, err := collection.UpdateOne(ctx, filter, update)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	return result, nil
+	return result, updatedBlog, nil
 }
 
 func (client *Client) DeleteOneBlogByURL(blogURL string) (*mongo.DeleteResult, error) {
