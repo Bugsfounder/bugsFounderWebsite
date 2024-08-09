@@ -56,7 +56,7 @@ const Blogs = () => {
                                 <Link to={`/blogs/${blog.url}`} className="text-sky-600 text-xl">
                                     <h1>{blog.title}</h1>
                                 </Link>
-                                <p className='text-sm mb-3'>{blog.author} . <span className='text-slate-400'>{formatDate(blog.created_at)} </span></p>
+                                <p className='text-sm mb-3'>{blog.author} . <span className='text-slate-400'>{formatDate(blog.updated_at)} </span></p>
                                 <p className='text-sm flex flex-wrap  space-y-2 items-center'>
                                     <span></span>
                                     {blog.tags.slice(0, 10).map(tag => (<p className='dark:bg-slate-700 bg-slate-300 p-1 mr-2  dark:text-slate-300 rounded-[10px] '>{tag}</p>))}

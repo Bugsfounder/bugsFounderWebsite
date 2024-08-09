@@ -10,9 +10,13 @@ const TextEditor = ({ editorHtml, setEditorHtml }) => {
     useEffect(() => {
         // Apply syntax highlighting to code blocks
         document.querySelectorAll('pre').forEach((block) => {
-            block.classList.add('p-6')
-            block.classList.add('rounded-[10px]')
-            hljs.highlightBlock(block);
+            block.classList.add('p-6');
+            block.classList.add('rounded-[10px]');
+            block.classList.add('my-2');
+            hljs.highlightBlock(block); // highlights code in text Editor 
+
+            // Add a title attribute to the code block
+            block.setAttribute('title', 'Double-click to copy this code');
         });
     }, [editorHtml]);
 
