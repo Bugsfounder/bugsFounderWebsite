@@ -26,6 +26,7 @@ import AdminEditTutorialPage from './Pages/AdminPages/AdminEditTutorialPage';
 import AdminAddTutorialPage from './Pages/AdminPages/AdminAddTutorialPage';
 import AdminAddSubTutorialPage from './Pages/AdminPages/AdminAddSubTutorialPage';
 import AdminGetAllSubTutorialPage from './Pages/AdminPages/AdminGetAllSubTutorialPage';
+import AdminUpdateSubTutorialPage from './Pages/AdminPages/AdminUpdateSubTutorialPage';
 
 const router = createBrowserRouter([
   {
@@ -119,6 +120,10 @@ const router = createBrowserRouter([
       {
         path: "tutorials/edit/sub_tutorial/:tutorial_url",
         element: <AdminGetAllSubTutorialPage />
+      },
+      {
+        path: "tutorials/edit/sub_tutorial/:tutorial_url/:sub_tutorial_url",
+        element: <AdminUpdateSubTutorialPage />
       },
       {
         path: "tutorials/add",

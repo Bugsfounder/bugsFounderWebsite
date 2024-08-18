@@ -50,7 +50,7 @@ const AdminGetAllSubTutorial = () => {
     }
     const confirmDelete = () => {
         if (tutorialToDelete) {
-            privateAxiosInstance.delete(`/tutorial/${tutorialToDelete.url}`)
+            privateAxiosInstance.delete(`/tutorial/${tutorial_url}/${tutorialToDelete.url}`)
                 .then(response => {
                     setTutorials(tutorials.filter(tutorial => tutorial.url !== tutorialToDelete.url));
                     setIsModalOpen(false);
@@ -95,7 +95,7 @@ const AdminGetAllSubTutorial = () => {
                                 </p>
                             </div>
                             <div className="buttons flex">
-                                <Link to={`edit/${tutorial.url}`}>
+                                <Link to={`/kubari/admin/tutorials/edit/sub_tutorial/${tutorial_url}/${tutorial.url}`}>
                                     <PencilSquareIcon className="size-9 text-slate-500 cursor-pointer" />
                                 </Link>
                                 <button onClick={() => handleDelete(tutorial)}>
