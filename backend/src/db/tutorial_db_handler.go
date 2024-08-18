@@ -28,6 +28,7 @@ func (client *Client) CreateOneTutorial(tutorial *models.Tutorial) (*mongo.Inser
 	// set the createdAt and updated at field
 	tutorial.CreatedAt = time.Now()
 	tutorial.UpdatedAt = time.Now()
+	tutorial.Sub_Tutorials = []models.Sub_Tutorial{}
 
 	// insert the blog into the collection
 	result, err := collection.InsertOne(ctx, tutorial)

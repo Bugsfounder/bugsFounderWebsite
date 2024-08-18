@@ -25,6 +25,7 @@ import 'react-notifications/lib/notifications.css';
 import AdminEditTutorialPage from './Pages/AdminPages/AdminEditTutorialPage';
 import AdminAddTutorialPage from './Pages/AdminPages/AdminAddTutorialPage';
 import AdminAddSubTutorialPage from './Pages/AdminPages/AdminAddSubTutorialPage';
+import AdminGetAllSubTutorialPage from './Pages/AdminPages/AdminGetAllSubTutorialPage';
 
 const router = createBrowserRouter([
   {
@@ -114,6 +115,10 @@ const router = createBrowserRouter([
       {
         path: "tutorials/edit/sub_tutorial/add/:tutorial_url",
         element: <AdminAddSubTutorialPage />
+      },
+      {
+        path: "tutorials/edit/sub_tutorial/:tutorial_url",
+        element: <AdminGetAllSubTutorialPage />
       },
       {
         path: "tutorials/add",

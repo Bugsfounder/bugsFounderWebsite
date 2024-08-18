@@ -100,10 +100,12 @@ const AdminEditTutorial = () => {
                     <input required className='dark:bg-slate-900 border p-2 outline-none h-12 rounded-[10px]' value={newTutorial.author} type="text" name="author" id="author" onChange={handleChange} />
 
                     <div className='px-4 flex items-center space-x-10'>
-                        <span>
-                            SubTutorials length: &nbsp;
-                            {newTutorial.sub_tutorials?.length || 0}
-                        </span>
+                        <Link to={`/kubari/admin/tutorials/edit/sub_tutorial/${tutorial_url}`}>
+                            <span>
+                                SubTutorials length: &nbsp;
+                                {newTutorial.sub_tutorials?.length || 0}
+                            </span>
+                        </Link>
                         <Link to={`/kubari/admin/tutorials/edit/sub_tutorial/add/${newTutorial.url}`} title='Add a sub tutorial'>
                             <PlusCircleIcon className="size-10 text-slate-600 hover:text-slate-700 cursor-pointer " />
                         </Link>
