@@ -43,7 +43,6 @@ func (h_DB *HandlerForDBHandlers) CreateOneBlog(ctx *gin.Context) {
 }
 
 // GetAllBlogs
-
 func (h_DB *HandlerForDBHandlers) GetAllBlogs(ctx *gin.Context) {
 	LOG.Debug("")
 
@@ -174,12 +173,19 @@ func (h_DB *HandlerForDBHandlers) CreateSubTutorial(ctx *gin.Context) {
 // GetAllTutorial
 func (h_DB *HandlerForDBHandlers) GetAllTutorial(ctx *gin.Context) {
 	LOG.Debug("")
-	allTutorial, err := h_DB.Client.GetAllTutorial()
+
+	// Parse Pagination parameters
+	page, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
+	limit, _ := strconv.Atoi(ctx.DefaultQuery("limit", "10"))
+	offset := (page + 1) + limit
+
+	// fetch tutorials with offset and limit
+	allTutorial, err := h_DB.Client.GetAllTutorial(offset, limit)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, allTutorial)
+	ctx.JSON(http.StatusOK, gin.H{"tutorials": allTutorial})
 }
 
 // GetOneTutorialByURL
@@ -226,7 +232,7 @@ func (h_DB *HandlerForDBHandlers) UpdateOneTutorialByURL(ctx *gin.Context) {
 	}
 
 	// call the db handler method to update the blog
-	result, err := h_DB.Client.UpdateOneTutorialByURL(tutorialURL, &updatedTutorial)
+	result, updated_fields, err := h_DB.Client.UpdateOneTutorialByURL(tutorialURL, &updatedTutorial)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
@@ -234,7 +240,7 @@ func (h_DB *HandlerForDBHandlers) UpdateOneTutorialByURL(ctx *gin.Context) {
 	}
 
 	// Return the result of the update operation
-	ctx.JSON(http.StatusOK, result)
+	ctx.JSON(http.StatusOK, gin.H{"result": result, "updated_fields": updated_fields})
 
 }
 

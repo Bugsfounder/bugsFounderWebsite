@@ -8,6 +8,7 @@ import (
 	"github.com/bugsfounder/bugsfounderweb/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func (client *Client) CreateOneTutorial(tutorial *models.Tutorial) (*mongo.InsertOneResult, error) {
@@ -37,12 +38,36 @@ func (client *Client) CreateOneTutorial(tutorial *models.Tutorial) (*mongo.Inser
 
 }
 
-func (client *Client) GetAllTutorial() ([]models.Tutorial, error) {
+/*
+	func (client *Client) GetAllBlogs(offset, limit int) ([]models.Blog, error) {
+		var blogs []models.Blog
+		for cursor.Next(ctx) {
+			var blog models.Blog
+			if err = cursor.Decode(&blog); err != nil {
+				LOG.Error("%v", err)
+				return nil, err
+			}
+			blogs = append(blogs, blog)
+		}
+
+		if err := cursor.Err(); err != nil {
+			LOG.Error("%v", err)
+			return nil, err
+		}
+
+		return blogs, nil
+	}
+*/
+func (client *Client) GetAllTutorial(offset, limit int) ([]models.Tutorial, error) {
 	LOG.Debug("")
 	ctx, cancel := withTimeout()
 	defer cancel()
 	// select the database and collection
 	collection := client.Client_Obj.Database("bugsfounderDB").Collection("tutorials")
+
+	findOptions := options.Find()
+	findOptions.SetSkip(int64(offset))
+	findOptions.SetLimit(int64(limit))
 
 	cursor, err := collection.Find(ctx, bson.M{})
 	if err != nil {
@@ -55,12 +80,11 @@ func (client *Client) GetAllTutorial() ([]models.Tutorial, error) {
 	var allTutorialsFromDatabase []models.Tutorial
 	for cursor.Next(ctx) {
 		var tutorial models.Tutorial
-		err := cursor.Decode(&tutorial)
-		if err != nil {
+		if err = cursor.Decode(&tutorial); err != nil {
 			LOG.Error("Failed to decode document: %v", err)
 			return nil, err
-		}
 
+		}
 		allTutorialsFromDatabase = append(allTutorialsFromDatabase, tutorial)
 	}
 
@@ -94,7 +118,7 @@ func (client *Client) GetOneTutorialByURL(tutorial_url string) (*models.Tutorial
 	return &tutorial, nil
 }
 
-func (client *Client) UpdateOneTutorialByURL(tutorialURL string, updatedTutorial *models.Tutorial) (*mongo.UpdateResult, error) {
+func (client *Client) UpdateOneTutorialByURL(tutorialURL string, updatedTutorial *models.Tutorial) (*mongo.UpdateResult, *models.Tutorial, error) {
 	LOG.Debug("")
 
 	LOG.Debug("")
@@ -136,10 +160,10 @@ func (client *Client) UpdateOneTutorialByURL(tutorialURL string, updatedTutorial
 	// update the blog in the collection
 	result, err := collection.UpdateOne(ctx, filter, update)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	return result, nil
+	return result, updatedTutorial, nil
 }
 
 func (client *Client) DeleteOneTutorialByURL(tutorialURL string) (*mongo.DeleteResult, error) {

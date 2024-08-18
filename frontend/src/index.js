@@ -22,6 +22,7 @@ import AdminPage from './Pages/AdminPages/AdminPage';
 import AdminEditBlogPage from './Pages/AdminPages/AdminEditBlogPage';
 import AdminAddBlogPage from './Pages/AdminPages/AdminAddBlogPage';
 import 'react-notifications/lib/notifications.css';
+import AdminEditTutorialPage from './Pages/AdminPages/AdminEditTutorialPage';
 
 const router = createBrowserRouter([
   {
@@ -103,6 +104,10 @@ const router = createBrowserRouter([
       {
         path: "tutorials",
         element: <AdminTutorialsPage />
+      },
+      {
+        path: "tutorials/edit/:tutorial_url",
+        element: <AdminEditTutorialPage />
       },
       {
         path: "users",

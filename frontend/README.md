@@ -38,3 +38,19 @@ import "highlight.js/styles/atom-one-dark.css";
 import "highlight.js/styles/a11y-dark.css";
 import "highlight.js/styles/night-owl.css";
 ```
+
+### Blogs
+
+Actions:
+Create Blog
+Delete Blog
+Update Blog
+Read Blog
+
+Issues to Fix Later:
+Issues with TextEditor - not highliting code while writing code when you update it works
+paddings of code blocks are removed if you update anyother field and not the content field.
+CreatedAt and UpdatedAt
+
+Note: Add Custom Styling for TextEditor (Quill) Because default styling is not working in tailwind css.
+so add styling for Headings, text size, etc
