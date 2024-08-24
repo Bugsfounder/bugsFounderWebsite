@@ -42,7 +42,7 @@ const Tutorials = () => {
     }, []);
 
     return (
-        <div className="p-6  h-screen">
+        <div className="p-6  h-screen container m-auto  mx-5 ">
             <h1 className="text-2xl font-semibold">Tutorials</h1>
             <InfiniteScroll
                 dataLength={tutorials.length}

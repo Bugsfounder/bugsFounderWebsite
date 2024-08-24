@@ -13,6 +13,7 @@ const TextEditor = ({ editorHtml, setEditorHtml }) => {
             block.classList.add('p-6');
             block.classList.add('rounded-[10px]');
             block.classList.add('my-2');
+            block.classList.add('overflow-auto');
             hljs.highlightBlock(block); // highlights code in text Editor 
 
             // Add a title attribute to the code block

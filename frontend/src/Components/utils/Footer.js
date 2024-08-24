@@ -4,7 +4,7 @@ import { SocialIcon } from 'react-social-icons'
 
 const Footer = () => {
     return (
-        <div className="footer  bg-slate-50 dark:bg-slate-800 p-10">
+        <div className="footer  bg-slate-50 dark:bg-slate-800 p-10 ">
             <div className="socialMedia flex justify-between items-center">
                 <div className="logo  flex justify-center items-center">
                     <Link to="/"><span className='font-extrabold text-xl' id="authorLogo"> <span className='dark:text-white text-gray-400'>Bugs</span><span className='text-sky-600'>Founder</span></span> </Link>

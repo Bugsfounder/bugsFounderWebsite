@@ -89,7 +89,7 @@ const Home = () => {
     ];
 
     return (
-        <>
+        <div className='container m-auto  mx-5 '>
             <div className="mt-[132.5px] welcome lg:flex order-0 pt2 bg-gray-100 dark:bg-slate-800 rounded-full">
                 <div className="">
                     <img src={bannerImage} alt="" className='w-2000 rounded-br-[500px]' />
@@ -135,7 +135,7 @@ const Home = () => {
                 </div>
             </div>
 
-        </>
+        </div>
     )
 }
 
