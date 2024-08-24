@@ -89,52 +89,54 @@ const Home = () => {
     ];
 
     return (
-        <div className='container m-auto  mx-5 '>
-            <div className="mt-[132.5px] welcome lg:flex order-0 pt2 bg-gray-100 dark:bg-slate-800 rounded-full">
-                <div className="">
-                    <img src={bannerImage} alt="" className='w-2000 rounded-br-[500px]' />
+        <div className='container m-auto   '>
+            <div className="m-5">
+
+                <div className="mt-[132.5px]  welcome lg:flex order-0 pt2 bg-gray-100 dark:bg-slate-800 rounded-full">
+                    <div className="">
+                        <img src={bannerImage} alt="" className='w-2000 rounded-br-[500px]' />
+                    </div>
+
+                    <div className="right dark:text-white text-center lg:pr-10 p-5 flex flex-col justify-center items-center">
+                        <h1 className='text-3xl lg:text-4xl font-bold'>welcome To <span className='dark:text-white text-gray-400'>Bugs</span><span className='text-sky-600'>Founder</span> </h1>
+                        {/* <p>Lorem ipsum dolor sit amet.</p> */}
+                        <p className='my-3'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem molestiae rem corporis exercitationem? Minus obcaecati molestiae et esse, nesciunt provident neque laborum hic?</p>
+                    </div>
                 </div>
 
-                <div className="right dark:text-white text-center lg:pr-10 p-5 flex flex-col justify-center items-center">
-                    <h1 className='text-3xl lg:text-4xl font-bold'>welcome To <span className='dark:text-white text-gray-400'>Bugs</span><span className='text-sky-600'>Founder</span> </h1>
-                    {/* <p>Lorem ipsum dolor sit amet.</p> */}
-                    <p className='my-3'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem molestiae rem corporis exercitationem? Minus obcaecati molestiae et esse, nesciunt provident neque laborum hic?</p>
+                <div className="blogSection">
+                    <h1 className="text-2xl font-bold my-8 dark:text-white">Top Blogs</h1>
+                    {
+                        blogs.length &&
+                        blogs.slice(0, 5).map(blog => {
+                            return <div key={blog.id} className='p-5 dark:text-white dark:bg-slate-800 bg-gray-100 my-3 shadow-sm rounded-md'>
+                                <Link to={blog.url} className='text-sky-600 text-xl'> <h1>{blog.title}</h1></Link>
+                                <p>{blog.description}</p>
+                                <p>{blog.author} . {blog.createdAt}</p>
+                            </div>
+                        })
+                    }
+                    <Link to="/blogs/" className='text-gray-500 pl-1  hover:dark:text-gray-600'>More Blogs</Link>
+                </div>
+
+                <div className="tutorialSection">
+                    <h1 className="text-2xl font-bold my-8 dark:text-white">Top Tutorials</h1>
+                    {
+                        blogs.length &&
+                        blogs.slice(0, 5).map(blog => {
+                            return <div key={blog.id} className='p-5 dark:text-white dark:bg-slate-800 bg-gray-100 my-3 shadow-sm rounded-md'>
+                                <Link to={blog.url} className='text-sky-600 text-xl'> <h1>{blog.title}</h1></Link>
+                                <p>{blog.description}</p>
+                                <p>{blog.author} . {blog.createdAt}</p>
+                            </div>
+                        })
+                    }
+                    <div className='p-1 mb-5'>
+
+                        <Link to="/blogs/" className='text-gray-500 hover:dark:text-gray-600'>More Tutorials</Link>
+                    </div>
                 </div>
             </div>
-
-            <div className="blogSection">
-                <h1 className="text-2xl font-bold my-8 dark:text-white">Top Blogs</h1>
-                {
-                    blogs.length &&
-                    blogs.slice(0, 5).map(blog => {
-                        return <div key={blog.id} className='p-5 dark:text-white dark:bg-slate-800 bg-gray-100 my-3 shadow-sm rounded-md'>
-                            <Link to={blog.url} className='text-sky-600 text-xl'> <h1>{blog.title}</h1></Link>
-                            <p>{blog.description}</p>
-                            <p>{blog.author} . {blog.createdAt}</p>
-                        </div>
-                    })
-                }
-                <Link to="/blogs/" className='text-gray-500 pl-1  hover:dark:text-gray-600'>More Blogs</Link>
-            </div>
-
-            <div className="tutorialSection">
-                <h1 className="text-2xl font-bold my-8 dark:text-white">Top Tutorials</h1>
-                {
-                    blogs.length &&
-                    blogs.slice(0, 5).map(blog => {
-                        return <div key={blog.id} className='p-5 dark:text-white dark:bg-slate-800 bg-gray-100 my-3 shadow-sm rounded-md'>
-                            <Link to={blog.url} className='text-sky-600 text-xl'> <h1>{blog.title}</h1></Link>
-                            <p>{blog.description}</p>
-                            <p>{blog.author} . {blog.createdAt}</p>
-                        </div>
-                    })
-                }
-                <div className='p-1 mb-5'>
-
-                    <Link to="/blogs/" className='text-gray-500 hover:dark:text-gray-600'>More Tutorials</Link>
-                </div>
-            </div>
-
         </div>
     )
 }

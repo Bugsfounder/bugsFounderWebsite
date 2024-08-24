@@ -11,7 +11,7 @@ const Tutorial = () => {
     const navigate = useNavigate();
     const { publicAxiosInstance } = useOutletContext();
     let { tutorial_url, sub_tutorial_url } = useParams();
-    const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth >= 768); // Initially open on larger screens
     const [tutorial, setTutorial] = useState({});
     const [subTutorial, setSubTutorial] = useState({});
     const [htmlContent, setHtmlContent] = useState("");
@@ -61,8 +61,8 @@ const Tutorial = () => {
     }, [sub_tutorial_url]);
 
     return (
-        <div>
-            <aside className={`${sidebarOpen ? 'w-60 sm:w-80' : 'w-16'} dark:text-slate-300 md:pt-7 fixed h-screen bg-gray-100 dark:bg-slate-900 flex flex-col px-5 shadow-lg dark:shadow-slate-500 shadow-slate-800 transition-all duration-300`}>
+        <div className="flex h-screen overflow-x-hidden">
+            <aside className={`${sidebarOpen ? 'w-80' : 'w-16'} dark:text-slate-300 fixed h-full bg-gray-100 dark:bg-slate-900 flex flex-col px-5 shadow-lg dark:shadow-slate-500 shadow-slate-800 transition-all duration-300`}>
                 <div className="sidebar">
                     <div className="flex justify-between w-full">
                         <div className="hamburger cursor-pointer py-5" onClick={toggleSidebar}>
@@ -82,8 +82,8 @@ const Tutorial = () => {
                         )}
                     </div>
                     {sidebarOpen && (
-                        <div className="sidebarContent overflow-auto h-[500px]">
-                            <div className="navItems mt-4 md:block md:mt-5">
+                        <div className="sidebarContent overflow-auto h-full">
+                            <div className="navItems md:block md:mt-5 mt-4">
                                 <ul className="space-y-2 font-bold">
                                     {tutorial.sub_tutorials && tutorial.sub_tutorials.map(sub_tutorial => (
                                         <li key={sub_tutorial.url}>
@@ -102,19 +102,17 @@ const Tutorial = () => {
                 </div>
             </aside>
 
-            <div className={`${sidebarOpen ? 'ml-40' : 'ml-16'} transition-all duration-300 w-full`}>
-                <div className="container m-auto p-6">
-                    <div className="dark:text-gray-300 mt-10">
-                        <div className="mb-10 dark:text-white">
-                            <h1 className="text-center text-xl md:text-3xl lg:text-4xl font-semibold text-gray-800 dark:text-white mb-1 mt-[20px]">{subTutorial.title}</h1>
-                            <div className="flex text-center items-center mb-6 flex-col md:flex-row md:justify-center">
-                                {subTutorial.author} &nbsp; &middot;
-                                <span className="text-slate-400">
-                                    &nbsp; {readingTime} min read
-                                </span>
-                            </div>
-                            <div className="cont leading-relaxed text-dark dark:text-gray-100" dangerouslySetInnerHTML={{ __html: htmlContent }} />
+            <div className={`flex-1 overflow-y-auto p-5 ${sidebarOpen ? 'ml-80' : 'ml-16'} transition-all duration-300`}>
+                <div className="dark:text-gray-300 mt-10">
+                    <div className="mb-10 dark:text-white">
+                        <h1 className="text-center text-xl md:text-3xl lg:text-4xl font-semibold text-gray-800 dark:text-white mb-1 mt-[20px]">{subTutorial.title}</h1>
+                        <div className="flex text-center items-center mb-6 flex-col md:flex-row md:justify-center">
+                            {subTutorial.author} &nbsp; &middot;
+                            <span className="text-slate-400">
+                                &nbsp; {readingTime} min read
+                            </span>
                         </div>
+                        <div className="cont leading-relaxed text-dark dark:text-gray-100" dangerouslySetInnerHTML={{ __html: htmlContent }} />
                     </div>
                 </div>
             </div>

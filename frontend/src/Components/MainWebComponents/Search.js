@@ -112,20 +112,23 @@ const Search = () => {
     }, []);
 
     return (
-        <div className="blogSection my-10 p-3 mt-[132.5px] container m-auto  mx-5 ">
-            <h1 className="text-2xl font-bold my-8 dark:text-white">Search Results for: {query}</h1>
-            {
-                loadedBlogs.map(blog => (
-                    <div key={blog.id} className='p-5 dark:text-white dark:bg-slate-800 bg-gray-100 my-3 shadow-sm rounded-md'>
-                        <Link to={blog.url} className='text-sky-600 text-xl'>
-                            <h1>{blog.title}</h1>
-                        </Link>
-                        <p>{blog.description}</p>
-                        <p>{blog.author} . {blog.createdAt}</p>
-                    </div>
-                ))
-            }
-            {loadedBlogs.length < allBlogs.length && <p className='text-gray-500 pl-1  hover:dark:text-gray-600'>Loading more blogs...</p>}
+        <div className="blogSection my-10 p-3 mt-[132.5px] container m-auto ">
+            <div className='mx-5'>
+
+                <h1 className="text-2xl font-bold my-8 dark:text-white">Search Results for: {query}</h1>
+                {
+                    loadedBlogs.map(blog => (
+                        <div key={blog.id} className='p-5 dark:text-white dark:bg-slate-800 bg-gray-100 my-3 shadow-sm rounded-md'>
+                            <Link to={blog.url} className='text-sky-600 text-xl'>
+                                <h1>{blog.title}</h1>
+                            </Link>
+                            <p>{blog.description}</p>
+                            <p>{blog.author} . {blog.createdAt}</p>
+                        </div>
+                    ))
+                }
+                {loadedBlogs.length < allBlogs.length && <p className='text-gray-500 pl-1  hover:dark:text-gray-600'>Loading more blogs...</p>}
+            </div>
         </div>
     );
 }
