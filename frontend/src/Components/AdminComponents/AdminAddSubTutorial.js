@@ -33,10 +33,10 @@ const AdminAddSubTutorial = () => {
             }
         };
         try {
-            // console.log("newSubTutorial: ", newSubTutorial)
+            console.log("newSubTutorial: ", newSubTutorial)
             const response = await privateAxiosInstance.post(`/tutorial/${tutorial_url}`, newSubTutorial, config);
             console.log("form submit....", response);
-            navigate(`/tutorials/${newSubTutorial.url}`)
+            navigate(`/tutorials/${tutorial_url}/${newSubTutorial.url}`)
             NotificationManager.success("Tutorial Added Successfully!")
         } catch (err) {
             if (err.response) {

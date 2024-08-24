@@ -43,7 +43,7 @@ const AdminUpdateSubTutorial = () => {
             const response = await privateAxiosInstance.put(`/tutorial/${tutorial_url}/${sub_tutorial_url}`, newSubTutorial, config);
             // console.log("form submit....", response.data.updated_fields.url);
             NotificationManager.success("Sub Tutorial Updated Successfully!")
-            navigate(`/tutorials/${newSubTutorial.url}`)
+            navigate(`/tutorials/${tutorial_url}/${newSubTutorial.url}`)
         } catch (err) {
             if (err.response) {
                 NotificationManager.error(`Data: ${err.response.data}\nStatus: ${err.response.status}\nHeaders: ${err.response.headers}`)

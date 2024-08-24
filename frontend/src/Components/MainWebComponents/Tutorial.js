@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { NotificationManager } from 'react-notifications';
-import { useOutletContext, useParams } from 'react-router';
+import { useNavigate, useOutletContext, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import hljs from 'highlight.js';
@@ -8,14 +8,15 @@ import 'highlight.js/styles/monokai.css';
 import { calculateReadingTime } from '../utils/Utility';
 
 const Tutorial = () => {
+    const navigate = useNavigate();
     const { publicAxiosInstance } = useOutletContext();
-    let { tutorial_url } = useParams();
+    let { tutorial_url, sub_tutorial_url } = useParams();
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [tutorial, setTutorial] = useState({});
     const [subTutorial, setSubTutorial] = useState({});
     const [htmlContent, setHtmlContent] = useState("");
     const [readingTime, setReadingTime] = useState(0);
-    const [activeSubTutorialUrl, setActiveSubTutorialUrl] = useState("");
+    const [activeSubTutorialUrl, setActiveSubTutorialUrl] = useState(sub_tutorial_url || "");
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
@@ -26,8 +27,9 @@ const Tutorial = () => {
             .then(response => {
                 setTutorial(response.data);
                 console.log("response.data: ", response.data);
-                setActiveSubTutorialUrl(response.data.sub_tutorials[0].url);
-                getSubTutorial(tutorial_url, response.data.sub_tutorials[0].url);
+                const initialSubTutorialUrl = sub_tutorial_url || response.data.sub_tutorials[0].url;
+                setActiveSubTutorialUrl(initialSubTutorialUrl);
+                getSubTutorial(tutorial_url, initialSubTutorialUrl);
             })
             .catch(err => {
                 NotificationManager.error(err.message);
@@ -41,6 +43,7 @@ const Tutorial = () => {
                 const sanitizedHtml = DOMPurify.sanitize(response.data.content);
                 setHtmlContent(sanitizedHtml);
                 setReadingTime(calculateReadingTime(response.data.content.split(" ").length));
+                navigate(`/tutorials/${tutorial_url}/${sub_tutorial_url}`, { replace: true });
             })
             .catch(err => {
                 NotificationManager.error(err.message);
@@ -50,6 +53,12 @@ const Tutorial = () => {
     useEffect(() => {
         getTutorial(tutorial_url);
     }, [tutorial_url]);
+
+    useEffect(() => {
+        if (sub_tutorial_url) {
+            getSubTutorial(tutorial_url, sub_tutorial_url);
+        }
+    }, [sub_tutorial_url]);
 
     return (
         <div>
