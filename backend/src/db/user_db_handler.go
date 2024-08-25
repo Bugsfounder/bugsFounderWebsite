@@ -136,6 +136,38 @@ func (client *Client) CreateOneUser(user *models.User) (*mongo.InsertOneResult, 
 
 }
 
+// DB Method
+func (client *Client) IsUsernameOrEmailPresent(usernameOrEmail string) (bool, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	collection := client.Client_Obj.Database("bugsfounderDB").Collection("users")
+
+	// check if email or username already exists
+	var filter bson.M
+	if utils.IsValidEmail(usernameOrEmail) {
+		filter = bson.M{"email": usernameOrEmail}
+	} else {
+		filter = bson.M{"username": usernameOrEmail}
+	}
+
+	emailCount, err := collection.CountDocuments(ctx, filter)
+	if err != nil {
+		return false, err
+	}
+	if emailCount > 0 {
+		return true, nil
+	}
+
+	usernameCount, err := collection.CountDocuments(ctx, filter)
+	if err != nil {
+		return false, err
+	}
+	if usernameCount > 0 {
+		return true, nil
+	}
+
+	return false, nil
+}
 func (client *Client) UpdateOneUserByUsernameOrEmail(emailOrUsername string, updatedUser *models.UpdateUser) (*mongo.UpdateResult, error) {
 	LOG.Debug("")
 

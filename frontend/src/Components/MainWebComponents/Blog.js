@@ -44,7 +44,6 @@ const Blog = () => {
                         NotificationManager.error("Failed to cpy code.")
                     });
             });
-
         })
     }, [htmlContent])
 

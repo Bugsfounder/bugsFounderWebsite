@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Logo from '../../images/banner.jpeg'
 import { Link } from 'react-router-dom'
 import { SocialIcon } from 'react-social-icons'
 const Login = () => {
+    const [usernameOrEmail, setUsernameOrEmail] = useState("")
+    const [password, setPassword] = useState("")
+
     return (
         <section class="bg-gray-50 dark:bg-gray-900 mt-[132.5px]">
             <div class="flex flex-col items-center justify-center md:px-4 md:py-20 py-8 mx-auto my-10">
@@ -51,7 +54,7 @@ const Login = () => {
                     </div>
                 </div>
             </div>
-        </section >
+        </section>
     )
 }
 

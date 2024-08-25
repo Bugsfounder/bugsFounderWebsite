@@ -31,6 +31,7 @@ func ApiRoutes(server *gin.Engine, dbHandler *handler.HandlerForDBHandlers) {
 		public_router.POST("/user/signup", Signup(dbHandler))                                                     // done - tested
 		public_router.POST("/user/login", Login(dbHandler))                                                       // done - tested
 		public_router.POST("/user/logout", Logout(dbHandler))                                                     // done - tested
+		public_router.POST("/user/email_or_username_unique", HandleIsUsernameOrEmailPresent(dbHandler))           // done - tested
 		public_router.PUT("/user/update/:username_or_email", HandlerUpdateOneUserByUsernameOrEmail(dbHandler))    // done - tested
 		public_router.DELETE("/user/delete/:username_or_email", HandlerDeleteOneUserByUsernameOrEmail(dbHandler)) // done - tested
 

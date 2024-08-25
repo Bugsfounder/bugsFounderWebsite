@@ -378,6 +378,24 @@ func (h_DB *HandlerForDBHandlers) Signup(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"token": token})
 }
 
+func (h_DB *HandlerForDBHandlers) IsUsernameOrEmailPresent(ctx *gin.Context) {
+	LOG.Debug("")
+
+	var usernameOrEmail map[string]string
+	if err := ctx.ShouldBindJSON(&usernameOrEmail); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "invalid input"})
+		return
+	}
+
+	isPresent, err := h_DB.Client.IsUsernameOrEmailPresent(usernameOrEmail["usernameOrEmail"])
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"isPresent": isPresent})
+}
+
 func (h_DB *HandlerForDBHandlers) Logout(ctx *gin.Context) {
 	LOG.Debug("Received a logout request")
 
