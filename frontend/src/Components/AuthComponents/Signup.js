@@ -36,7 +36,7 @@ const Signup = () => {
       }
     };
 
-    const usernameOrEmailObj = { "usernameOrEmail": usernameOrEmail };
+    const usernameOrEmailObj = { "usernameOrEmail": usernameOrEmail.toLowerCase() };
     publicAxiosInstance.post('/user/email_or_username_unique', usernameOrEmailObj, config)
       .then(response => {
         let isPresent = response.data.isPresent;
@@ -57,7 +57,7 @@ const Signup = () => {
       [name]: value
     });
     if (name === "email" || name === "username") {
-      isUsernameOrEmailUnique(value);
+      isUsernameOrEmailUnique(value.toLowerCase());
     }
   };
 
