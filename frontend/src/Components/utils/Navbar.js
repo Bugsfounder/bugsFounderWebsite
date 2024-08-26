@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useOutletContext } from 'react-router-dom'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { HomeIcon, UserCircleIcon, SunIcon, MoonIcon } from '@heroicons/react/24/solid'
 import { NotificationContainer } from 'react-notifications';
 
-const Navbar = () => {
-    const navigate = useNavigate(0)
+const Navbar = (props) => {
+    const navigate = useNavigate()
     const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark")
+    const { loggedIn, setLoggedIn } = props
 
     useEffect(() => {
         document.documentElement.classList.add(theme)
@@ -57,7 +58,16 @@ const Navbar = () => {
             aboutLogo.classList.remove("hidden")
             hamburger.classList.remove("mt-3")
         }
-        // console.log(hamburger, itemsNav, navbar, aboutLogo);
+    }
+
+    const logout = (event) => {
+        try {
+            localStorage.removeItem("authToken")
+            setLoggedIn(false)
+            navigate('/auth/login')  // Navigate to login page after logging out
+        } catch (err) {
+            console.error(err)
+        }
     }
 
     return (
@@ -107,11 +117,16 @@ const Navbar = () => {
                             :
                             <MoonIcon className='size-8 text-slate-500 cursor-pointer' onClick={toggleTheme} />
                         }
-                        <Link to='/auth/login'> <UserCircleIcon className='size-9 text-slate-500 cursor-pointer' /></Link>
+
+                        {
+                            !loggedIn ? (
+                                <Link to='/auth/login'> <UserCircleIcon className='size-9 text-slate-500 cursor-pointer' /></Link>
+                            ) :
+                                <button onClick={logout}><span className='size-9 text-slate-500 cursor-pointer'>Logout</span></button>
+                        }
                     </div>
                 </div>
             </div>
-
         </>
     )
 }

@@ -5,9 +5,6 @@ import { SocialIcon } from 'react-social-icons';
 import { NotificationManager } from 'react-notifications';
 
 const Signup = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const { publicAxiosInstance } = useOutletContext();
   const [user, setUser] = useState({});
   const [isPresent, setIsPresent] = useState(false);

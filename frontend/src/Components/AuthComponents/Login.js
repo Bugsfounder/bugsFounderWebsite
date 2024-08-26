@@ -9,7 +9,7 @@ const Login = () => {
     const [username_or_email, setusername_or_email] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-    const { publicAxiosInstance } = useOutletContext()
+    const { publicAxiosInstance, loggedIn, setLoggedIn } = useOutletContext()
 
     const handleLogin = (event) => {
         event.preventDefault();
@@ -30,12 +30,13 @@ const Login = () => {
 
                 // You can store the token in local storage if needed
                 localStorage.setItem('authToken', response.data.token);
+                setLoggedIn(true)
                 navigate('/'); // Redirect to the dashboard or desired page
             })
-        // .catch((error) => {
-        //     NotificationManager.error("Invalid credentials, try again");
-        //     console.error(error.message);
-        // });
+            .catch((error) => {
+                NotificationManager.error("Invalid credentials, try again");
+                console.error(error.message);
+            });
     };
 
     return (
