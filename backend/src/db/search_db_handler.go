@@ -10,7 +10,6 @@ import (
 )
 
 // search
-
 func (client *Client) SearchBlogURL(url string) (int64, error) {
 	LOG.Debug("")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)

@@ -3,7 +3,6 @@ import AdminEditTutorial from '../../Components/AdminComponents/AdminEditTutoria
 
 const AdminEditTutorialPage = () => {
     return (
-
         <AdminEditTutorial />
     )
 }

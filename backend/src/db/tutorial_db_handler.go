@@ -59,6 +59,7 @@ func (client *Client) CreateOneTutorial(tutorial *models.Tutorial) (*mongo.Inser
 		return blogs, nil
 	}
 */
+
 func (client *Client) GetAllTutorial(offset, limit int) ([]models.Tutorial, error) {
 	LOG.Debug("")
 	ctx, cancel := withTimeout()
