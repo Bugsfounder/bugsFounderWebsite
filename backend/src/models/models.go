@@ -11,12 +11,12 @@ type Blog struct {
 	Content   string          `json:"content"`
 	Author    string          `json:"author"`
 	Tags      []string        `json:"tags"`
-	CreatedAt time.Time       `json:"created_at"`
 	Url       string          `json:"url"`
 	IsAdmin   bool            `json:"is_admin"`
 	AdminMode admin.AdminMode `json:"admin_mode"`
 	IsHidden  bool            `json:"is_hidden"`
-	UpdatedAt time.Time       `json:"updated_at"`
+	CreatedAt time.Time       `bson:"createdAt" json:"created_at"`
+	UpdatedAt time.Time       `json:"updatedAt" bson:"updatedAt"`
 }
 
 type Tutorial struct {
@@ -29,8 +29,8 @@ type Tutorial struct {
 	IsAdmin       bool            `json:"is_admin"`
 	AdminMode     admin.AdminMode `json:"admin_mode"`
 	IsHidden      bool            `json:"is_hidden"`
-	CreatedAt     time.Time       `json:"created_at"`
-	UpdatedAt     time.Time       `json:"updated_at"`
+	CreatedAt     time.Time       `json:"createdAt" bson:"createdAt"`
+	UpdatedAt     time.Time       `json:"updatedAt" bson:"updatedAt"`
 }
 
 type Sub_Tutorial struct {

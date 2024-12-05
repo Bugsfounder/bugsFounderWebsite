@@ -25,6 +25,8 @@ func (client *Client) CreateOneBlog(blog *models.Blog) (*mongo.InsertOneResult, 
 		return nil, errors.New("blog url already exists")
 	}
 	// insert the blog into the collection
+	blog.CreatedAt = time.Now()
+	blog.UpdatedAt = time.Now()
 	result, err := collection.InsertOne(ctx, blog)
 	if err != nil {
 		return nil, err
@@ -39,10 +41,13 @@ func (client *Client) GetAllBlogs(offset, limit int) ([]models.Blog, error) {
 
 	collection := client.Client_Obj.Database("bugsfounderDB").Collection("blogs")
 
+	// Set pagination and sort options
 	findOptions := options.Find()
 	findOptions.SetSkip(int64(offset))
 	findOptions.SetLimit(int64(limit))
+	findOptions.SetSort(bson.D{{"createdAt", -1}}) // Sort by createdAt descending for newest first
 
+	// Fetch data from the collection
 	cursor, err := collection.Find(ctx, bson.M{}, findOptions)
 	if err != nil {
 		LOG.Error("%v", err)

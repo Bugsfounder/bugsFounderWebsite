@@ -46,6 +46,8 @@ func (client *Client) CreateOneAdmin(adminModel *models.Admin) (*mongo.InsertOne
 	}
 
 	// Insert the admin into the collection
+	adminModel.CreatedAt = time.Now()
+	adminModel.UpdatedAt = time.Now()
 	result, err := collection.InsertOne(ctx, adminModel)
 	if err != nil {
 		return nil, err
