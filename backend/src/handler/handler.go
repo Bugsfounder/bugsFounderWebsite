@@ -171,21 +171,22 @@ func (h_DB *HandlerForDBHandlers) CreateSubTutorial(ctx *gin.Context) {
 }
 
 // GetAllTutorial
-func (h_DB *HandlerForDBHandlers) GetAllTutorial(ctx *gin.Context) {
+func (h_DB *HandlerForDBHandlers) GetAllTutorials(ctx *gin.Context) {
 	LOG.Debug("")
 
-	// Parse Pagination parameters
+	// Parse pagination parameters
 	page, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))
 	limit, _ := strconv.Atoi(ctx.DefaultQuery("limit", "10"))
-	offset := (page + 1) + limit
+	offset := (page - 1) * limit
 
-	// fetch tutorials with offset and limit
-	allTutorial, err := h_DB.Client.GetAllTutorial(offset, limit)
+	// Fetch blogs with offset and limit
+	allTutorials, err := h_DB.Client.GetAllTutorials(offset, limit)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, gin.H{"tutorials": allTutorial})
+
+	ctx.JSON(http.StatusOK, gin.H{"tutorials": allTutorials})
 }
 
 // GetOneTutorialByURL

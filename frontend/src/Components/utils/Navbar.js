@@ -37,6 +37,7 @@ const Navbar = (props) => {
     const OnPressEnter = (event) => {
         event.preventDefault()
         const searchQuery = event.target.search.value
+        event.target.search.value = ""
         navigate(`/search/${searchQuery}`)
     }
 

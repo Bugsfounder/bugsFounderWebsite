@@ -53,7 +53,7 @@ func HandleCreateSubTutorial(dbHandler *handler.HandlerForDBHandlers) gin.Handle
 
 func HandleGetAllTutorial(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
 	LOG.Debug("")
-	return dbHandler.GetAllTutorial
+	return dbHandler.GetAllTutorials
 }
 
 func HandleGetOneTutorialByURL(dbHandler *handler.HandlerForDBHandlers) gin.HandlerFunc {
