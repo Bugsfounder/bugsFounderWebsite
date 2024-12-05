@@ -29,7 +29,7 @@ const AdminAddTutorial = () => {
             // console.log("newBlog: ", newBlog)
             const response = await privateAxiosInstance.post('/tutorial', newBlog, config);
             // console.log("form submit....", response);
-            navigate(`/tutorials/${newBlog.url}`)
+            navigate(`/tutorials/`)
             NotificationManager.success("Blog Added Successfully!")
         } catch (err) {
             if (err.response) {

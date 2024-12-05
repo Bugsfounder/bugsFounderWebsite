@@ -57,7 +57,7 @@ const Tutorials = () => {
                         {tutorials.map(tutorial => (
                             <div key={tutorial.url} className="p-5 dark:text-white dark:bg-slate-800 bg-gray-100 my-3 shadow-sm rounded-md md:flex md:justify-between" >
                                 <div className="contentDir">
-                                    <Link to={`/tutorials/${tutorial.url}/${tutorial.sub_tutorials[0].url}`} className="text-sky-600 text-xl">
+                                    <Link to={`/tutorials/${tutorial.url}/`} className="text-sky-600 text-xl">
                                         <h1>{tutorial.title}</h1>
                                     </Link>
                                     <p className='text-sm mb-3 text-slate-400'>{tutorial.author}
