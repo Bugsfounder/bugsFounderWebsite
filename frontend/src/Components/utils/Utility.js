@@ -21,13 +21,13 @@ export default function formatDate(dateString) {
     const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
     // Extract components
-    const dayName = dayNames[date.getUTCDay()];
+    // const dayName = dayNames[date.getUTCDay()];
     const monthName = monthNames[date.getUTCMonth()];
     const year = date.getUTCFullYear();
     const day = String(date.getUTCDate()).padStart(2, '0');
     const hours = String(date.getUTCHours()).padStart(2, '0');
     const minutes = String(date.getUTCMinutes()).padStart(2, '0');
-    const seconds = String(date.getUTCSeconds()).padStart(2, '0');
+    // const seconds = String(date.getUTCSeconds()).padStart(2, '0');
 
     // return `${dayName}-${monthName}-${day}-${year} ${hours}:${minutes}:${seconds}`;
     // return `${day}-${monthName}-${year} ${hours}:${minutes}:${seconds}`;

@@ -66,6 +66,7 @@ func (client *Client) SearchSubTutorialURL(tutorialURL, subTutorialURL string) (
 }
 
 func (client *Client) Search(query string) ([]interface{}, error) {
+	LOG.Debug("")
 	queryWords := strings.Split(query, " ")
 
 	var results []interface{}
@@ -96,6 +97,7 @@ func (client *Client) Search(query string) ([]interface{}, error) {
 }
 
 func (client *Client) searchCollection(collectionName string, queryWords []string) ([]interface{}, error) {
+	LOG.Debug("")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -123,6 +125,7 @@ func (client *Client) searchCollection(collectionName string, queryWords []strin
 			return nil, err
 		}
 		results = append(results, result)
+
 	}
 
 	if err := cursor.Err(); err != nil {
@@ -134,6 +137,7 @@ func (client *Client) searchCollection(collectionName string, queryWords []strin
 
 // searchSubTutorials searches sub-tutorials within tutorials
 func (client *Client) searchSubTutorials(queryWords []string) ([]interface{}, error) {
+	LOG.Debug("")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -187,6 +191,7 @@ func (client *Client) searchSubTutorials(queryWords []string) ([]interface{}, er
 
 // containsAllWords checks if all queryWords are present in the text
 func containsAllWords(text string, queryWords []string) bool {
+	LOG.Debug("")
 	for _, word := range queryWords {
 		if !strings.Contains(strings.ToLower(text), strings.ToLower(word)) {
 			return false
