@@ -42,8 +42,7 @@ const Home = () => {
                                 <Link to={`/blogs/${blog.url}`} className='text-sky-600 text-xl'>
                                     <h1>{blog.title}</h1>
                                 </Link>
-                                <p>{blog.description}</p>
-                                <p>{blog.author} . {blog.createdAt}</p>
+                                <p className='text-sm mb-3 text-slate-400'>{blog.author}</p>
                             </div>
                         ))
                     ) : (
@@ -60,14 +59,14 @@ const Home = () => {
                                 <Link to={`/tutorials/${tutorial.url}`} className='text-sky-600 text-xl'>
                                     <h1>{tutorial.title}</h1>
                                 </Link>
-                                <p>{tutorial.description}</p>
-                                <p>{tutorial.author} . {tutorial.createdAt}</p>
+                                <p>{tutorial.description.substr(0, 100)}</p>
+                                <p className='text-sm mb-3 text-slate-400'>{tutorial.author}</p>
                             </div>
                         ))
                     ) : (
                         <p className="text-center dark:text-white">No Tutorials</p>
                     )}
-                    <Link to="/blogs/" className='text-gray-500 pl-1 hover:dark:text-gray-600'>More Tutorials</Link>
+                    <Link to="/tutorials/" className='text-gray-500 pl-1 hover:dark:text-gray-600'>More Tutorials</Link>
                 </div>
             </div>
         </div>
