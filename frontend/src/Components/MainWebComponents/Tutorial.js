@@ -30,6 +30,9 @@ const Tutorial = () => {
                 const initialSubTutorialUrl = sub_tutorial_url || response.data.sub_tutorials[0].url;
                 setActiveSubTutorialUrl(initialSubTutorialUrl);
                 getSubTutorial(tutorial_url, initialSubTutorialUrl);
+                console.log('==================================== mmmmm');
+                console.log(initialSubTutorialUrl);
+                console.log('====================================');
             })
             .catch(err => {
                 NotificationManager.error(err.message);
